@@ -1,0 +1,31 @@
+* Sampleapp
+
+This is a barebones sample application for a multi-module, multi-bundle apache karaf web application.
+
+Intended to make it simple to start a new webapp.
+
+The application database has a single table "accounts" listing the users that are allowed to log into the database.
+
+The application OSGi service Java interface (SampleappService), has a single method "getAccounts()", which is taken through a jersey JAX-RS REST resource (AccountsResource) and the result is displayed in a react frontend (so a narrow path all the way from an SQL database and to a react frontend).
+
+The rest of the user information (full name, email) comes from an injected OSGi service of type [[https://www.javadoc.io/doc/no.priv.bang.osgiservice/osgiservice/latest/no/priv/bang/osgiservice/users/UserManagementService.html][UserManagementService]] provided by the [[https://github.com/steinarb/authservice][authservice]].
+
+The username/password combinations of users in the test db version of authservice, are:
+| username | password  | authorized for sampleapp |
+|----------+-----------+--------------------------|
+| jad      | 1ad       | yes                      |
+| jod      | johnnyBoi | no                       |
+
+** Development status
+[[https://travis-ci.org/steinarb/sampleapp][file:https://travis-ci.org/steinarb/sampleapp.svg?branch=master]]
+
+** Installing the sample application
+
+Give the following commands to the karaf console:
+#+BEGIN_EXAMPLE
+  feature:repo-add mvn:no.priv.bang.sampleapp/karaf/LATEST/xml/features
+  feature:install sampleapp-with-derby
+#+END_EXAMPLE
+** License
+
+This software is licensed with the Apache License v2.  See the file LICENSE for details.
