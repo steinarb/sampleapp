@@ -26,6 +26,52 @@ Give the following commands to the karaf console:
   feature:repo-add mvn:no.priv.bang.sampleapp/karaf/LATEST/xml/features
   feature:install sampleapp-with-derby
 #+END_EXAMPLE
+** Creating a new application based on the sample app
+
+Using the [[https://maven.apache.org/archetype/maven-archetype-plugin/i][maven archetype plugin]] to adapt the sample project to a new project is simpler than hand editing the sample project and moving all packages and module names, but it doesn't take you all the way (it doesn't rename Java classes and doesn't fix up the shiro.ini files).
+
+To create a new project called "mynewapp":
+ 1. First clone the sample project and create an archetype from it (it's best to create an archetype from a fresh clone, because then the archetype won't contain unnecessary files like IDE config files and binary files from the build)
+    #+begin_example
+      cd /tmp
+      git clone https://github.com/steinarb/sampleapp.git
+      cd sampleapp
+      mvn archetype:create-from-project -Darchetype.filteredExtensions=java
+      cd target/generated-sources/archetype/
+      mvn install
+    #+end_example
+ 2. Create the new project from the archetype (the -DgroupId, -DartifactId, and -Dversion arguments are the GAV values of the new project)
+    #+begin_example
+      mkdir -p ~/git/
+      cd ~/git/
+      mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=no.priv.bang.sampleapp -DarchetypeArtifactId=sampleapp-archetype -DgroupId=no.priv.bang.mynewapp -DartifactId=mynewapp -Dversion=1.0.0-SNAPSHOT -DinteractiveMode=false
+    #+end_example
+ 3. Fix up some files that aren't handled by the archetype filtering (don't know why everything in the pom files aren't filtered)
+    #+begin_example
+      cd ~/git/mynewapp/
+      sed -i 's/sampleapp/mynewapp/g' */src/main/resources/shiro.ini
+      sed -i 's/sampleapp/mynewapp/g' */src/test/resources/test.shiro.ini
+      sed -i 's/sampleapp/mynewapp/gI' */pom.xml
+      find . -name \*.js | xargs sed -i 's/sampleapp/mynewapp/g'
+    #+end_example
+ 4. Test build the project with "mvn install" (it should build without any errors)
+    #+begin_example
+      cd ~/git/mynewapp/
+      mvn install
+    #+end_example
+ 5. Open the java maven modules of the mynewapp project, in a Java IDE (eclipse or IntelliJ), and use the refactoring of the IDE to rename classes with names starting with "Sampleapp" into classes starting with "Mynewapp" (this is the step that the archetype can't handle, but at least the classes are already in packages they are supposed to be in for the new application)
+ 6. Build mynewapp from the top with "mvn clean install" ("clean" is to get rid of .class files with the old names)
+    #+begin_example
+      cd ~/git/mynewapp/
+      mvn clean install
+    #+end_example
+ 7. Install mynewapp in a karaf instance
+    #+begin_example
+      feature:repo-add mvn:no.priv.bang.mynewapp/karaf/LATEST/xml/features
+      feature:install mynewapp-with-derby
+    #+end_example
+ 8. Verify that the application is running on http://localhost:8181/mynewapp
+
 ** License
 
 This software is licensed with the Apache License v2.  See the file LICENSE for details.
