@@ -28,7 +28,7 @@ import org.osgi.service.jdbc.DataSourceFactory;
 
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 
-class SampleappDerbyTestDatabaseTest {
+class SampleappTestDbLiquibaseRunnerTest {
 
     @Test
     void testCreateAndVerifySomeDataInSomeTables() throws Exception {
