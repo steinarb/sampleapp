@@ -21,7 +21,7 @@
     </parent>
     <artifactId>sampleapp.backend.testdata</artifactId>
 
-    <name>Ekstra testdata til authservice</name>
+    <name>Sampleapp add role membership to test user</name>
 
     <properties>
         <karaf-feature-name>sampleapp-backend-testdata</karaf-feature-name>
