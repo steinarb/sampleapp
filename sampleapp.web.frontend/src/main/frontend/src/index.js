@@ -10,7 +10,11 @@ import { routerMiddleware } from 'connected-react-router';
 import { createBrowserHistory } from 'history';
 import createRootReducer from './reducers';
 import rootSaga from './sagas';
-import { LOGINSTATE_REQUEST } from './actiontypes';
+import {
+    LOGINSTATE_REQUEST,
+    DEFAULT_LOCALE_REQUEST,
+    AVAILABLE_LOCALES_REQUEST,
+} from './actiontypes';
 
 const sagaMiddleware = createSagaMiddleware();
 const history = createBrowserHistory();
@@ -24,6 +28,8 @@ const store = configureStore({
 sagaMiddleware.run(rootSaga);
 
 store.dispatch(LOGINSTATE_REQUEST());
+store.dispatch(DEFAULT_LOCALE_REQUEST());
+store.dispatch(AVAILABLE_LOCALES_REQUEST());
 
 ReactDOM.render(
     <Provider store={store}>

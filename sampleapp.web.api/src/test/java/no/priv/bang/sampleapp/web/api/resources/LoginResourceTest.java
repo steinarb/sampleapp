@@ -16,6 +16,7 @@
 package no.priv.bang.sampleapp.web.api.resources;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.subject.WebSubject;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import no.priv.bang.sampleapp.services.Credentials;
 import no.priv.bang.sampleapp.services.Loginresult;
+import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.web.api.ShiroTestBase;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 
@@ -38,40 +40,53 @@ class LoginResourceTest extends ShiroTestBase {
         String password = "johnnyBoi";
         createSubjectAndBindItToThread();
         Credentials credentials = Credentials.with().username(username).password(password).build();
-        Loginresult resultat = resource.login(credentials);
+        String locale = "nb_NO";
+        Loginresult resultat = resource.login(locale, credentials);
         assertTrue(resultat.getSuksess());
     }
 
     @Test
     void testLoginFeilPassord() {
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Feil passord");
         MockLogService logservice = new MockLogService();
         LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
         resource.setLogservice(logservice);
         String username = "jd";
         String password = "feil";
         createSubjectAndBindItToThread();
         Credentials credentials = Credentials.with().username(username).password(password).build();
-        Loginresult resultat = resource.login(credentials);
+        String locale = "nb_NO";
+        Loginresult resultat = resource.login(locale, credentials);
         assertFalse(resultat.getSuksess());
         assertThat(resultat.getFeilmelding()).startsWith("Feil passord");
     }
 
     @Test
     void testLoginUkjentBrukernavn() {
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Ukjent konto");
         MockLogService logservice = new MockLogService();
         LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
         resource.setLogservice(logservice);
         String username = "jdd";
         String password = "feil";
         createSubjectAndBindItToThread();
         Credentials credentials = Credentials.with().username(username).password(password).build();
-        Loginresult resultat = resource.login(credentials);
+        String locale = "nb_NO";
+        Loginresult resultat = resource.login(locale, credentials);
         assertThat(resultat.getFeilmelding()).startsWith("Ukjent konto");
     }
 
     @Test
     void testLogout() {
+        String locale = "nb_NO";
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Logget ut");
         LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
         String username = "jd";
         String password = "johnnyBoi";
         WebSubject subject = createSubjectAndBindItToThread();
@@ -79,7 +94,7 @@ class LoginResourceTest extends ShiroTestBase {
         subject.login(token);
         assertTrue(subject.isAuthenticated()); // Verify precondition user logged in
 
-        Loginresult loginresultat = resource.logout();
+        Loginresult loginresultat = resource.logout(locale);
         assertFalse(loginresultat.getSuksess());
         assertEquals("Logget ut", loginresultat.getFeilmelding());
         assertFalse(loginresultat.isAuthorized());
@@ -88,14 +103,18 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testGetLoginstateWhenLoggedIn() {
+        String locale = "nb_NO";
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er logget inn og har tilgang");
         LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
         String username = "jd";
         String password = "johnnyBoi";
         WebSubject subject = createSubjectAndBindItToThread();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray(), true);
         subject.login(token);
 
-        Loginresult loginresultat = resource.loginstate();
+        Loginresult loginresultat = resource.loginstate(locale);
         assertTrue(loginresultat.getSuksess());
         assertEquals("Bruker er logget inn og har tilgang", loginresultat.getFeilmelding());
         assertTrue(loginresultat.isAuthorized());
@@ -103,14 +122,18 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testGetLoginstateWhenLoggedInButUserDoesntHaveRoleSampleappuser() {
+        String locale = "nb_NO";
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er logget inn men mangler tilgang");
         LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
         String username = "jad";
         String password = "1ad";
         WebSubject subject = createSubjectAndBindItToThread();
         UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray(), true);
         subject.login(token);
 
-        Loginresult loginresultat = resource.loginstate();
+        Loginresult loginresultat = resource.loginstate(locale);
         assertTrue(loginresultat.getSuksess());
         assertEquals("Bruker er logget inn men mangler tilgang", loginresultat.getFeilmelding());
         assertFalse(loginresultat.isAuthorized());
@@ -118,10 +141,14 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testGetLoginstateWhenNotLoggedIn() {
+        String locale = "nb_NO";
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er ikke logget inn");
         LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
         createSubjectAndBindItToThread();
 
-        Loginresult loginresultat = resource.loginstate();
+        Loginresult loginresultat = resource.loginstate(locale);
         assertFalse(loginresultat.getSuksess());
         assertEquals("Bruker er ikke logget inn", loginresultat.getFeilmelding());
         assertFalse(loginresultat.isAuthorized());

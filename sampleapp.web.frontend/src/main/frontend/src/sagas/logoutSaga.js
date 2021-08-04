@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put, select } from 'redux-saga/effects';
 import axios from 'axios';
 import {
     LOGOUT_REQUEST,
@@ -6,13 +6,14 @@ import {
     LOGOUT_ERROR,
 } from '../actiontypes';
 
-function sendLogout() {
-    return axios.get('/sampleapp/api/logout');
+function sendLogout(locale) {
+    return axios.get('/sampleapp/api/logout', { params: { locale } });
 }
 
 function* mottaLogoutResultat() {
     try {
-        const response = yield call(sendLogout);
+        const locale = yield select(state => state.locale);
+        const response = yield call(sendLogout, locale);
         const logoutresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(LOGOUT_RECEIVE(logoutresult));
     } catch (error) {

@@ -24,7 +24,12 @@ import static org.mockito.Mockito.when;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -44,10 +49,15 @@ import com.mockrunner.mock.web.MockServletOutputStream;
 
 import no.priv.bang.sampleapp.services.Account;
 import no.priv.bang.sampleapp.services.Credentials;
+import no.priv.bang.sampleapp.services.LocaleBean;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.web.api.resources.ErrorMessage;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 
 class SampleappWebApiTest extends ShiroTestBase {
+    private final static Locale NB_NO = Locale.forLanguageTag("nb-no");
+    private final static Locale EN_UK = Locale.forLanguageTag("en-uk");
+
     public static final ObjectMapper mapper = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .findAndRegisterModules();
@@ -104,6 +114,103 @@ class SampleappWebApiTest extends ShiroTestBase {
         assertEquals(200, response.getStatus());
         List<Account> accounts = mapper.readValue(getBinaryContent(response), new TypeReference<List<Account>>() {});
         assertThat(accounts).isNotEmpty();
+    }
+    @Test
+    void testDefaultLocale() throws Exception {
+        // Set up REST API servlet with mocked services
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.defaultLocale()).thenReturn(NB_NO);
+        MockLogService logservice = new MockLogService();
+
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+
+        // Create the request and response
+        MockHttpServletRequest request = buildGetUrl("/defaultlocale");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        // Run the method under test
+        servlet.service(request, response);
+
+        // Check the response
+        assertEquals(200, response.getStatus());
+        assertEquals("application/json", response.getContentType());
+        Locale defaultLocale = mapper.readValue(getBinaryContent(response), Locale.class);
+        assertEquals(NB_NO, defaultLocale);
+    }
+    @Test
+    void testAvailableLocales() throws Exception {
+        // Set up REST API servlet with mocked services
+        SampleappService sampleapp = mock(SampleappService.class);
+        when(sampleapp.availableLocales()).thenReturn(Collections.singletonList(Locale.forLanguageTag("nb-NO")).stream().map(l -> LocaleBean.with().locale(l).build()).collect(Collectors.toList()));
+        MockLogService logservice = new MockLogService();
+
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+
+        // Create the request and response
+        MockHttpServletRequest request = buildGetUrl("/availablelocales");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        // Run the method under test
+        servlet.service(request, response);
+
+        // Check the response
+        assertEquals(200, response.getStatus());
+        assertEquals("application/json", response.getContentType());
+        List<LocaleBean> availableLocales = mapper.readValue(getBinaryContent(response), new TypeReference<List<LocaleBean>>() {});
+        assertThat(availableLocales).isNotEmpty().contains(LocaleBean.with().locale(Locale.forLanguageTag("nb-NO")).build());
+    }
+
+    @Test
+    void testDisplayTexts() throws Exception {
+        // Set up REST API servlet with mocked services
+        SampleappService sampleapp = mock(SampleappService.class);
+        Map<String, String> texts = new HashMap<>();
+        texts.put("date", "Dato");
+        when(sampleapp.displayTexts(NB_NO)).thenReturn(texts);
+        MockLogService logservice = new MockLogService();
+
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+
+        // Create the request and response
+        MockHttpServletRequest request = buildGetUrl("/displaytexts");
+        request.setQueryString("locale=nb_NO");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        // Run the method under test
+        servlet.service(request, response);
+
+        // Check the response
+        assertEquals(200, response.getStatus());
+        assertEquals("application/json", response.getContentType());
+        Map<String, String> displayTexts = mapper.readValue(getBinaryContent(response), new TypeReference<Map<String, String>>() {});
+        assertThat(displayTexts).isNotEmpty();
+    }
+
+    @Test
+    void testDisplayTextsWithUnknownLocale() throws Exception {
+        // Set up REST API servlet with mocked services
+        SampleappService sampleapp = mock(SampleappService.class);
+        Map<String, String> texts = new HashMap<>();
+        texts.put("date", "Dato");
+        when(sampleapp.displayTexts(EN_UK)).thenThrow(MissingResourceException.class);
+        MockLogService logservice = new MockLogService();
+
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+
+        // Create the request and response
+        MockHttpServletRequest request = buildGetUrl("/displaytexts");
+        request.setQueryString("locale=en_UK");
+        MockHttpServletResponse response = new MockHttpServletResponse();
+
+        // Run the method under test
+        servlet.service(request, response);
+
+        // Check the response
+        assertEquals(500, response.getStatus());
+        assertEquals("application/json", response.getContentType());
+        ErrorMessage errorMessage = mapper.readValue(getBinaryContent(response), ErrorMessage.class);
+        assertEquals(500, errorMessage.getStatus());
+        assertThat(errorMessage.getMessage()).startsWith("Unknown locale");
     }
 
     private byte[] getBinaryContent(MockHttpServletResponse response) throws IOException {

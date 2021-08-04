@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put, select } from 'redux-saga/effects';
 import axios from 'axios';
 import {
     LOGIN_REQUEST,
@@ -6,13 +6,14 @@ import {
     LOGIN_ERROR,
 } from '../actiontypes';
 
-function sendLogin(credentials) {
-    return axios.post('/sampleapp/api/login', credentials);
+function sendLogin(credentials, locale) {
+    return axios.post('/sampleapp/api/login', credentials, { params: { locale } });
 }
 
 function* mottaLoginResultat(action) {
     try {
-        const response = yield call(sendLogin, action.payload);
+        const locale = yield select(state => state.locale);
+        const response = yield call(sendLogin, action.payload, locale);
         const loginresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(LOGIN_RECEIVE(loginresult));
     } catch (error) {

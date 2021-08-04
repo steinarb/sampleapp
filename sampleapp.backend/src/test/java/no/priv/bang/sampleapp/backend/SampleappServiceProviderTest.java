@@ -15,13 +15,18 @@
  */
 package no.priv.bang.sampleapp.backend;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.sql.DataSource;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
@@ -29,10 +34,13 @@ import org.osgi.service.jdbc.DataSourceFactory;
 
 import no.priv.bang.sampleapp.db.liquibase.test.SampleappTestDbLiquibaseRunner;
 import no.priv.bang.sampleapp.services.Account;
+import no.priv.bang.sampleapp.services.LocaleBean;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
 class SampleappServiceProviderTest {
+    private final static Locale NB_NO = Locale.forLanguageTag("nb-no");
+
     private static DataSource datasource;
 
     @BeforeAll
@@ -49,17 +57,62 @@ class SampleappServiceProviderTest {
     }
 
     @Test
-    void testGetSampleapp() {
+    void testGetAccounts() {
         MockLogService logservice = new MockLogService();
         UserManagementService useradmin = mock(UserManagementService.class);
         SampleappServiceProvider provider = new SampleappServiceProvider();
         provider.setLogservice(logservice);
         provider.setDatasource(datasource);
         provider.setUseradmin(useradmin);
-        provider.activate();
+        provider.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
 
         List<Account> accounts = provider.getAccounts();
         assertThat(accounts).isNotEmpty();
+    }
+
+    @Test
+    void testDefaultLocale() {
+        SampleappServiceProvider ukelonn = new SampleappServiceProvider();
+        UserManagementService useradmin = mock(UserManagementService.class);
+        ukelonn.setUseradmin(useradmin);
+        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        assertEquals(NB_NO, ukelonn.defaultLocale());
+    }
+
+    @Test
+    void testAvailableLocales() {
+        SampleappServiceProvider ukelonn = new SampleappServiceProvider();
+        UserManagementService useradmin = mock(UserManagementService.class);
+        ukelonn.setUseradmin(useradmin);
+        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        List<LocaleBean> locales = ukelonn.availableLocales();
+        assertThat(locales).isNotEmpty().contains(LocaleBean.with().locale(ukelonn.defaultLocale()).build());
+    }
+
+    @Test
+    void testDisplayTextsForDefaultLocale() {
+        SampleappServiceProvider ukelonn = new SampleappServiceProvider();
+        UserManagementService useradmin = mock(UserManagementService.class);
+        ukelonn.setUseradmin(useradmin);
+        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        Map<String, String> displayTexts = ukelonn.displayTexts(ukelonn.defaultLocale());
+        assertThat(displayTexts).isNotEmpty();
+    }
+
+    @Test
+    void testDisplayText() {
+        SampleappServiceProvider ukelonn = new SampleappServiceProvider();
+        UserManagementService useradmin = mock(UserManagementService.class);
+        ukelonn.setUseradmin(useradmin);
+        ukelonn.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+        String text1 = ukelonn.displayText("hi", "nb_NO");
+        assertEquals("Hei", text1);
+        String text2 = ukelonn.displayText("hi", "en_GB");
+        assertEquals("Hi", text2);
+        String text3 = ukelonn.displayText("hi", "");
+        assertEquals("Hei", text3);
+        String text4 = ukelonn.displayText("hi", null);
+        assertEquals("Hei", text4);
     }
 
 }

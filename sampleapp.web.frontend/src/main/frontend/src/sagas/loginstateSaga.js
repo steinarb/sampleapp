@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put, select } from 'redux-saga/effects';
 import axios from 'axios';
 import {
     LOGINSTATE_REQUEST,
@@ -6,13 +6,14 @@ import {
     LOGINSTATE_ERROR,
 } from '../actiontypes';
 
-function sendLoginstate() {
-    return axios.get('/sampleapp/api/loginstate');
+function sendLoginstate(locale) {
+    return axios.get('/sampleapp/api/loginstate', { params: { locale } });
 }
 
 function* mottaLoginstateResultat() {
     try {
-        const response = yield call(sendLoginstate);
+        const locale = yield select(state => state.locale);
+        const response = yield call(sendLoginstate, locale);
         const logoutresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(LOGINSTATE_RECEIVE(logoutresult));
     } catch (error) {

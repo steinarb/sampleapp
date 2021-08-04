@@ -4,6 +4,9 @@ import username from './usernameReducer';
 import password from './passwordReducer';
 import loginresultat from './loginresultatReducer';
 import accounts from './accountsReducer';
+import locale from './localeReducer';
+import availableLocales from './availableLocalesReducer';
+import displayTexts from './displayTextsReducer';
 import errors from './errorsReducer';
 
 export default (history) => combineReducers({
@@ -12,5 +15,8 @@ export default (history) => combineReducers({
     password,
     loginresultat,
     accounts,
+    locale,
+    availableLocales,
+    displayTexts,
     errors,
 });

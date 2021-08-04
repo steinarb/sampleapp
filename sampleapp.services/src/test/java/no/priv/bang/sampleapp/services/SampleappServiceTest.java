@@ -17,8 +17,11 @@ package no.priv.bang.sampleapp.services;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -30,6 +33,16 @@ class SampleappServiceTest {
         SampleappService service = mock(SampleappService.class);
         List<Account> accounts = service.getAccounts();
         assertThat(accounts).isEmpty();
+        Locale defaultLocale = service.defaultLocale();
+        assertNull(defaultLocale);
+        List<LocaleBean> availableLocales = service.availableLocales();
+        assertThat(availableLocales).isEmpty();
+        Locale locale = Locale.UK;
+        Map<String, String> texts = service.displayTexts(locale);
+        assertThat(texts).isEmpty();
+        String key = "loggedout";
+        String text = service.displayText(key, locale.toString());
+        assertNull(text);
     }
 
 }

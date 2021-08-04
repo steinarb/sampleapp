@@ -9,7 +9,7 @@ import {
 import LoginMessage from './LoginMessage';
 
 function Login(props) {
-    const { username, password, loginresultat, onUsernameEndre, onPasswordEndre, onSendLogin } = props;
+    const { username, password, loginresultat, text, onUsernameEndre, onPasswordEndre, onSendLogin } = props;
     if (loginresultat.suksess) {
         const originalRequestUrl = loginresultat.originalRequestUrl || '/sampleapp/';
         return (<Redirect to={originalRequestUrl} />);
@@ -27,13 +27,13 @@ function Login(props) {
                 <LoginMessage/>
                 <form onSubmit={e => { e.preventDefault(); }}>
                     <div className="form-group row">
-                        <label htmlFor="username" className="col-form-label col-3 mr-2">Username:</label>
+                        <label htmlFor="username" className="col-form-label col-3 mr-2">{text.username}:</label>
                         <div className="col-8">
                             <input id="username" className="form-control" type="text" name="username" value={username} onChange={e => onUsernameEndre(e.target.value)} />
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label htmlFor="password" className="col-form-label col-3 mr-2">Password:</label>
+                        <label htmlFor="password" className="col-form-label col-3 mr-2">{text.password}:</label>
                         <div className="col-8">
                             <input id="password" className="form-control" type="password" name="password" value={password} onChange={e => onPasswordEndre(e.target.value)}/>
                         </div>
@@ -51,10 +51,12 @@ function Login(props) {
 
 function mapStateToProps(state) {
     const { username, password, loginresultat } = state;
+    const text = state.displayTexts;
     return {
         username,
         password,
         loginresultat,
+        text,
     };
 }
 

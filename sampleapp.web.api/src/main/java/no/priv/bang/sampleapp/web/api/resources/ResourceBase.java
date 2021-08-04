@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package no.priv.bang.sampleapp.services;
+package no.priv.bang.sampleapp.web.api.resources;
 
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
-public interface SampleappService {
+public class ResourceBase {
 
-    public List<Account> getAccounts();
+    public ResourceBase() {
+        super();
+    }
 
-    Locale defaultLocale();
-
-    List<LocaleBean> availableLocales();
-
-    public Map<String, String> displayTexts(Locale locale);
-
-    public String displayText(String key, String locale);
+    protected Response response(int status, String message) {
+        return Response
+            .status(status)
+            .entity(new ErrorMessage(status, message))
+            .type(MediaType.APPLICATION_JSON)
+            .build();
+    }
 
 }

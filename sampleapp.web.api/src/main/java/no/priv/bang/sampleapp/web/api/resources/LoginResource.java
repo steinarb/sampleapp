@@ -25,6 +25,7 @@ import javax.ws.rs.InternalServerErrorException;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
@@ -42,6 +43,7 @@ import org.osgi.service.log.Logger;
 
 import no.priv.bang.sampleapp.services.Credentials;
 import no.priv.bang.sampleapp.services.Loginresult;
+import no.priv.bang.sampleapp.services.SampleappService;
 
 @Path("")
 @Consumes(MediaType.APPLICATION_JSON)
@@ -54,13 +56,16 @@ public class LoginResource {
     private HttpServletRequest request;
 
     @Inject
+    SampleappService sampleapp;
+
+    @Inject
     void setLogservice(LogService logservice) {
         this.logger = logservice.getLogger(LoginResource.class);
     }
 
     @POST
     @Path("/login")
-    public Loginresult login(Credentials credentials) {
+    public Loginresult login(@QueryParam("locale")String locale, Credentials credentials) {
         Subject subject = SecurityUtils.getSubject();
 
         UsernamePasswordToken token = new UsernamePasswordToken(credentials.getUsername(), credentials.getPassword().toCharArray(), true);
@@ -78,16 +83,16 @@ public class LoginResource {
                 .build();
         } catch(UnknownAccountException e) {
             logger.warn("Login error: unknown account", e);
-            return Loginresult.with().suksess(false).feilmelding("Ukjent konto").build();
+            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("unknownaccount", locale)).build();
         } catch (IncorrectCredentialsException  e) {
             logger.warn("Login error: wrong password", e);
-            return Loginresult.with().suksess(false).feilmelding("Feil passord").build();
+            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("wrongpassword", locale)).build();
         } catch (LockedAccountException  e) {
             logger.warn("Login error: locked account", e);
-            return Loginresult.with().suksess(false).feilmelding("Låst konto").build();
+            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("lockedaccount", locale)).build();
         } catch (AuthenticationException e) {
             logger.warn("Login error: general authentication error", e);
-            return Loginresult.with().suksess(false).feilmelding("Ukjent feil").build();
+            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("unknownerror", locale)).build();
         } catch (Exception e) {
             logger.error("Login error: internal server error", e);
             throw new InternalServerErrorException();
@@ -98,24 +103,27 @@ public class LoginResource {
 
     @GET
     @Path("/logout")
-    public Loginresult logout() {
+    public Loginresult logout(@QueryParam("locale")String locale) {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
 
-        return Loginresult.with().suksess(false).feilmelding("Logget ut").build();
+        return Loginresult.with()
+            .suksess(false)
+            .feilmelding(sampleapp.displayText("loggedout", locale))
+            .build();
     }
 
     @GET
     @Path("/loginstate")
-    public Loginresult loginstate() {
+    public Loginresult loginstate(@QueryParam("locale")String locale) {
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
         boolean suksess = subject.isAuthenticated();
         boolean harRoleSampleappuser = subject.hasRole(SAMPLEAPPUSER_ROLE);
         String brukerLoggetInnMelding = harRoleSampleappuser ?
-            "Bruker er logget inn og har tilgang" :
-            "Bruker er logget inn men mangler tilgang";
-        String melding = suksess ? brukerLoggetInnMelding : "Bruker er ikke logget inn";
+            sampleapp.displayText("userloggedinwithaccesses", locale) :
+            sampleapp.displayText("userloggedinwithoutaccesses", locale);
+        String melding = suksess ? brukerLoggetInnMelding : sampleapp.displayText("usernotloggedin", locale);
         return Loginresult.with()
             .suksess(suksess)
             .feilmelding(melding)

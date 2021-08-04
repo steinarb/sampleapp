@@ -21,8 +21,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
 
@@ -33,17 +40,20 @@ import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
 import no.priv.bang.sampleapp.services.Account;
+import no.priv.bang.sampleapp.services.LocaleBean;
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.osgiservice.users.Role;
 import no.priv.bang.osgiservice.users.User;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
-@Component(service=SampleappService.class, immediate=true)
+@Component(service=SampleappService.class, immediate=true, property= { "defaultlocale=nb_NO" })
 public class SampleappServiceProvider implements SampleappService {
 
+    private static final String DISPLAY_TEXT_RESOURCES = "i18n.Texts";
     private Logger logger;
     private DataSource datasource;
     private UserManagementService useradmin;
+    private Locale defaultLocale;
 
     @Reference
     public void setLogservice(LogService logservice) {
@@ -61,7 +71,8 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     @Activate
-    public void activate() {
+    public void activate(Map<String, Object> config) {
+        defaultLocale = Locale.forLanguageTag(((String) config.get("defaultlocale")).replace('_', '-'));
         addRolesIfNotpresent();
     }
 
@@ -88,6 +99,28 @@ public class SampleappServiceProvider implements SampleappService {
         return accounts;
     }
 
+    @Override
+    public Locale defaultLocale() {
+        return defaultLocale;
+    }
+
+    @Override
+    public List<LocaleBean> availableLocales() {
+        return Arrays.asList(Locale.forLanguageTag("nb-NO"), Locale.UK).stream().map(l -> LocaleBean.with().locale(l).build()).collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, String> displayTexts(Locale locale) {
+        return transformResourceBundleToMap(locale);
+    }
+
+    @Override
+    public String displayText(String key, String locale) {
+        Locale active = locale == null || locale.isEmpty() ? defaultLocale : Locale.forLanguageTag(locale.replace('_', '-'));
+        ResourceBundle bundle = ResourceBundle.getBundle(DISPLAY_TEXT_RESOURCES, active);
+        return bundle.getString(key);
+    }
+
     private void addRolesIfNotpresent() {
         String sampleappuser = SAMPLEAPPUSER_ROLE;
         List<Role> roles = useradmin.getRoles();
@@ -95,6 +128,18 @@ public class SampleappServiceProvider implements SampleappService {
         if (!existingRole.isPresent()) {
             useradmin.addRole(Role.with().id(-1).rolename(sampleappuser).description("Bruker av applikasjonen sampleapp").build());
         }
+    }
+
+    Map<String, String> transformResourceBundleToMap(Locale locale) {
+        Map<String, String> map = new HashMap<>();
+        ResourceBundle bundle = ResourceBundle.getBundle(DISPLAY_TEXT_RESOURCES, locale);
+        Enumeration<String> keys = bundle.getKeys();
+        while(keys.hasMoreElements()) {
+            String key = keys.nextElement();
+            map.put(key, bundle.getString(key));
+        }
+
+        return map;
     }
 
 }
