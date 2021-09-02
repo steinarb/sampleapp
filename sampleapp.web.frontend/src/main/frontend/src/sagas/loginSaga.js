@@ -7,7 +7,7 @@ import {
 } from '../actiontypes';
 
 function sendLogin(credentials, locale) {
-    return axios.post('/sampleapp/api/login', credentials, { params: { locale } });
+    return axios.post('/api/login', credentials, { params: { locale } });
 }
 
 function* mottaLoginResultat(action) {

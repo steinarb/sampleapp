@@ -10,7 +10,7 @@ import { Container } from './bootstrap/Container';
 function Unauthorized(props) {
     const { username, loginresultat, text, onLogout } = props;
     if (!loginresultat.suksess) {
-        return <Redirect to="/sampleapp/login" />;
+        return <Redirect to="/login" />;
     }
 
     return (

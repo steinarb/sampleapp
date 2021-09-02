@@ -12,7 +12,7 @@ export default function* defaultLocaleSaga() {
 }
 
 function doDefaultLocale() {
-    return axios.get('/sampleapp/api/defaultlocale');
+    return axios.get('/api/defaultlocale');
 }
 
 // worker saga

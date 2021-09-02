@@ -7,7 +7,7 @@ import {
 } from '../actiontypes';
 
 function sendLogout(locale) {
-    return axios.get('/sampleapp/api/logout', { params: { locale } });
+    return axios.get('/api/logout', { params: { locale } });
 }
 
 function* mottaLogoutResultat() {

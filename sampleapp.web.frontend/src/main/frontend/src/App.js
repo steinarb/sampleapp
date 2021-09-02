@@ -8,14 +8,14 @@ import Unauthorized from './components/Unauthorized';
 
 class App extends Component {
     render() {
-        const { history } = this.props;
+        const { history, basename } = this.props;
 
         return (
-            <Router history={history}>
+            <Router history={history} basename={basename}>
                 <Switch>
-                    <Route exact path="/sampleapp/" component={Home} />
-                    <Route exact path="/sampleapp/login" component={Login} />
-                    <Route exact path="/sampleapp/unauthorized" component={Unauthorized} />
+                    <Route exact path="/" component={Home} />
+                    <Route exact path="/login" component={Login} />
+                    <Route exact path="/unauthorized" component={Unauthorized} />
                 </Switch>
             </Router>
         );

@@ -11,7 +11,7 @@ import LoginMessage from './LoginMessage';
 function Login(props) {
     const { username, password, loginresultat, text, onUsernameEndre, onPasswordEndre, onSendLogin } = props;
     if (loginresultat.suksess) {
-        const originalRequestUrl = loginresultat.originalRequestUrl || '/sampleapp/';
+        const originalRequestUrl = loginresultat.originalRequestUrl || '/';
         return (<Redirect to={originalRequestUrl} />);
     }
 

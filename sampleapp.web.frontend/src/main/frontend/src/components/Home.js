@@ -15,7 +15,7 @@ function Home(props) {
     } = props;
     const username = loginresultat.username;
     if (!loginresultat.authorized) {
-        return <Redirect to="/sampleapp/unauthorized" />;
+        return <Redirect to="/unauthorized" />;
     }
 
     return (

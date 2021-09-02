@@ -12,7 +12,7 @@ export default function* availableLocalesSaga() {
 }
 
 function doAvailableLocales() {
-    return axios.get('/sampleapp/api/availablelocales');
+    return axios.get('/api/availablelocales');
 }
 
 // worker saga

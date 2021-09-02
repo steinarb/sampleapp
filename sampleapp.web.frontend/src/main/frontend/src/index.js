@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import axios from 'axios';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
@@ -16,8 +17,11 @@ import {
     AVAILABLE_LOCALES_REQUEST,
 } from './actiontypes';
 
+const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.includes('bundle.js'))[0].replace('/bundle.js', '');
+const basename = new URL(baseUrl).pathname;
+axios.defaults.baseURL = baseUrl;
 const sagaMiddleware = createSagaMiddleware();
-const history = createBrowserHistory();
+const history = createBrowserHistory({ basename });
 const store = configureStore({
     reducer: createRootReducer(history),
     middleware: [
@@ -33,7 +37,7 @@ store.dispatch(AVAILABLE_LOCALES_REQUEST());
 
 ReactDOM.render(
     <Provider store={store}>
-        <App history={history} />
+        <App history={history} basename={basename} />
     </Provider>,
     document.getElementById('root'));
 

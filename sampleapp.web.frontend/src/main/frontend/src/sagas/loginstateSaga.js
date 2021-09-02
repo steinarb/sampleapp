@@ -7,7 +7,7 @@ import {
 } from '../actiontypes';
 
 function sendLoginstate(locale) {
-    return axios.get('/sampleapp/api/loginstate', { params: { locale } });
+    return axios.get('/api/loginstate', { params: { locale } });
 }
 
 function* mottaLoginstateResultat() {

@@ -7,7 +7,7 @@ import {
 } from '../actiontypes';
 
 function sendAccounts() {
-    return axios.get('/sampleapp/api/accounts');
+    return axios.get('/api/accounts');
 }
 
 function* mottaAccountsResultat() {

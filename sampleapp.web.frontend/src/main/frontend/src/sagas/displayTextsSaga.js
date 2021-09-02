@@ -14,7 +14,7 @@ export default function* displayTextsSaga() {
 }
 
 function doDisplayTexts(locale) {
-    return axios.get('/sampleapp/api/displaytexts', { params: { locale } });
+    return axios.get('/api/displaytexts', { params: { locale } });
 }
 
 // worker saga

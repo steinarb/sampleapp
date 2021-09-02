@@ -6,7 +6,7 @@ function* locationChange(action) {
     const { location = {} } = action.payload || {};
     const { pathname = '' } = location;
 
-    if (pathname === '/sampleapp/') {
+    if (pathname === '/') {
         yield select(state => state.username);
         yield put(ACCOUNTS_REQUEST());
     }
