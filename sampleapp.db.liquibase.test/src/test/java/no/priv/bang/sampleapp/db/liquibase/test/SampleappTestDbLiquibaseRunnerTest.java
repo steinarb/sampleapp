@@ -46,18 +46,17 @@ class SampleappTestDbLiquibaseRunnerTest {
     }
 
     private void assertAccounts(DataSource datasource) throws Exception {
+        int resultcount = 0;
         try (Connection connection = datasource.getConnection()) {
             try(PreparedStatement statement = connection.prepareStatement("select * from sampleapp_accounts")) {
                 try (ResultSet results = statement.executeQuery()) {
-                    assertAccount(results, "jod");
+                    while (results.next()) {
+                        ++resultcount;
+                    }
                 }
             }
         }
-    }
-
-    private void assertAccount(ResultSet results, String username) throws Exception {
-        assertTrue(results.next());
-        assertEquals(username, results.getString(2)); // column 1 is the id
+        assertEquals(0, resultcount);
     }
 
 }
