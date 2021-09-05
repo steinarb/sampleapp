@@ -53,7 +53,7 @@ class SampleappLiquibaseTest {
     }
 
     private void assertAccounts(Connection connection) throws Exception {
-        String sql = "select count(*) from accounts";
+        String sql = "select count(*) from sampleapp_accounts";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             try(ResultSet results = statement.executeQuery()) {
                 if (results.next()) {
@@ -65,7 +65,7 @@ class SampleappLiquibaseTest {
     }
 
     private int addAccount(Connection connection, String username) throws Exception {
-        String sql = "insert into accounts (username) values (?)";
+        String sql = "insert into sampleapp_accounts (username) values (?)";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
             statement.executeUpdate();
@@ -75,7 +75,7 @@ class SampleappLiquibaseTest {
     }
 
     private int findAccountId(Connection connection, String username) throws Exception {
-        String sql = "select account_id from accounts where username=?";
+        String sql = "select account_id from sampleapp_accounts where username=?";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
             try(ResultSet results = statement.executeQuery()) {

@@ -52,6 +52,7 @@ To create a new project called "mynewapp":
       sed -i 's/sampleapp/mynewapp/g' */src/main/resources/shiro.ini
       sed -i 's/sampleapp/mynewapp/g' */src/test/resources/test.shiro.ini
       sed -i 's/sampleapp/mynewapp/gI' */pom.xml
+      sed -i 's/sampleapp_accounts/mynewapp_accounts/g' */src/main/resources/sql/data/accounts.sql
       find . -name \*.js | xargs sed -i 's/sampleapp/mynewapp/g'
     #+end_example
  4. Test build the project with "mvn install" (it should build without any errors)

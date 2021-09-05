@@ -49,7 +49,7 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
     private void assertAccounts(DataSource datasource) throws Exception {
         try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("select * from accounts")) {
+            try(PreparedStatement statement = connection.prepareStatement("select * from sampleapp_accounts")) {
                 try (ResultSet results = statement.executeQuery()) {
                     assertAccount(results, "jd");
                 }
@@ -64,14 +64,14 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
     private int addAccount(DataSource datasource, String username) throws Exception {
         try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("insert into accounts (username) values (?)")) {
+            try(PreparedStatement statement = connection.prepareStatement("insert into sampleapp_accounts (username) values (?)")) {
                 statement.setString(1, username);
                 statement.executeUpdate();
             }
         }
         int accountId = -1;
         try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("select * from accounts where username=?")) {
+            try(PreparedStatement statement = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
                 statement.setString(1, username);
                 try (ResultSet results = statement.executeQuery()) {
                     results.next();

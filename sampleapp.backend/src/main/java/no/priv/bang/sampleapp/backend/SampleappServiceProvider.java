@@ -81,7 +81,7 @@ public class SampleappServiceProvider implements SampleappService {
         List<Account> accounts = new ArrayList<>();
         try(Connection connection = datasource.getConnection()) {
             try(Statement statement = connection.createStatement()) {
-                try(ResultSet results = statement.executeQuery("select * from accounts")) {
+                try(ResultSet results = statement.executeQuery("select * from sampleapp_accounts")) {
                     while(results.next()) {
                         int accountId = results.getInt(1);
                         String username = results.getString(2);

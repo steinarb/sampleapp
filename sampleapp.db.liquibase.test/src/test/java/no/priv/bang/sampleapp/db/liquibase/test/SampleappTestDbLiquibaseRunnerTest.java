@@ -47,7 +47,7 @@ class SampleappTestDbLiquibaseRunnerTest {
 
     private void assertAccounts(DataSource datasource) throws Exception {
         try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("select * from accounts")) {
+            try(PreparedStatement statement = connection.prepareStatement("select * from sampleapp_accounts")) {
                 try (ResultSet results = statement.executeQuery()) {
                     assertAccount(results, "jod");
                 }
