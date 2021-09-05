@@ -67,18 +67,23 @@ public class LoginResource {
     @Path("/login")
     public Loginresult login(@QueryParam("locale")String locale, Credentials credentials) {
         Subject subject = SecurityUtils.getSubject();
+        String username = credentials.getUsername();
 
-        UsernamePasswordToken token = new UsernamePasswordToken(credentials.getUsername(), credentials.getPassword().toCharArray(), true);
+        UsernamePasswordToken token = new UsernamePasswordToken(username, credentials.getPassword().toCharArray(), true);
         try {
             subject.login(token);
             SavedRequest savedRequest = WebUtils.getSavedRequest(request);
             String originalRequestUrl = savedRequest != null ? savedRequest.getRequestUrl() : null;
+            boolean authorized = subject.hasRole(SAMPLEAPPUSER_ROLE);
+            if (authorized) {
+                sampleapp.lazilyCreateAccount(username);
+            }
 
             return Loginresult.with()
                 .suksess(true)
                 .feilmelding("")
-                .authorized(subject.hasRole(SAMPLEAPPUSER_ROLE))
-                .username(credentials.getUsername())
+                .authorized(authorized)
+                .username(username)
                 .originalRequestUrl(originalRequestUrl)
                 .build();
         } catch(UnknownAccountException e) {

@@ -15,6 +15,7 @@
  */
 package no.priv.bang.sampleapp.backend;
 
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -66,8 +67,34 @@ class SampleappServiceProviderTest {
         provider.setUseradmin(useradmin);
         provider.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
 
-        List<Account> accounts = provider.getAccounts();
-        assertThat(accounts).isNotEmpty();
+        List<Account> accountsBefore = provider.getAccounts();
+        assertThat(accountsBefore).isEmpty();
+        boolean accountCreated = provider.lazilyCreateAccount("jad");
+        assertTrue(accountCreated);
+        List<Account> accountsAfter = provider.getAccounts();
+        assertThat(accountsAfter).isNotEmpty();
+        boolean secondAccountCreate = provider.lazilyCreateAccount("jad");
+        assertFalse(secondAccountCreate);
+        List<Account> accountsAfterSecondCreate = provider.getAccounts();
+        assertThat(accountsAfterSecondCreate).isEqualTo(accountsAfter);
+    }
+
+    @Test
+    void testLazilyCreateAccountWithSQLException() throws Exception {
+        MockLogService logservice = new MockLogService();
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappServiceProvider provider = new SampleappServiceProvider();
+        DataSource datasourceThrowsException = mock(DataSource.class);
+        when(datasourceThrowsException.getConnection()).thenThrow(SQLException.class);
+        provider.setLogservice(logservice);
+        provider.setDatasource(datasourceThrowsException);
+        provider.setUseradmin(useradmin);
+        provider.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+
+        assertThat(logservice.getLogmessages()).isEmpty();
+        boolean accountCreated = provider.lazilyCreateAccount("jad");
+        assertFalse(accountCreated);
+        assertThat(logservice.getLogmessages()).isNotEmpty();
     }
 
     @Test

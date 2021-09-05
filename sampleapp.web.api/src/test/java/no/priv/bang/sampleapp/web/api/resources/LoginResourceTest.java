@@ -20,10 +20,13 @@ import static org.mockito.Mockito.*;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.subject.WebSubject;
+import org.apache.shiro.web.util.WebUtils;
 
 import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
+
+import com.mockrunner.mock.web.MockHttpServletRequest;
 
 import no.priv.bang.sampleapp.services.Credentials;
 import no.priv.bang.sampleapp.services.Loginresult;
@@ -35,7 +38,9 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLogin() {
+        SampleappService sampleapp = mock(SampleappService.class);
         LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
         String username = "jd";
         String password = "johnnyBoi";
         createSubjectAndBindItToThread();
@@ -43,6 +48,42 @@ class LoginResourceTest extends ShiroTestBase {
         String locale = "nb_NO";
         Loginresult resultat = resource.login(locale, credentials);
         assertTrue(resultat.getSuksess());
+        assertTrue(resultat.isAuthorized());
+        assertNull(resultat.getOriginalRequestUrl());
+    }
+
+    @Test
+    void testLoginByUserWithoutRole() {
+        SampleappService sampleapp = mock(SampleappService.class);
+        LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
+        String username = "jad";
+        String password = "1ad";
+        createSubjectAndBindItToThread();
+        Credentials credentials = Credentials.with().username(username).password(password).build();
+        String locale = "nb_NO";
+        Loginresult resultat = resource.login(locale, credentials);
+        assertTrue(resultat.getSuksess());
+        assertFalse(resultat.isAuthorized());
+    }
+
+    @Test
+    void testLoginWithOriginalRequestUrl() {
+        SampleappService sampleapp = mock(SampleappService.class);
+        LoginResource resource = new LoginResource();
+        resource.sampleapp = sampleapp;
+        String username = "jd";
+        String password = "johnnyBoi";
+        MockHttpServletRequest originalRequest = new MockHttpServletRequest();
+        originalRequest.setRequestURI("http://localhost:8181/sampleapp");
+        createSubjectFromOriginalRequestAndBindItToThread(originalRequest);
+        WebUtils.saveRequest(originalRequest);
+        Credentials credentials = Credentials.with().username(username).password(password).build();
+        String locale = "nb_NO";
+        Loginresult resultat = resource.login(locale, credentials);
+        assertTrue(resultat.getSuksess());
+        assertTrue(resultat.isAuthorized());
+        assertNotNull(resultat.getOriginalRequestUrl());
     }
 
     @Test

@@ -17,6 +17,7 @@ package no.priv.bang.sampleapp.backend;
 
 import static no.priv.bang.sampleapp.services.SampleappConstants.*;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -74,6 +75,36 @@ public class SampleappServiceProvider implements SampleappService {
     public void activate(Map<String, Object> config) {
         defaultLocale = Locale.forLanguageTag(((String) config.get("defaultlocale")).replace('_', '-'));
         addRolesIfNotpresent();
+    }
+
+    @Override
+    public boolean lazilyCreateAccount(String username) {
+        boolean exists = false;
+        try(Connection connection = datasource.getConnection()) {
+            try(PreparedStatement findAccount = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
+                findAccount.setString(1, username);
+                try(ResultSet results = findAccount.executeQuery()) {
+                    while (results.next()) {
+                        exists = true;
+                    }
+                }
+            }
+
+            if (exists) {
+                return false;
+            }
+
+            try(PreparedStatement createAccount = connection.prepareStatement("insert into sampleapp_accounts (username) values (?)")) {
+                createAccount.setString(1, username);
+                createAccount.executeUpdate();
+                return true;
+            }
+
+        } catch (SQLException e) {
+            logger.warn("Failed to create sampleapp account for username \"{}\"", username, e);
+        }
+
+        return false;
     }
 
     @Override

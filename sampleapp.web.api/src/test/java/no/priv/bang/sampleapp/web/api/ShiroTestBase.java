@@ -37,6 +37,7 @@ import org.apache.shiro.web.subject.WebSubject;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockHttpServletResponse;
+import com.mockrunner.mock.web.MockHttpSession;
 
 public class ShiroTestBase {
 
@@ -72,11 +73,15 @@ public class ShiroTestBase {
     }
 
     protected WebSubject createSubjectAndBindItToThread() {
-        HttpSession session = mock(HttpSession.class);
-        MockHttpServletRequest dummyrequest = new MockHttpServletRequest();
-        dummyrequest.setSession(session);
+        MockHttpServletRequest originalRequest = new MockHttpServletRequest();
+        return createSubjectFromOriginalRequestAndBindItToThread(originalRequest);
+    }
+
+    protected WebSubject createSubjectFromOriginalRequestAndBindItToThread(MockHttpServletRequest originalRequest) {
+        MockHttpSession session = new MockHttpSession();
+        originalRequest.setSession(session);
         MockHttpServletResponse dummyresponse = new MockHttpServletResponse();
-        return createSubjectAndBindItToThread(dummyrequest, dummyresponse);
+        return createSubjectAndBindItToThread(originalRequest, dummyresponse);
     }
 
     protected WebSubject createSubjectAndBindItToThread(HttpServletRequest request, HttpServletResponse response) {

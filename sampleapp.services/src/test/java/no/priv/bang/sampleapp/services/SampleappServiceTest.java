@@ -31,6 +31,9 @@ class SampleappServiceTest {
     @Test
     void testOfAllOfTheMethods() {
         SampleappService service = mock(SampleappService.class);
+        String username = "jad";
+        boolean created = service.lazilyCreateAccount(username);
+        assertFalse(created);
         List<Account> accounts = service.getAccounts();
         assertThat(accounts).isEmpty();
         Locale defaultLocale = service.defaultLocale();

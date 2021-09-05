@@ -31,4 +31,6 @@ public interface SampleappService {
 
     public String displayText(String key, String locale);
 
+    public boolean lazilyCreateAccount(String username);
+
 }
