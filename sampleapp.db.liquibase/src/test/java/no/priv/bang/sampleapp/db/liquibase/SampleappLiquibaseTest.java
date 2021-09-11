@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -38,6 +40,13 @@ class SampleappLiquibaseTest {
         sampleappLiquibase.createInitialSchema(connection);
         addAccounts(connection);
         assertAccounts(connection);
+        addCounterIncrementSteps(connection);
+        assertCounterIncrementSteps(connection);
+        int accountIdNotMatchingAccount = 375;
+        assertThrows(SQLException.class,() -> addCounterIncrementStep(connection, accountIdNotMatchingAccount, 10));
+        addCounters(connection);
+        assertCounters(connection);
+        assertThrows(SQLException.class,() -> addCounter(connection, accountIdNotMatchingAccount, 4));
         sampleappLiquibase.updateSchema(connection);
     }
 
@@ -64,6 +73,34 @@ class SampleappLiquibaseTest {
         }
     }
 
+    private void addCounterIncrementSteps(Connection connection) throws Exception {
+        addCounterIncrementStep(connection, findAccountId(connection, "admin"), 10);
+    }
+
+    private void assertCounterIncrementSteps(Connection connection) throws Exception {
+        try(Statement statement = connection.createStatement()) {
+            try(ResultSet results = statement.executeQuery("select * from counter_increment_steps")) {
+                assertTrue(results.next());
+                assertEquals(findAccountId(connection, "admin"), results.getInt(2));
+                assertEquals(10, results.getInt(3));
+            }
+        }
+    }
+
+    private void addCounters(Connection connection) throws Exception {
+        addCounter(connection, findAccountId(connection, "admin"), 3);
+    }
+
+    private void assertCounters(Connection connection) throws Exception {
+        try(Statement statement = connection.createStatement()) {
+            try(ResultSet results = statement.executeQuery("select * from counters")) {
+                assertTrue(results.next());
+                assertEquals(findAccountId(connection, "admin"), results.getInt(2));
+                assertEquals(3, results.getInt(3));
+            }
+        }
+    }
+
     private int addAccount(Connection connection, String username) throws Exception {
         String sql = "insert into sampleapp_accounts (username) values (?)";
         try(PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -72,6 +109,24 @@ class SampleappLiquibaseTest {
         }
 
         return findAccountId(connection, username);
+    }
+
+    private void addCounterIncrementStep(Connection connection, int accountid, int counterIncrementStep) throws Exception {
+        String sql = "insert into counter_increment_steps (account_id, counter_increment_step) values (?, ?)";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, accountid);
+            statement.setInt(2, counterIncrementStep);
+            statement.executeUpdate();
+        }
+    }
+
+    private void addCounter(Connection connection, int accountid, int count) throws Exception {
+        String sql = "insert into counters (account_id, counter) values (?, ?)";
+        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setInt(1, accountid);
+            statement.setInt(2, count);
+            statement.executeUpdate();
+        }
     }
 
     private int findAccountId(Connection connection, String username) throws Exception {

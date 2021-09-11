@@ -39,4 +39,62 @@
 
     </changeSet>
 
+    <changeSet author="sb" id="sampleapp-1.0.0-counter_increment_steps">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="counter_increment_steps" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="counter_increment_steps">
+            <column autoIncrement="true" name="increment_step_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="counter_increment_steps_primary_key"/>
+            </column>
+            <column name="account_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_counter_increment_steps_account" references="sampleapp_accounts(account_id)"/>
+            </column>
+            <column name="counter_increment_step" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="counter_increment_steps_id_index" tableName="counter_increment_steps">
+            <column name="increment_step_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_counter_increment_steps_account_id" tableName="counter_increment_steps">
+            <column name="account_id" type="INTEGER" />
+        </createIndex>
+
+    </changeSet>
+
+    <changeSet author="sb" id="sampleapp-1.0.0-counters">
+        <preConditions onFail="CONTINUE" >
+            <not>
+                <tableExists tableName="counters" />
+            </not>
+        </preConditions>
+
+        <createTable tableName="counters">
+            <column autoIncrement="true" name="count_id" type="INTEGER">
+                <constraints primaryKey="true" primaryKeyName="counters_primary_key"/>
+            </column>
+            <column name="account_id" type="INTEGER">
+                <constraints nullable="false" foreignKeyName="fk_counters_account" references="sampleapp_accounts(account_id)"/>
+            </column>
+            <column name="counter" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="counters_id_index" tableName="counters">
+            <column name="count_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_counters_account_id" tableName="counters">
+            <column name="account_id" type="INTEGER" />
+        </createIndex>
+
+    </changeSet>
+
 </databaseChangeLog>
