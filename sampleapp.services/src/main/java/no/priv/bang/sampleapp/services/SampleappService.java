@@ -18,10 +18,21 @@ package no.priv.bang.sampleapp.services;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 public interface SampleappService {
 
     public List<Account> getAccounts();
+
+    public Optional<CounterIncrementStepBean> getCounterIncrementStep(String username);
+
+    public Optional<CounterIncrementStepBean> updateCounterIncrementStep(CounterIncrementStepBean cupdatedIncrementStep);
+
+    public Optional<CounterBean> getCounter(String username);
+
+    public Optional<CounterBean> incrementCounter(String username);
+
+    public Optional<CounterBean> decrementCounter(String username);
 
     Locale defaultLocale();
 

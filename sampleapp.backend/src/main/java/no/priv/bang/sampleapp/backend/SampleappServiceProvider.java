@@ -41,6 +41,8 @@ import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
 import no.priv.bang.sampleapp.services.Account;
+import no.priv.bang.sampleapp.services.CounterBean;
+import no.priv.bang.sampleapp.services.CounterIncrementStepBean;
 import no.priv.bang.sampleapp.services.LocaleBean;
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.osgiservice.users.Role;
@@ -79,27 +81,30 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public boolean lazilyCreateAccount(String username) {
-        boolean exists = false;
         try(Connection connection = datasource.getConnection()) {
-            try(PreparedStatement findAccount = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
-                findAccount.setString(1, username);
-                try(ResultSet results = findAccount.executeQuery()) {
-                    while (results.next()) {
-                        exists = true;
-                    }
-                }
-            }
+            int accountid = findAccount(connection, username);
 
-            if (exists) {
+            if (accountid != -1) {
                 return false;
             }
 
             try(PreparedStatement createAccount = connection.prepareStatement("insert into sampleapp_accounts (username) values (?)")) {
                 createAccount.setString(1, username);
                 createAccount.executeUpdate();
-                return true;
             }
 
+            accountid = findAccount(connection, username);
+            try(PreparedStatement createIncrementStep = connection.prepareStatement("insert into counter_increment_steps (account_id) values (?)")) {
+                createIncrementStep.setInt(1, accountid);
+                createIncrementStep.executeUpdate();
+            }
+
+            try(PreparedStatement createCounter = connection.prepareStatement("insert into counters (account_id) values (?)")) {
+                createCounter.setInt(1, accountid);
+                createCounter.executeUpdate();
+            }
+
+            return true;
         } catch (SQLException e) {
             logger.warn("Failed to create sampleapp account for username \"{}\"", username, e);
         }
@@ -124,10 +129,95 @@ public class SampleappServiceProvider implements SampleappService {
             }
 
         } catch (SQLException e) {
-            logger.error("Ingen sampleapp");
+            logger.error("Ingen sampleapp", e);
         }
 
         return accounts;
+    }
+
+    @Override
+    public Optional<CounterIncrementStepBean> getCounterIncrementStep(String username) {
+        try(Connection connection = datasource.getConnection()) {
+            Integer counterIncrementStep = findCounterIncrementStep(connection, username);
+            if (counterIncrementStep != null) {
+                CounterIncrementStepBean bean = CounterIncrementStepBean.with()
+                    .counterIncrementStep(counterIncrementStep)
+                    .build();
+                return Optional.of(bean);
+            }
+        } catch (SQLException e) {
+            logger.error("No increment steps could be found for user \"{}\"", username, e);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<CounterIncrementStepBean> updateCounterIncrementStep(CounterIncrementStepBean updatedIncrementStep) {
+        String username = updatedIncrementStep.getUsername();
+        try(Connection connection = datasource.getConnection()) {
+            try(PreparedStatement statement = connection.prepareStatement("update counter_increment_steps set counter_increment_step=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
+                statement.setInt(1, updatedIncrementStep.getCounterIncrementStep());
+                statement.setString(2, username);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            logger.error("Unable to update increment step for user \"{}\"", username, e);
+            return Optional.empty();
+        }
+
+        return getCounterIncrementStep(username);
+    }
+
+    @Override
+    public Optional<CounterBean> getCounter(String username) {
+        try(Connection connection = datasource.getConnection()) {
+            return findAndCreateCounterBean(connection, username);
+        } catch (SQLException e) {
+            logger.error("No counter could be found for user \"{}\"", username, e);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<CounterBean> incrementCounter(String username) {
+        try(Connection connection = datasource.getConnection()) {
+            int incrementStep = findCounterIncrementStep(connection, username);
+            int counter = findCounter(connection, username);
+
+            try(PreparedStatement statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
+                statement.setInt(1, counter + incrementStep);
+                statement.setString(2, username);
+                statement.executeUpdate();
+            }
+
+            return findAndCreateCounterBean(connection, username);
+        } catch (SQLException e) {
+            logger.warn("Failed to increment counter for user \"{}\"", username, e);
+        }
+
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<CounterBean> decrementCounter(String username) {
+        try(Connection connection = datasource.getConnection()) {
+            int incrementStep = findCounterIncrementStep(connection, username);
+            int counter = findCounter(connection, username);
+
+            try(PreparedStatement statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
+                statement.setInt(1, counter - incrementStep);
+                statement.setString(2, username);
+                statement.executeUpdate();
+            }
+
+            return findAndCreateCounterBean(connection, username);
+        } catch (SQLException e) {
+            logger.warn("Failed to decrement counter for user \"{}\"", username, e);
+        }
+
+        return Optional.empty();
     }
 
     @Override
@@ -150,6 +240,52 @@ public class SampleappServiceProvider implements SampleappService {
         Locale active = locale == null || locale.isEmpty() ? defaultLocale : Locale.forLanguageTag(locale.replace('_', '-'));
         ResourceBundle bundle = ResourceBundle.getBundle(DISPLAY_TEXT_RESOURCES, active);
         return bundle.getString(key);
+    }
+
+    private int findAccount(Connection connection, String username) throws SQLException {
+        try(PreparedStatement findAccount = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
+            findAccount.setString(1, username);
+            try(ResultSet results = findAccount.executeQuery()) {
+                while (results.next()) {
+                    return results.getInt(1);
+                }
+            }
+        }
+
+        return -1;
+    }
+
+    private Integer findCounterIncrementStep(Connection connection, String username) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement("select * from counter_increment_steps c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
+            statement.setString(1, username);
+            try(ResultSet results = statement.executeQuery()) {
+                while(results.next()) {
+                    return results.getInt(3);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Integer findCounter(Connection connection, String username) throws SQLException {
+        try(PreparedStatement statement = connection.prepareStatement("select * from counters c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
+            statement.setString(1, username);
+            try(ResultSet results = statement.executeQuery()) {
+                while(results.next()) {
+                    return results.getInt(3);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Optional<CounterBean> findAndCreateCounterBean(Connection connection, String username) throws SQLException {
+        Integer counter = findCounter(connection, username);
+        return counter != null ?
+            Optional.of(CounterBean.with().counter(counter).build()) :
+            Optional.empty();
     }
 
     private void addRolesIfNotpresent() {

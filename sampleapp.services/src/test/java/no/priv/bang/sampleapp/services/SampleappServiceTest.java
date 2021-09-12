@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,6 +37,16 @@ class SampleappServiceTest {
         assertFalse(created);
         List<Account> accounts = service.getAccounts();
         assertThat(accounts).isEmpty();
+        Optional<CounterIncrementStepBean> incrementStep = service.getCounterIncrementStep(username);
+        assertTrue(incrementStep.isEmpty());
+        Optional<CounterIncrementStepBean> updatedStep = service.updateCounterIncrementStep(CounterIncrementStepBean.with().build());
+        assertTrue(updatedStep.isEmpty());
+        Optional<CounterBean> counter = service.getCounter(username);
+        assertTrue(counter.isEmpty());
+        Optional<CounterBean> incrementedCounter = service.incrementCounter(username);
+        assertTrue(incrementedCounter.isEmpty());
+        Optional<CounterBean> decrementedCounter = service.decrementCounter(username);
+        assertTrue(decrementedCounter.isEmpty());
         Locale defaultLocale = service.defaultLocale();
         assertNull(defaultLocale);
         List<LocaleBean> availableLocales = service.availableLocales();

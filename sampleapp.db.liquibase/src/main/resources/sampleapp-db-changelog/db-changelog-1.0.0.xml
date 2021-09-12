@@ -58,6 +58,8 @@
             </column>
         </createTable>
 
+        <addDefaultValue tableName="counter_increment_steps" columnName="counter_increment_step" defaultValueNumeric="1" columnDataType="INTEGER" />
+
         <createIndex indexName="counter_increment_steps_id_index" tableName="counter_increment_steps">
             <column name="increment_step_id"/>
         </createIndex>
@@ -86,6 +88,8 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <addDefaultValue tableName="counters" columnName="counter" defaultValueNumeric="0" columnDataType="INTEGER" />
 
         <createIndex indexName="counters_id_index" tableName="counters">
             <column name="count_id"/>
