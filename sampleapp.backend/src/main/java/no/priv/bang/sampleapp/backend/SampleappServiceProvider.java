@@ -141,6 +141,7 @@ public class SampleappServiceProvider implements SampleappService {
             Integer counterIncrementStep = findCounterIncrementStep(connection, username);
             if (counterIncrementStep != null) {
                 CounterIncrementStepBean bean = CounterIncrementStepBean.with()
+                    .username(username)
                     .counterIncrementStep(counterIncrementStep)
                     .build();
                 return Optional.of(bean);
