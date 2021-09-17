@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default function Col(props) {
+export default function Row(props) {
     const { className } = props;
-    const classes = className ? 'col ' + className : 'col';
+    const classes = className ? 'row ' + className : 'row';
     return (
         <div className={classes}>
             {props.children}

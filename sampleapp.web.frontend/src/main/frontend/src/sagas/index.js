@@ -9,6 +9,8 @@ import availableLocalesSaga from './availableLocalesSaga';
 import displayTextsSaga from './displayTextsSaga';
 import locationSaga from './locationSaga';
 import accountsSaga from './accountsSaga';
+import counterIncrementStepSaga from './counterIncrementStepSaga';
+import counterSaga from './counterSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -21,5 +23,7 @@ export default function* rootSaga() {
         fork(displayTextsSaga),
         fork(locationSaga),
         fork(accountsSaga),
+        fork(counterIncrementStepSaga),
+        fork(counterSaga),
     ]);
 }

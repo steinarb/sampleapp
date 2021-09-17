@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'connected-react-router';
 import './App.css';
 import Home from './components/Home';
+import Counter from './components/Counter';
 import Login from './components/Login';
 import Unauthorized from './components/Unauthorized';
 
@@ -14,6 +15,7 @@ class App extends Component {
             <Router history={history} basename={basename}>
                 <Switch>
                     <Route exact path="/" component={Home} />
+                    <Route exact path="/counter" component={Counter} />
                     <Route exact path="/login" component={Login} />
                     <Route exact path="/unauthorized" component={Unauthorized} />
                 </Switch>

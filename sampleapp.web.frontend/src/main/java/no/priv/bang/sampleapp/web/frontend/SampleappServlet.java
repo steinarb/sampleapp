@@ -39,6 +39,7 @@ public class SampleappServlet extends FrontendServlet {
         // The paths used by the react router
         setRoutes(
             "/",
+            "/counter",
             "/login",
             "/unauthorized");
     }

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router';
+import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { Container } from './bootstrap/Container';
 import { LOGOUT_REQUEST } from '../actiontypes';
@@ -23,6 +24,7 @@ function Home(props) {
             <nav className="navbar navbar-light bg-light">
                 <a className="btn btn-primary left-align-cell" href="../.."><span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!</a>
                 <h1>Sampleapp</h1>
+                <NavLink className="btn btn-primary" to="/counter">Counter</NavLink>
                 <Locale />
             </nav>
             <Container>

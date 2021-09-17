@@ -4,6 +4,8 @@ import username from './usernameReducer';
 import password from './passwordReducer';
 import loginresultat from './loginresultatReducer';
 import accounts from './accountsReducer';
+import counterIncrementStep from './counterIncrementStepReducer';
+import counter from './counterReducer';
 import locale from './localeReducer';
 import availableLocales from './availableLocalesReducer';
 import displayTexts from './displayTextsReducer';
@@ -15,6 +17,8 @@ export default (history) => combineReducers({
     password,
     loginresultat,
     accounts,
+    counterIncrementStep,
+    counter,
     locale,
     availableLocales,
     displayTexts,
