@@ -54,23 +54,36 @@ To create a new project called "mynewapp":
       sed -i 's/sampleapp/mynewapp/gI' */pom.xml
       find . -name \*.js | xargs sed -i 's/sampleapp/mynewapp/g'
     #+end_example
- 4. Test build the project with "mvn install" (it should build without any errors)
+ 4. Add a .gitignore file (there is a bug in maven-resources-plugin that excludes this file from archetypes):
+    #+begin_example
+      ,*.iml
+      ,*.log
+      .classpath
+      .idea/
+      .project
+      .settings/
+      /.metadata/
+      /TAGS
+      node_modules/
+      target/
+    #+end_example
+ 5. Test build the project with "mvn install" (it should build without any errors)
     #+begin_example
       cd ~/git/mynewapp/
       mvn install
     #+end_example
- 5. Open the java maven modules of the mynewapp project, in a Java IDE (eclipse or IntelliJ), and use the refactoring of the IDE to rename classes with names starting with "Sampleapp" into classes starting with "Mynewapp" (this is the step that the archetype can't handle, but at least the classes are already in packages they are supposed to be in for the new application)
- 6. Build mynewapp from the top with "mvn clean install" ("clean" is to get rid of .class files with the old names)
+ 6. Open the java maven modules of the mynewapp project, in a Java IDE (eclipse or IntelliJ), and use the refactoring of the IDE to rename classes with names starting with "Sampleapp" into classes starting with "Mynewapp" (this is the step that the archetype can't handle, but at least the classes are already in packages they are supposed to be in for the new application)
+ 7. Build mynewapp from the top with "mvn clean install" ("clean" is to get rid of .class files with the old names)
     #+begin_example
       cd ~/git/mynewapp/
       mvn clean install
     #+end_example
- 7. Install mynewapp in a karaf instance
+ 8. Install mynewapp in a karaf instance
     #+begin_example
       feature:repo-add mvn:no.priv.bang.mynewapp/karaf/LATEST/xml/features
       feature:install mynewapp-with-derby
     #+end_example
- 8. Verify that the application is running on http://localhost:8181/mynewapp
+ 9. Verify that the application is running on http://localhost:8181/mynewapp
 
 ** Configuring a new default locale
 
