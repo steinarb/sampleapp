@@ -26,6 +26,9 @@ Give the following commands to the karaf console:
   feature:repo-add mvn:no.priv.bang.sampleapp/karaf/LATEST/xml/features
   feature:install sampleapp-with-derby
 #+END_EXAMPLE
+
+Then open http://localhost:8181/sampleapp in a web browser.
+
 ** Creating a new application based on the sample app
 
 Using the [[https://maven.apache.org/archetype/maven-archetype-plugin/i][maven archetype plugin]] to adapt the sample project to a new project is simpler than hand editing the sample project and moving all packages and module names, but it doesn't take you all the way (it doesn't rename Java classes and doesn't fix up the shiro.ini files).
