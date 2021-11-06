@@ -4,11 +4,11 @@ This is a barebones sample application for a multi-module, multi-bundle apache k
 
 Intended to make it simple to start a new webapp.
 
-The application database has a single table "accounts" listing the users that are allowed to log into the database.
+The application database has a table "accounts" listing the users that are allowed to log into the database.  It also has some tables supporting a simple counter application (the increment step size for the counter for each logged in user, and the current count for each user).
 
-The application OSGi service Java interface (SampleappService), has a single method "getAccounts()", which is taken through a jersey JAX-RS REST resource (AccountsResource) and the result is displayed in a react frontend (so a narrow path all the way from an SQL database and to a react frontend).
+The application OSGi service Java interface (SampleappService), has a method "getAccounts()", which is taken through a jersey JAX-RS REST resource (AccountsResource) and the result is displayed in a react frontend (so a narrow path all the way from an SQL database and to a react frontend).  The interface also has methods to manage the counter operations.
 
-The rest of the user information (full name, email) comes from an injected OSGi service of type [[https://www.javadoc.io/doc/no.priv.bang.osgiservice/osgiservice/latest/no/priv/bang/osgiservice/users/UserManagementService.html][UserManagementService]] provided by the [[https://github.com/steinarb/authservice][authservice]].
+All user information, outside of the username, i.e. full name, email, comes from an injected OSGi service of type [[https://www.javadoc.io/doc/no.priv.bang.osgiservice/osgiservice/latest/no/priv/bang/osgiservice/users/UserManagementService.html][UserManagementService]] provided by the [[https://github.com/steinarb/authservice][authservice]].
 
 The username/password combinations of users in the test db version of authservice, are:
 | username | password  | authorized for sampleapp |
