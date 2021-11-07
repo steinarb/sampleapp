@@ -27,7 +27,14 @@ Give the following commands to the karaf console:
   feature:install sampleapp-with-derby
 #+END_EXAMPLE
 
-Then open http://localhost:8181/sampleapp in a web browser.
+Then:
+ 1. open http://localhost:8181/sampleapp in a web browser
+ 2. log in as user "jad" with password "1ad"
+ 3. click on counter and use "-" and "+" to change the value
+ 4. try editing the step size, wait a few seconds and then observe that "+" and "-" change the value with the step size
+ 5. Navigate to the top page and log out
+ 6. Log in as user "jod" with password "johnnyBoi" and observe that you end in a "not authorized page" (the user exists but do not have the role of the app)
+ 7. Log out and log back in as user "jad", navigate to the "counter" page, and observe that the count is like you left it (the count is persisted in the database)
 
 ** Creating a new application based on the sample app
 
