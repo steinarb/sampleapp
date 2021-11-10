@@ -38,8 +38,10 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLogin() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
         SampleappService sampleapp = mock(SampleappService.class);
         LoginResource resource = new LoginResource();
+        resource.request = request;
         resource.sampleapp = sampleapp;
         String username = "jd";
         String password = "johnnyBoi";
@@ -54,8 +56,10 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLoginByUserWithoutRole() {
+        MockHttpServletRequest request = new MockHttpServletRequest();
         SampleappService sampleapp = mock(SampleappService.class);
         LoginResource resource = new LoginResource();
+        resource.request = request;
         resource.sampleapp = sampleapp;
         String username = "jad";
         String password = "1ad";
@@ -69,13 +73,16 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLoginWithOriginalRequestUrl() {
+        MockHttpServletRequest request = new MockHttpServletRequest()
+            .setContextPath("/sampleapp");
         SampleappService sampleapp = mock(SampleappService.class);
         LoginResource resource = new LoginResource();
+        resource.request = request;
         resource.sampleapp = sampleapp;
         String username = "jd";
         String password = "johnnyBoi";
         MockHttpServletRequest originalRequest = new MockHttpServletRequest();
-        originalRequest.setRequestURI("http://localhost:8181/sampleapp");
+        originalRequest.setRequestURI("/sampleapp/");
         createSubjectFromOriginalRequestAndBindItToThread(originalRequest);
         WebUtils.saveRequest(originalRequest);
         Credentials credentials = Credentials.with().username(username).password(password).build();
@@ -83,7 +90,7 @@ class LoginResourceTest extends ShiroTestBase {
         Loginresult resultat = resource.login(locale, credentials);
         assertTrue(resultat.getSuksess());
         assertTrue(resultat.isAuthorized());
-        assertNotNull(resultat.getOriginalRequestUrl());
+        assertEquals("/", resultat.getOriginalRequestUrl());
     }
 
     @Test

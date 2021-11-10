@@ -53,7 +53,7 @@ public class LoginResource {
     private Logger logger;
 
     @Context
-    private HttpServletRequest request;
+    HttpServletRequest request;
 
     @Inject
     SampleappService sampleapp;
@@ -72,8 +72,7 @@ public class LoginResource {
         UsernamePasswordToken token = new UsernamePasswordToken(username, credentials.getPassword().toCharArray(), true);
         try {
             subject.login(token);
-            SavedRequest savedRequest = WebUtils.getSavedRequest(request);
-            String originalRequestUrl = savedRequest != null ? savedRequest.getRequestUrl() : null;
+            String originalRequestUrl = findOriginalRequestUrl();
             boolean authorized = subject.hasRole(SAMPLEAPPUSER_ROLE);
             if (authorized) {
                 sampleapp.lazilyCreateAccount(username);
@@ -135,6 +134,17 @@ public class LoginResource {
             .authorized(harRoleSampleappuser)
             .username(username)
             .build();
+    }
+
+    String findOriginalRequestUrl() {
+        SavedRequest savedRequest = WebUtils.getSavedRequest(request);
+        String contextPath = request.getContextPath();
+        String originalRequestUrl = savedRequest != null ? savedRequest.getRequestUrl() : null;
+        if (contextPath != null && originalRequestUrl != null) {
+            return originalRequestUrl.replaceFirst(contextPath, "");
+        }
+
+        return originalRequestUrl;
     }
 
 }
