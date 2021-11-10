@@ -54,7 +54,7 @@ To create a new project called "mynewapp":
     #+begin_example
       mkdir -p ~/git/
       cd ~/git/
-      mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=no.priv.bang.sampleapp -DarchetypeArtifactId=sampleapp-archetype -DgroupId=no.priv.bang.mynewapp -DartifactId=mynewapp -Dversion=1.0.0-SNAPSHOT -DinteractiveMode=false
+      mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=no.priv.bang.sampleapp -DarchetypeArtifactId=sampleapp-archetype -DgroupId=com.mycompany.mynewapp -DartifactId=mynewapp -Dversion=1.0.0-SNAPSHOT -DinteractiveMode=false
     #+end_example
  3. Fix up some files that aren't handled by the archetype filtering (don't know why everything in the pom files aren't filtered)
     #+begin_example
@@ -90,7 +90,7 @@ To create a new project called "mynewapp":
     #+end_example
  8. Install mynewapp in a karaf instance
     #+begin_example
-      feature:repo-add mvn:no.priv.bang.mynewapp/karaf/LATEST/xml/features
+      feature:repo-add mvn:com.mycompany.mynewapp/karaf/LATEST/xml/features
       feature:install mynewapp-with-derby
     #+end_example
  9. Verify that the application is running on http://localhost:8181/mynewapp
