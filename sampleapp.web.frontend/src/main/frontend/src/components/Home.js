@@ -24,7 +24,7 @@ function Home(props) {
             <nav className="navbar navbar-light bg-light">
                 <a className="btn btn-primary left-align-cell" href="../.."><span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!</a>
                 <h1>Sampleapp</h1>
-                <NavLink className="btn btn-primary" to="/counter">Counter</NavLink>
+                <NavLink className="btn btn-primary" to="/counter">{text.counter}</NavLink>
                 <Locale />
             </nav>
             <Container>
