@@ -23,6 +23,7 @@ function Counter(props) {
         decrementCounter,
         incrementCounter,
     } = props;
+    const firstname = loginresultat.user.firstname;
     if (!loginresultat.authorized) {
         return <Redirect to="/unauthorized" />;
     }
@@ -31,7 +32,7 @@ function Counter(props) {
         <div>
             <nav className="navbar navbar-light bg-light">
                 <NavLink className="btn btn-primary left-align-cell" to="/"><span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!</NavLink>
-                <h1>{text.counter}</h1>
+                <h1>{text.counter_for} {firstname}</h1>
                 <Locale />
             </nav>
             <Container>

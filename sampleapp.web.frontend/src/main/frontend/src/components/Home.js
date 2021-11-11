@@ -14,7 +14,7 @@ function Home(props) {
         accountCount,
         onLogout,
     } = props;
-    const username = loginresultat.username;
+    const { username, firstname, lastname, email } = loginresultat.user;
     if (!loginresultat.authorized) {
         return <Redirect to="/unauthorized" />;
     }
@@ -28,8 +28,29 @@ function Home(props) {
                 <Locale />
             </nav>
             <Container>
-                <p>{text.hi} {username}!</p>
+                <p>{text.hi} {firstname}!</p>
                 <p>{text.numberofaccounts}: {accountCount}</p>
+                <p>{text.logged_in_user_info}</p>
+                <table className="table">
+                    <tbody>
+                        <tr>
+                            <th>{text.username}</th>
+                            <td>{username}</td>
+                        </tr>
+                        <tr>
+                            <th>{text.firstname}</th>
+                            <td>{firstname}</td>
+                        </tr>
+                        <tr>
+                            <th>{text.lastname}</th>
+                            <td>{lastname}</td>
+                        </tr>
+                        <tr>
+                            <th>{text.email}</th>
+                            <td>{email}</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <p><button className="btn btn-primary" onClick={onLogout}>{text.logout}</button></p>
             </Container>
         </div>

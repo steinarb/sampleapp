@@ -41,6 +41,9 @@ import org.apache.shiro.web.util.WebUtils;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
+import no.priv.bang.authservice.definitions.AuthserviceException;
+import no.priv.bang.osgiservice.users.User;
+import no.priv.bang.osgiservice.users.UserManagementService;
 import no.priv.bang.sampleapp.services.Credentials;
 import no.priv.bang.sampleapp.services.Loginresult;
 import no.priv.bang.sampleapp.services.SampleappService;
@@ -57,6 +60,9 @@ public class LoginResource {
 
     @Inject
     SampleappService sampleapp;
+
+    @Inject
+    UserManagementService useradmin;
 
     @Inject
     void setLogservice(LogService logservice) {
@@ -78,11 +84,13 @@ public class LoginResource {
                 sampleapp.lazilyCreateAccount(username);
             }
 
+            User user = useradmin.getUser(username);
+
             return Loginresult.with()
                 .suksess(true)
                 .feilmelding("")
                 .authorized(authorized)
-                .username(username)
+                .user(user)
                 .originalRequestUrl(originalRequestUrl)
                 .build();
         } catch(UnknownAccountException e) {
@@ -114,6 +122,7 @@ public class LoginResource {
         return Loginresult.with()
             .suksess(false)
             .feilmelding(sampleapp.displayText("loggedout", locale))
+            .user(User.with().build())
             .build();
     }
 
@@ -128,12 +137,21 @@ public class LoginResource {
             sampleapp.displayText("userloggedinwithaccesses", locale) :
             sampleapp.displayText("userloggedinwithoutaccesses", locale);
         String melding = suksess ? brukerLoggetInnMelding : sampleapp.displayText("usernotloggedin", locale);
+        User user = findUserSafely(username);
         return Loginresult.with()
             .suksess(suksess)
             .feilmelding(melding)
             .authorized(harRoleSampleappuser)
-            .username(username)
+            .user(user)
             .build();
+    }
+
+    User findUserSafely(String username) {
+        try {
+            return useradmin.getUser(username);
+        } catch (AuthserviceException e) {
+            return User.with().build();
+        }
     }
 
     String findOriginalRequestUrl() {

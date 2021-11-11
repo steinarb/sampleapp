@@ -15,12 +15,14 @@
  */
 package no.priv.bang.sampleapp.services;
 
+import no.priv.bang.osgiservice.users.User;
+
 public class Loginresult {
 
     private boolean suksess;
     private String feilmelding;
     private boolean authorized;
-    private String username;
+    public User user;
     private String originalRequestUrl;
 
     private Loginresult() {}
@@ -37,8 +39,8 @@ public class Loginresult {
         return authorized;
     }
 
-    public String getUsername() {
-        return username;
+    public User getUser() {
+        return user;
     }
 
     public String getOriginalRequestUrl() {
@@ -58,7 +60,7 @@ public class Loginresult {
         private boolean suksess;
         private String feilmelding;
         private boolean authorized;
-        private String username;
+        private User user;
         private String originalRequestUrl;
 
         private LoginresultBuilder() {}
@@ -68,7 +70,7 @@ public class Loginresult {
             loginresultat.suksess = this.suksess;
             loginresultat.feilmelding = this.feilmelding;
             loginresultat.authorized = authorized;
-            loginresultat.username = username;
+            loginresultat.user = user;
             loginresultat.originalRequestUrl = originalRequestUrl;
             return loginresultat;
         }
@@ -88,8 +90,8 @@ public class Loginresult {
             return this;
         }
 
-        public LoginresultBuilder username(String username) {
-            this.username = username;
+        public LoginresultBuilder user(User user) {
+            this.user = user;
             return this;
         }
 

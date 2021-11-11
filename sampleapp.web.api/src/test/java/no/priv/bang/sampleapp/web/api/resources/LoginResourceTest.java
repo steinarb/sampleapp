@@ -32,7 +32,10 @@ import no.priv.bang.sampleapp.services.Credentials;
 import no.priv.bang.sampleapp.services.Loginresult;
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.web.api.ShiroTestBase;
+import no.priv.bang.authservice.definitions.AuthserviceException;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
+import no.priv.bang.osgiservice.users.User;
+import no.priv.bang.osgiservice.users.UserManagementService;
 
 class LoginResourceTest extends ShiroTestBase {
 
@@ -40,9 +43,11 @@ class LoginResourceTest extends ShiroTestBase {
     void testLogin() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         SampleappService sampleapp = mock(SampleappService.class);
+        UserManagementService useradmin = mock(UserManagementService.class);
         LoginResource resource = new LoginResource();
         resource.request = request;
         resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
         String username = "jd";
         String password = "johnnyBoi";
         createSubjectAndBindItToThread();
@@ -58,9 +63,11 @@ class LoginResourceTest extends ShiroTestBase {
     void testLoginByUserWithoutRole() {
         MockHttpServletRequest request = new MockHttpServletRequest();
         SampleappService sampleapp = mock(SampleappService.class);
+        UserManagementService useradmin = mock(UserManagementService.class);
         LoginResource resource = new LoginResource();
         resource.request = request;
         resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
         String username = "jad";
         String password = "1ad";
         createSubjectAndBindItToThread();
@@ -76,9 +83,11 @@ class LoginResourceTest extends ShiroTestBase {
         MockHttpServletRequest request = new MockHttpServletRequest()
             .setContextPath("/sampleapp");
         SampleappService sampleapp = mock(SampleappService.class);
+        UserManagementService useradmin = mock(UserManagementService.class);
         LoginResource resource = new LoginResource();
         resource.request = request;
         resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
         String username = "jd";
         String password = "johnnyBoi";
         MockHttpServletRequest originalRequest = new MockHttpServletRequest();
@@ -129,6 +138,16 @@ class LoginResourceTest extends ShiroTestBase {
     }
 
     @Test
+    void testFindUserSafelyWithUnknownUsername() {
+        UserManagementService useradmin = mock(UserManagementService.class);
+        when(useradmin.getUser(anyString())).thenThrow(AuthserviceException.class);
+        LoginResource resource = new LoginResource();
+        resource.useradmin = useradmin;
+        User user = resource.findUserSafely("null");
+        assertNull(user.getUsername());
+    }
+
+    @Test
     void testLogout() {
         String locale = "nb_NO";
         SampleappService sampleapp = mock(SampleappService.class);
@@ -154,8 +173,10 @@ class LoginResourceTest extends ShiroTestBase {
         String locale = "nb_NO";
         SampleappService sampleapp = mock(SampleappService.class);
         when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er logget inn og har tilgang");
+        UserManagementService useradmin = mock(UserManagementService.class);
         LoginResource resource = new LoginResource();
         resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
         String username = "jd";
         String password = "johnnyBoi";
         WebSubject subject = createSubjectAndBindItToThread();
@@ -173,8 +194,10 @@ class LoginResourceTest extends ShiroTestBase {
         String locale = "nb_NO";
         SampleappService sampleapp = mock(SampleappService.class);
         when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er logget inn men mangler tilgang");
+        UserManagementService useradmin = mock(UserManagementService.class);
         LoginResource resource = new LoginResource();
         resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
         String username = "jad";
         String password = "1ad";
         WebSubject subject = createSubjectAndBindItToThread();
@@ -192,8 +215,10 @@ class LoginResourceTest extends ShiroTestBase {
         String locale = "nb_NO";
         SampleappService sampleapp = mock(SampleappService.class);
         when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er ikke logget inn");
+        UserManagementService useradmin = mock(UserManagementService.class);
         LoginResource resource = new LoginResource();
         resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
         createSubjectAndBindItToThread();
 
         Loginresult loginresultat = resource.loginstate(locale);

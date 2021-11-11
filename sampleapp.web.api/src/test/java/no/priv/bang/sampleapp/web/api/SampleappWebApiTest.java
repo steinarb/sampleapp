@@ -52,6 +52,7 @@ import no.priv.bang.sampleapp.services.LocaleBean;
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.web.api.resources.ErrorMessage;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
+import no.priv.bang.osgiservice.users.UserManagementService;
 
 class SampleappWebApiTest extends ShiroTestBase {
     private final static Locale NB_NO = Locale.forLanguageTag("nb-no");
@@ -68,7 +69,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         Credentials credentials = Credentials.with().username(username).password(password).build();
         MockLogService logservice = new MockLogService();
         SampleappService sampleapp = mock(SampleappService.class);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         createSubjectAndBindItToThread();
         MockHttpServletRequest request = buildPostUrl("/login");
         String postBody = mapper.writeValueAsString(credentials);
@@ -87,7 +89,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         Credentials credentials = Credentials.with().username(username).password(password).build();
         MockLogService logservice = new MockLogService();
         SampleappService sampleapp = mock(SampleappService.class);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         createSubjectAndBindItToThread();
         MockHttpServletRequest request = buildPostUrl("/login");
         String postBody = mapper.writeValueAsString(credentials);
@@ -104,7 +107,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         SampleappService sampleapp = mock(SampleappService.class);
         Account account = Account.with().accountId(123).build();
         when(sampleapp.getAccounts()).thenReturn(Collections.singletonList(account));
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/accounts");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -122,7 +126,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         SampleappService sampleapp = mock(SampleappService.class);
         Optional<CounterIncrementStepBean> optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
         when(sampleapp.getCounterIncrementStep(anyString())).thenReturn(optionalIncrementStep);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/incrementstep/jad");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -137,7 +142,8 @@ class SampleappWebApiTest extends ShiroTestBase {
     void testGetCounterIncrementStepWhenNotFound() throws Exception {
         MockLogService logservice = new MockLogService();
         SampleappService sampleapp = mock(SampleappService.class);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/incrementstep/jad");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -153,7 +159,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         SampleappService sampleapp = mock(SampleappService.class);
         Optional<CounterIncrementStepBean> optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
         when(sampleapp.updateCounterIncrementStep(any())).thenReturn(optionalIncrementStep);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         CounterIncrementStepBean updateIncrementStep = CounterIncrementStepBean.with()
             .username("jad")
             .counterIncrementStep(incrementStepValue)
@@ -174,7 +181,8 @@ class SampleappWebApiTest extends ShiroTestBase {
     void testUpdateCounterIncrementStepWhenUpdateFails() throws Exception {
         MockLogService logservice = new MockLogService();
         SampleappService sampleapp = mock(SampleappService.class);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         CounterIncrementStepBean updateIncrementStep = CounterIncrementStepBean.with()
             .username("jad")
             .counterIncrementStep(3)
@@ -196,7 +204,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         SampleappService sampleapp = mock(SampleappService.class);
         Optional<CounterBean> optionalCounter = Optional.of(CounterBean.with().counter(counterValue).build());
         when(sampleapp.getCounter(anyString())).thenReturn(optionalCounter);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/jad");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -211,7 +220,8 @@ class SampleappWebApiTest extends ShiroTestBase {
     void testGetCounterWhenNotFound() throws Exception {
         MockLogService logservice = new MockLogService();
         SampleappService sampleapp = mock(SampleappService.class);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/jad");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -227,7 +237,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         SampleappService sampleapp = mock(SampleappService.class);
         Optional<CounterBean> optionalCounter = Optional.of(CounterBean.with().counter(counterValue).build());
         when(sampleapp.incrementCounter(anyString())).thenReturn(optionalCounter);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/jad/increment");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -242,7 +253,8 @@ class SampleappWebApiTest extends ShiroTestBase {
     void testIncrementCounterWhenFailing() throws Exception {
         MockLogService logservice = new MockLogService();
         SampleappService sampleapp = mock(SampleappService.class);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/jad/increment");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -258,7 +270,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         SampleappService sampleapp = mock(SampleappService.class);
         Optional<CounterBean> optionalCounter = Optional.of(CounterBean.with().counter(counterValue).build());
         when(sampleapp.decrementCounter(anyString())).thenReturn(optionalCounter);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/jad/decrement");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -273,7 +286,8 @@ class SampleappWebApiTest extends ShiroTestBase {
     void testDecrementCounterWhenFailing() throws Exception {
         MockLogService logservice = new MockLogService();
         SampleappService sampleapp = mock(SampleappService.class);
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
         MockHttpServletRequest request = buildGetUrl("/counter/jad/decrement");
         MockHttpServletResponse response = new MockHttpServletResponse();
 
@@ -289,7 +303,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         when(sampleapp.defaultLocale()).thenReturn(NB_NO);
         MockLogService logservice = new MockLogService();
 
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/defaultlocale");
@@ -311,7 +326,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         when(sampleapp.availableLocales()).thenReturn(Collections.singletonList(Locale.forLanguageTag("nb-NO")).stream().map(l -> LocaleBean.with().locale(l).build()).collect(Collectors.toList()));
         MockLogService logservice = new MockLogService();
 
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/availablelocales");
@@ -336,7 +352,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         when(sampleapp.displayTexts(NB_NO)).thenReturn(texts);
         MockLogService logservice = new MockLogService();
 
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/displaytexts");
@@ -362,7 +379,8 @@ class SampleappWebApiTest extends ShiroTestBase {
         when(sampleapp.displayTexts(EN_UK)).thenThrow(MissingResourceException.class);
         MockLogService logservice = new MockLogService();
 
-        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , logservice);
+        UserManagementService useradmin = mock(UserManagementService.class);
+        SampleappWebApi servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
 
         // Create the request and response
         MockHttpServletRequest request = buildGetUrl("/displaytexts");
@@ -407,10 +425,11 @@ class SampleappWebApiTest extends ShiroTestBase {
         return request;
     }
 
-    private SampleappWebApi simulateDSComponentActivationAndWebWhiteboardConfiguration(SampleappService sampleapp, LogService logservice) throws Exception {
+    private SampleappWebApi simulateDSComponentActivationAndWebWhiteboardConfiguration(SampleappService sampleapp, UserManagementService useradmin, LogService logservice) throws Exception {
         SampleappWebApi servlet = new SampleappWebApi();
         servlet.setLogService(logservice);
         servlet.setSampleappService(sampleapp);
+        servlet.setUseradmin(useradmin);
         servlet.activate();
         ServletConfig config = createServletConfigWithApplicationAndPackagenameForJerseyResources();
         servlet.init(config);

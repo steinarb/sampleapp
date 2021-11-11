@@ -18,7 +18,8 @@ function getCounterIncrementStep(username) {
 
 function* fetchCounterIncrementStep() {
     try {
-        const { suksess, authorized, username } = yield select(state => state.loginresultat);
+        const { suksess, authorized, user } = yield select(state => state.loginresultat);
+        const { username } = user;
         if (suksess && authorized) {
             const response = yield call(getCounterIncrementStep, username);
             const counterIncrementStepresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
@@ -35,7 +36,8 @@ function postCounterIncrementStep(updatedCounterIncrementStep) {
 
 function* updateCounterIncrementStep(action) {
     try {
-        const { suksess, authorized, username } = yield select(state => state.loginresultat);
+        const { suksess, authorized, user } = yield select(state => state.loginresultat);
+        const { username } = user;
         if (suksess && authorized) {
             const counterIncrementStep = action.payload;
             const response = yield call(postCounterIncrementStep, { username, counterIncrementStep});

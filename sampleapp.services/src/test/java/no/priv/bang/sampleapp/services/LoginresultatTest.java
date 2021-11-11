@@ -20,6 +20,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import no.priv.bang.osgiservice.users.User;
+
 class LoginresultatTest {
 
     @Test
@@ -29,17 +31,18 @@ class LoginresultatTest {
         String feilmelding = "Feil passord";
         String originalRequestUrl = "http://localhost:8181/sampleapp/hurtigregistrering";
         String username = "jod";
+        User user = User.with().username(username).build();
         Loginresult bean = Loginresult.with()
             .suksess(suksess)
             .feilmelding(feilmelding)
             .authorized(authorized)
-            .username(username)
+            .user(user)
             .originalRequestUrl(originalRequestUrl)
             .build();
         assertTrue(bean.getSuksess());
         assertEquals(feilmelding, bean.getFeilmelding());
         assertTrue(bean.isAuthorized());
-        assertEquals(username, bean.getUsername());
+        assertEquals(username, bean.getUser().getUsername());
         assertEquals(originalRequestUrl, bean.getOriginalRequestUrl());
     }
 
