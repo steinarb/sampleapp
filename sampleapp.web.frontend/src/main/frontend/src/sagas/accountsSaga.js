@@ -10,7 +10,7 @@ function sendAccounts() {
     return axios.get('/api/accounts');
 }
 
-function* mottaAccountsResultat() {
+function* mottaAccountsResult() {
     try {
         const response = yield call(sendAccounts);
         const accountsresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
@@ -21,5 +21,5 @@ function* mottaAccountsResultat() {
 }
 
 export default function* accountsSaga() {
-    yield takeLatest(ACCOUNTS_REQUEST, mottaAccountsResultat);
+    yield takeLatest(ACCOUNTS_REQUEST, mottaAccountsResult);
 }

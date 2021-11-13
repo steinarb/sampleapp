@@ -10,7 +10,7 @@ function sendLogin(credentials, locale) {
     return axios.post('/api/login', credentials, { params: { locale } });
 }
 
-function* mottaLoginResultat(action) {
+function* mottaLoginResult(action) {
     try {
         const locale = yield select(state => state.locale);
         const response = yield call(sendLogin, action.payload, locale);
@@ -22,5 +22,5 @@ function* mottaLoginResultat(action) {
 }
 
 export default function* loginSaga() {
-    yield takeLatest(LOGIN_REQUEST, mottaLoginResultat);
+    yield takeLatest(LOGIN_REQUEST, mottaLoginResult);
 }

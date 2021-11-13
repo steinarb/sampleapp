@@ -6,7 +6,7 @@ import {
 
 const passwordReducer = createReducer('', {
     [PASSWORD_MODIFY]: (state, action) => action.payload,
-    [LOGIN_RECEIVE]: (state, action) => action.payload.suksess ? '' : state,
+    [LOGIN_RECEIVE]: (state, action) => action.payload.success ? '' : state,
 });
 
 export default passwordReducer;

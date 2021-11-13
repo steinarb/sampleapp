@@ -8,8 +8,8 @@ import { Container } from './bootstrap/Container';
 
 
 function Unauthorized(props) {
-    const { username, loginresultat, text, onLogout } = props;
-    if (!loginresultat.suksess) {
+    const { username, loginresult, text, onLogout } = props;
+    if (!loginresult.success) {
         return <Redirect to="/login" />;
     }
 
@@ -37,11 +37,11 @@ function Unauthorized(props) {
 }
 
 const mapStateToProps = state => {
-    const { username, loginresultat } = state;
+    const { username, loginresult } = state;
     const text = state.displayTexts;
     return {
         username,
-        loginresultat,
+        loginresult,
         text,
     };
 };

@@ -20,9 +20,9 @@ function getCounter(username) {
 
 function* fetchCounter() {
     try {
-        const { suksess, authorized, user } = yield select(state => state.loginresultat);
+        const { success, authorized, user } = yield select(state => state.loginresult);
         const { username } = user;
-        if (suksess && authorized) {
+        if (success && authorized) {
             const response = yield call(getCounter, username);
             const counterresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
             yield put(COUNTER_RECEIVE(counterresult));
@@ -38,9 +38,9 @@ function getDecrementCounter(username) {
 
 function* decrementCounter() {
     try {
-        const { suksess, authorized, user } = yield select(state => state.loginresultat);
+        const { success, authorized, user } = yield select(state => state.loginresult);
         const { username } = user;
-        if (suksess && authorized) {
+        if (success && authorized) {
             const response = yield call(getDecrementCounter, username);
             const counterresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
             yield put(COUNTER_DECREMENT_RECEIVE(counterresult));
@@ -57,9 +57,9 @@ function getIncrementCounter(username) {
 
 function* incrementCounter() {
     try {
-        const { suksess, authorized, user } = yield select(state => state.loginresultat);
+        const { success, authorized, user } = yield select(state => state.loginresult);
         const { username } = user;
-        if (suksess && authorized) {
+        if (success && authorized) {
             const response = yield call(getIncrementCounter, username);
             const counterresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
             yield put(COUNTER_INCREMENT_RECEIVE(counterresult));

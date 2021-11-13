@@ -5,10 +5,10 @@ import {
     LOGINSTATE_RECEIVE,
 } from '../actiontypes';
 
-const loginresultatReducer = createReducer({ authorized: true, user: {} }, {
+const loginresultReducer = createReducer({ authorized: true, user: {} }, {
     [LOGIN_RECEIVE]: (state, action) => action.payload,
     [LOGOUT_RECEIVE]: (state, action) => action.payload,
     [LOGINSTATE_RECEIVE]: (state, action) => action.payload,
 });
 
-export default loginresultatReducer;
+export default loginresultReducer;

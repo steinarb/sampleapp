@@ -16,15 +16,15 @@ import Plus from './bootstrap/Plus';
 function Counter(props) {
     const {
         text,
-        loginresultat,
+        loginresult,
         counterIncrementStep,
         counter,
         onCounterIncrementStepModify,
         decrementCounter,
         incrementCounter,
     } = props;
-    const firstname = loginresultat.user.firstname;
-    if (!loginresultat.authorized) {
+    const firstname = loginresult.user.firstname;
+    if (!loginresult.authorized) {
         return <Redirect to="/unauthorized" />;
     }
 
@@ -56,13 +56,13 @@ function Counter(props) {
 
 function mapStateToProps(state) {
     const {
-        loginresultat,
+        loginresult,
         counterIncrementStep,
         counter,
     } = state;
     return {
         text: state.displayTexts,
-        loginresultat,
+        loginresult,
         counterIncrementStep,
         counter,
     };

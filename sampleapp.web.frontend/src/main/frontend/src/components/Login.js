@@ -9,9 +9,9 @@ import {
 import LoginMessage from './LoginMessage';
 
 function Login(props) {
-    const { username, password, loginresultat, text, onUsernameEndre, onPasswordEndre, onSendLogin } = props;
-    if (loginresultat.suksess) {
-        const originalRequestUrl = loginresultat.originalRequestUrl || '/';
+    const { username, password, loginresult, text, onUsernameEndre, onPasswordEndre, onSendLogin } = props;
+    if (loginresult.success) {
+        const originalRequestUrl = loginresult.originalRequestUrl || '/';
         return (<Redirect to={originalRequestUrl} />);
     }
 
@@ -50,12 +50,12 @@ function Login(props) {
 }
 
 function mapStateToProps(state) {
-    const { username, password, loginresultat } = state;
+    const { username, password, loginresult } = state;
     const text = state.displayTexts;
     return {
         username,
         password,
-        loginresultat,
+        loginresult,
         text,
     };
 }

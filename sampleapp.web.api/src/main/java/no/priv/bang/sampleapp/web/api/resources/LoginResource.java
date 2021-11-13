@@ -87,24 +87,24 @@ public class LoginResource {
             User user = useradmin.getUser(username);
 
             return Loginresult.with()
-                .suksess(true)
-                .feilmelding("")
+                .success(true)
+                .errormessage("")
                 .authorized(authorized)
                 .user(user)
                 .originalRequestUrl(originalRequestUrl)
                 .build();
         } catch(UnknownAccountException e) {
             logger.warn("Login error: unknown account", e);
-            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("unknownaccount", locale)).build();
+            return Loginresult.with().success(false).errormessage(sampleapp.displayText("unknownaccount", locale)).build();
         } catch (IncorrectCredentialsException  e) {
             logger.warn("Login error: wrong password", e);
-            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("wrongpassword", locale)).build();
+            return Loginresult.with().success(false).errormessage(sampleapp.displayText("wrongpassword", locale)).build();
         } catch (LockedAccountException  e) {
             logger.warn("Login error: locked account", e);
-            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("lockedaccount", locale)).build();
+            return Loginresult.with().success(false).errormessage(sampleapp.displayText("lockedaccount", locale)).build();
         } catch (AuthenticationException e) {
             logger.warn("Login error: general authentication error", e);
-            return Loginresult.with().suksess(false).feilmelding(sampleapp.displayText("unknownerror", locale)).build();
+            return Loginresult.with().success(false).errormessage(sampleapp.displayText("unknownerror", locale)).build();
         } catch (Exception e) {
             logger.error("Login error: internal server error", e);
             throw new InternalServerErrorException();
@@ -120,8 +120,8 @@ public class LoginResource {
         subject.logout();
 
         return Loginresult.with()
-            .suksess(false)
-            .feilmelding(sampleapp.displayText("loggedout", locale))
+            .success(false)
+            .errormessage(sampleapp.displayText("loggedout", locale))
             .user(User.with().build())
             .build();
     }
@@ -131,16 +131,16 @@ public class LoginResource {
     public Loginresult loginstate(@QueryParam("locale")String locale) {
         Subject subject = SecurityUtils.getSubject();
         String username = (String) subject.getPrincipal();
-        boolean suksess = subject.isAuthenticated();
+        boolean success = subject.isAuthenticated();
         boolean harRoleSampleappuser = subject.hasRole(SAMPLEAPPUSER_ROLE);
         String brukerLoggetInnMelding = harRoleSampleappuser ?
             sampleapp.displayText("userloggedinwithaccesses", locale) :
             sampleapp.displayText("userloggedinwithoutaccesses", locale);
-        String melding = suksess ? brukerLoggetInnMelding : sampleapp.displayText("usernotloggedin", locale);
+        String melding = success ? brukerLoggetInnMelding : sampleapp.displayText("usernotloggedin", locale);
         User user = findUserSafely(username);
         return Loginresult.with()
-            .suksess(suksess)
-            .feilmelding(melding)
+            .success(success)
+            .errormessage(melding)
             .authorized(harRoleSampleappuser)
             .user(user)
             .build();

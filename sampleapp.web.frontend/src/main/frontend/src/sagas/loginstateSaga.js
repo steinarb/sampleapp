@@ -10,7 +10,7 @@ function sendLoginstate(locale) {
     return axios.get('/api/loginstate', { params: { locale } });
 }
 
-function* mottaLoginstateResultat() {
+function* mottaLoginstateResult() {
     try {
         const locale = yield select(state => state.locale);
         const response = yield call(sendLoginstate, locale);
@@ -22,5 +22,5 @@ function* mottaLoginstateResultat() {
 }
 
 export default function* loginstateSaga() {
-    yield takeLatest(LOGINSTATE_REQUEST, mottaLoginstateResultat);
+    yield takeLatest(LOGINSTATE_REQUEST, mottaLoginstateResult);
 }

@@ -10,12 +10,12 @@ import Locale from './Locale';
 function Home(props) {
     const {
         text,
-        loginresultat,
+        loginresult,
         accountCount,
         onLogout,
     } = props;
-    const { username, firstname, lastname, email } = loginresultat.user;
-    if (!loginresultat.authorized) {
+    const { username, firstname, lastname, email } = loginresult.user;
+    if (!loginresult.authorized) {
         return <Redirect to="/unauthorized" />;
     }
 
@@ -58,12 +58,12 @@ function Home(props) {
 }
 
 function mapStateToProps(state) {
-    const { loginresultat } = state;
+    const { loginresult } = state;
     const text = state.displayTexts;
     const accountCount = state.accounts.length;
     return {
         text,
-        loginresultat,
+        loginresult,
         accountCount,
     };
 }

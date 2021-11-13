@@ -10,7 +10,7 @@ function sendLogout(locale) {
     return axios.get('/api/logout', { params: { locale } });
 }
 
-function* mottaLogoutResultat() {
+function* mottaLogoutResult() {
     try {
         const locale = yield select(state => state.locale);
         const response = yield call(sendLogout, locale);
@@ -22,5 +22,5 @@ function* mottaLogoutResultat() {
 }
 
 export default function* logoutSaga() {
-    yield takeLatest(LOGOUT_REQUEST, mottaLogoutResultat);
+    yield takeLatest(LOGOUT_REQUEST, mottaLogoutResult);
 }
