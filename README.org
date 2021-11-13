@@ -10,6 +10,8 @@ The application OSGi service Java interface (SampleappService), has a method "ge
 
 All user information, outside of the username, i.e. full name, email, comes from an injected OSGi service of type [[https://www.javadoc.io/doc/no.priv.bang.osgiservice/osgiservice/latest/no/priv/bang/osgiservice/users/UserManagementService.html][UserManagementService]] provided by the [[https://github.com/steinarb/authservice][authservice]].
 
+The application also provides internationalization/localization (i18n/l11n) support, in the form of a Java resource bundle with Norwegian and English texts, that are displayed in the react frontend with the help of redux.
+
 The username/password combinations of users in the test db version of authservice, are:
 | username | password  | authorized for sampleapp |
 |----------+-----------+--------------------------|
