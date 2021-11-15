@@ -40,11 +40,11 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
-import no.priv.bang.sampleapp.services.Account;
-import no.priv.bang.sampleapp.services.CounterBean;
-import no.priv.bang.sampleapp.services.CounterIncrementStepBean;
-import no.priv.bang.sampleapp.services.LocaleBean;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.Account;
+import no.priv.bang.sampleapp.services.beans.CounterBean;
+import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
+import no.priv.bang.sampleapp.services.beans.LocaleBean;
 import no.priv.bang.osgiservice.users.Role;
 import no.priv.bang.osgiservice.users.User;
 import no.priv.bang.osgiservice.users.UserManagementService;

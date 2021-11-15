@@ -30,9 +30,9 @@ import javax.ws.rs.core.MediaType;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 
-import no.priv.bang.sampleapp.services.CounterBean;
-import no.priv.bang.sampleapp.services.CounterIncrementStepBean;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.CounterBean;
+import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
 
 @Path("counter")
 @Produces(MediaType.APPLICATION_JSON)

@@ -31,8 +31,8 @@ import javax.ws.rs.core.MediaType;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
 
-import no.priv.bang.sampleapp.services.LocaleBean;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.LocaleBean;
 
 @Path("")
 public class LocalizationResource extends ResourceBase {

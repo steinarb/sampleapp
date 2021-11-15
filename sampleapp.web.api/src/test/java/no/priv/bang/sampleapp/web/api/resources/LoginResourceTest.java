@@ -28,9 +28,9 @@ import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
 
-import no.priv.bang.sampleapp.services.Credentials;
-import no.priv.bang.sampleapp.services.Loginresult;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.Credentials;
+import no.priv.bang.sampleapp.services.beans.Loginresult;
 import no.priv.bang.sampleapp.web.api.ShiroTestBase;
 import no.priv.bang.authservice.definitions.AuthserviceException;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;

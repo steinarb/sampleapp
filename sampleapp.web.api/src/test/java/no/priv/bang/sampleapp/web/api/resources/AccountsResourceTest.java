@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import no.priv.bang.sampleapp.services.Account;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.Account;
 
 class AccountsResourceTest {
 

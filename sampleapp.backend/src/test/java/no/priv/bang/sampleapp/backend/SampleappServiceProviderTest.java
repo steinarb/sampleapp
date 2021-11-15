@@ -35,10 +35,10 @@ import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 
 import no.priv.bang.sampleapp.db.liquibase.test.SampleappTestDbLiquibaseRunner;
-import no.priv.bang.sampleapp.services.Account;
-import no.priv.bang.sampleapp.services.CounterBean;
-import no.priv.bang.sampleapp.services.CounterIncrementStepBean;
-import no.priv.bang.sampleapp.services.LocaleBean;
+import no.priv.bang.sampleapp.services.beans.Account;
+import no.priv.bang.sampleapp.services.beans.CounterBean;
+import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
+import no.priv.bang.sampleapp.services.beans.LocaleBean;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 import no.priv.bang.osgiservice.users.UserManagementService;
 

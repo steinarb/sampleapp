@@ -26,6 +26,10 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 
+import no.priv.bang.sampleapp.services.beans.Account;
+import no.priv.bang.sampleapp.services.beans.CounterBean;
+import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
+import no.priv.bang.sampleapp.services.beans.LocaleBean;
 
 class SampleappServiceTest {
 

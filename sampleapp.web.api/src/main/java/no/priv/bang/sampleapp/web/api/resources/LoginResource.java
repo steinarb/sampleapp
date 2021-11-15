@@ -44,9 +44,9 @@ import org.osgi.service.log.Logger;
 import no.priv.bang.authservice.definitions.AuthserviceException;
 import no.priv.bang.osgiservice.users.User;
 import no.priv.bang.osgiservice.users.UserManagementService;
-import no.priv.bang.sampleapp.services.Credentials;
-import no.priv.bang.sampleapp.services.Loginresult;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.Credentials;
+import no.priv.bang.sampleapp.services.beans.Loginresult;
 
 @Path("")
 @Consumes(MediaType.APPLICATION_JSON)

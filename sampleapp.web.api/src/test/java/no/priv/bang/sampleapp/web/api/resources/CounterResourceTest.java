@@ -26,9 +26,9 @@ import javax.ws.rs.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import no.priv.bang.sampleapp.services.CounterBean;
-import no.priv.bang.sampleapp.services.CounterIncrementStepBean;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.CounterBean;
+import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
 import no.priv.bang.sampleapp.web.api.ShiroTestBase;
 
 class CounterResourceTest extends ShiroTestBase {

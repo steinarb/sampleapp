@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package no.priv.bang.sampleapp.services;
+package no.priv.bang.sampleapp.services.beans;
 
 import no.priv.bang.beans.immutable.Immutable;
 import no.priv.bang.osgiservice.users.User;

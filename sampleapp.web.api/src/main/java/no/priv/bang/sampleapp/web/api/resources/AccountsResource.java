@@ -23,8 +23,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import no.priv.bang.sampleapp.services.Account;
 import no.priv.bang.sampleapp.services.SampleappService;
+import no.priv.bang.sampleapp.services.beans.Account;
 
 @Path("")
 @Produces(MediaType.APPLICATION_JSON)
