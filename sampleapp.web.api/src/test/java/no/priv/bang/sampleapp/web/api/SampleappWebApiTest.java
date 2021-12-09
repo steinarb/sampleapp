@@ -79,7 +79,6 @@ class SampleappWebApiTest extends ShiroTestBase {
 
         servlet.service(request, response);
         assertEquals(200, response.getStatus());
-
     }
 
     @Test
