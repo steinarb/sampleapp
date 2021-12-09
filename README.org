@@ -94,12 +94,17 @@ To create a new project called "mynewapp":
       cd ~/git/mynewapp/
       mvn clean install
     #+end_example
- 9. Install mynewapp in a karaf instance
+ 9. Correct some Java class member names that hasn't been touched by the renaming (OSGi service injection setter and constants):
     #+begin_example
-      feature:repo-add mvn:com.mycompany.mynewapp/karaf/LATEST/xml/features
-      feature:install mynewapp-with-derby
+      find . -name \*.java | xargs sed -i 's/Sampleapp/Mynewapp/g'
+      find . -name \*.java | xargs sed -i 's/SAMPLEAPP/MYNEWAPP/g'
     #+end_example
- 10. Verify that the application is running on http://localhost:8181/mynewapp
+ 10. Install mynewapp in a karaf instance
+     #+begin_example
+       feature:repo-add mvn:com.mycompany.mynewapp/karaf/LATEST/xml/features
+       feature:install mynewapp-with-derby
+     #+end_example
+ 11. Verify that the application is running on http://localhost:8181/mynewapp
 
 ** Configuring a new default locale
 
