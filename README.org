@@ -6,11 +6,17 @@ Intended to make it simple to start a new webapp.
 
 The application database has a table "accounts" listing the users that are allowed to log into the database.  It also has some tables supporting a simple counter application (the increment step size for the counter for each logged in user, and the current count for each user).
 
-The application OSGi service Java interface (SampleappService), has a method "getAccounts()", which is taken through a jersey JAX-RS REST resource (AccountsResource) and the result is displayed in a react frontend (so a narrow path all the way from an SQL database and to a react frontend).  The interface also has methods to manage the counter operations.
+Highlights of the app:
+ - Uses the [[https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.http.whiteboard.html][OSGi HTTP whiteboard]] to register servlets as services and give them a web context and paths
+ - [[https://www.postgresql.org][react.js]] frontend, using [[https://redux.js.org][redux]] for state management (set up using [[https://redux-toolkit.js.org][redux-toolkit]]) and [[https://redux-saga.js.org][saga]] for asynchonous REST communication and asynchronous redux state logic
+ - [[https://redux-saga.js.org][bootstrap v4]] styling of the frontend
+ - [[https://en.wikipedia.org/wiki/Internationalization_and_localization][i18n/l11n]] support (using redux on the frontend and [[https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ResourceBundle.html][Java resource bundles]] on the backend) with English and Norwegian as the languages
+ - [[https://en.wikipedia.org/wiki/Jakarta_RESTful_Web_Services][JAX-RS]] REST Service support provided by [[https://eclipse-ee4j.github.io/jersey/][eclipse jersey]]
+ - authentication and authorization provided by [[https://shiro.apache.org][apache shiro]] (implemented in [[https://github.com/steinarb/authservice][authservice]], but in theory anything that provides a [[https://shiro.apache.org/realm.html][shiro Realm]] as an OSGi service and provides a shiro role named sampleappuser can give access to the application)
+ - JDBC configuration and setup using [[https://ops4j1.jira.com/wiki/spaces/PAXJDBC/pages/61767710/Create+DataSource+from+config][PAX JDBC config]] (provides a Datasource OSGi service using configuration only and no code needed)
+ - Database migration support provided by [[https://liquibase.org][liquibase]] with sample database setups for [[https://db.apache.org/derby/][apache derby]] and [[https://www.postgresql.org][PostgreSQL]]
 
 All user information, outside of the username, i.e. full name, email, comes from an injected OSGi service of type [[https://www.javadoc.io/doc/no.priv.bang.osgiservice/osgiservice/latest/no/priv/bang/osgiservice/users/UserManagementService.html][UserManagementService]] provided by the [[https://github.com/steinarb/authservice][authservice]].
-
-The application also provides internationalization/localization (i18n/l11n) support, in the form of a Java resource bundle with Norwegian and English texts, that are displayed in the react frontend with the help of redux.
 
 The username/password combinations of users in the test db version of authservice, are:
 | username | password  | authorized for sampleapp |
@@ -23,7 +29,16 @@ The username/password combinations of users in the test db version of authservic
 
 ** Installing the sample application
 
-Give the following commands to the karaf console:
+First clone and build the sample application:
+#+begin_example
+  mkdir -p ~/git/
+  cd ~/git/
+  git clone https://github.com/steinarb/sampleapp.git
+  cd ~/git/sampleapp/
+  mvn install
+#+end_example
+
+Then give the following commands to the karaf console:
 #+BEGIN_EXAMPLE
   feature:repo-add mvn:no.priv.bang.sampleapp/karaf/LATEST/xml/features
   feature:install sampleapp-with-derby
