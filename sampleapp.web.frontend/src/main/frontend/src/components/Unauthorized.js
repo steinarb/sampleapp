@@ -1,12 +1,13 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import { connect, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { LOGOUT_REQUEST } from '../actiontypes';
 import { Container } from './bootstrap/Container';
 
 
-function Unauthorized(props) {
-    const { loginresult, text } = props;
+export default function Unauthorized() {
+    const loginresult = useSelector(state => state.loginresult);
+    const text = useSelector(state => state.displayTexts);
     const username = loginresult.user.username;
     const dispatch = useDispatch();
 
@@ -36,14 +37,3 @@ function Unauthorized(props) {
         </div>
     );
 }
-
-const mapStateToProps = state => {
-    const { loginresult } = state;
-    const text = state.displayTexts;
-    return {
-        loginresult,
-        text,
-    };
-};
-
-export default connect(mapStateToProps)(Unauthorized);

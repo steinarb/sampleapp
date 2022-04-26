@@ -1,8 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-function LoginMessage(props) {
-    const { loginresult } = props;
+export default function LoginMessage() {
+    const loginresult = useSelector(state => state.loginresult);
+
     if (!loginresult.errormessage) {
         return null;
     }
@@ -13,12 +14,3 @@ function LoginMessage(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const { loginresult } = state;
-    return {
-        loginresult,
-    };
-}
-
-export default connect(mapStateToProps)(LoginMessage);

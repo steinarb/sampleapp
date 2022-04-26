@@ -1,18 +1,16 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container } from './bootstrap/Container';
 import { LOGOUT_REQUEST } from '../actiontypes';
 import Locale from './Locale';
 
 
-function Home(props) {
-    const {
-        text,
-        loginresult,
-        accountCount,
-    } = props;
+export default function Home() {
+    const text = useSelector(state => state.displayTexts);
+    const loginresult = useSelector(state => state.loginresult);
+    const accountCount = useSelector(state => state.accounts.length);
     const dispatch = useDispatch();
     const { username, firstname, lastname, email } = loginresult.user;
 
@@ -57,16 +55,3 @@ function Home(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const { loginresult } = state;
-    const text = state.displayTexts;
-    const accountCount = state.accounts.length;
-    return {
-        text,
-        loginresult,
-        accountCount,
-    };
-}
-
-export default connect(mapStateToProps)(Home);

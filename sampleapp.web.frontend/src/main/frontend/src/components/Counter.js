@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { connect, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Container } from './bootstrap/Container';
 import {
     COUNTER_INCREMENT_STEP_MODIFY,
@@ -13,13 +13,11 @@ import Minus from './bootstrap/Minus';
 import Plus from './bootstrap/Plus';
 
 
-function Counter(props) {
-    const {
-        text,
-        loginresult,
-        counterIncrementStep,
-        counter,
-    } = props;
+export default function Counter() {
+    const text = useSelector(state => state.displayTexts);
+    const loginresult = useSelector(state => state.loginresult);
+    const counterIncrementStep = useSelector(state => state.counterIncrementStep);
+    const counter = useSelector(state => state.counter);
     const dispatch = useDispatch();
     const firstname = loginresult.user.firstname;
     if (!loginresult.authorized) {
@@ -51,19 +49,3 @@ function Counter(props) {
         </div>
     );
 }
-
-function mapStateToProps(state) {
-    const {
-        loginresult,
-        counterIncrementStep,
-        counter,
-    } = state;
-    return {
-        text: state.displayTexts,
-        loginresult,
-        counterIncrementStep,
-        counter,
-    };
-}
-
-export default connect(mapStateToProps)(Counter);
