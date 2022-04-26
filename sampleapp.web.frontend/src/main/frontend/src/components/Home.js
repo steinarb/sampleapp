@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect } from 'react-router';
 import { NavLink } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Container } from './bootstrap/Container';
 import { LOGOUT_REQUEST } from '../actiontypes';
 import Locale from './Locale';
@@ -12,9 +12,10 @@ function Home(props) {
         text,
         loginresult,
         accountCount,
-        onLogout,
     } = props;
+    const dispatch = useDispatch();
     const { username, firstname, lastname, email } = loginresult.user;
+
     if (!loginresult.authorized) {
         return <Redirect to="/unauthorized" />;
     }
@@ -51,7 +52,7 @@ function Home(props) {
                         </tr>
                     </tbody>
                 </table>
-                <p><button className="btn btn-primary" onClick={onLogout}>{text.logout}</button></p>
+                <p><button className="btn btn-primary" onClick={() => dispatch(LOGOUT_REQUEST())}>{text.logout}</button></p>
             </Container>
         </div>
     );
@@ -68,10 +69,4 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        onLogout: () => dispatch(LOGOUT_REQUEST()),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home);
+export default connect(mapStateToProps)(Home);

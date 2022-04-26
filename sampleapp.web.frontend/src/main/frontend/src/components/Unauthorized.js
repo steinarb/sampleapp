@@ -1,15 +1,14 @@
 import React from 'react';
 import { Redirect } from 'react-router';
-import { connect } from 'react-redux';
-import {
-    LOGOUT_REQUEST,
-} from '../actiontypes';
+import { connect, useDispatch } from 'react-redux';
+import { LOGOUT_REQUEST } from '../actiontypes';
 import { Container } from './bootstrap/Container';
 
 
 function Unauthorized(props) {
-    const { loginresult, text, onLogout } = props;
-    const { username } = loginresult.user;
+    const { loginresult, text } = props;
+    const username = loginresult.user.username;
+    const dispatch = useDispatch();
 
     if (!loginresult.success) {
         return <Redirect to="/login" />;
@@ -29,7 +28,7 @@ function Unauthorized(props) {
                     <div className="form-group row">
                         <div className="col-5"/>
                         <div className="col-7">
-                            <button className="btn btn-primary" onClick={onLogout}>{text.logout}</button>
+                            <button className="btn btn-primary" onClick={() => dispatch(LOGOUT_REQUEST())}>{text.logout}</button>
                         </div>
                     </div>
                 </form>
@@ -47,10 +46,4 @@ const mapStateToProps = state => {
     };
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onLogout: () => dispatch(LOGOUT_REQUEST()),
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Unauthorized);
+export default connect(mapStateToProps)(Unauthorized);

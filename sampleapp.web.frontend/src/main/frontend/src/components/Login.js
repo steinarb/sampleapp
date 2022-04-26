@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
 import { LOGIN_REQUEST } from '../actiontypes';
 import LoginMessage from './LoginMessage';
 
 function Login(props) {
-    const { loginresult, text, onSendLogin } = props;
+    const { loginresult, text } = props;
+    const dispatch = useDispatch();
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
 
@@ -39,7 +40,7 @@ function Login(props) {
                     </div>
                     <div className="form-group row">
                         <div className="offset-xs-3 col-xs-9">
-                            <input className="btn btn-primary" type="submit" value="Login" onClick={() => onSendLogin(username, password)}/>
+                            <input className="btn btn-primary" type="submit" value="Login" onClick={() => dispatch(LOGIN_REQUEST({ username, password }))}/>
                         </div>
                     </div>
                 </form>
@@ -57,10 +58,4 @@ function mapStateToProps(state) {
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        onSendLogin: (username, password) => dispatch(LOGIN_REQUEST({ username, password })),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps)(Login);
