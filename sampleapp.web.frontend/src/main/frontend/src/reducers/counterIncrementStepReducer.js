@@ -3,7 +3,7 @@ import {
     COUNTER_INCREMENT_STEP_MODIFY,
     COUNTER_INCREMENT_STEP_RECEIVE,
     UPDATE_COUNTER_INCREMENT_STEP_RECEIVE,
- } from '../actiontypes';
+ } from '../reduxactions';
 
 const counterIncrementStepReducer = createReducer(1, {
     [COUNTER_INCREMENT_STEP_MODIFY]: (state, action) => parseInt(action.payload) || 0,

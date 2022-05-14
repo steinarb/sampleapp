@@ -5,7 +5,7 @@ import {
     DISPLAY_TEXTS_RECEIVE,
     DISPLAY_TEXTS_ERROR,
     UPDATE_LOCALE,
-} from '../actiontypes';
+} from '../reduxactions';
 
 // watcher saga
 export default function* displayTextsSaga() {

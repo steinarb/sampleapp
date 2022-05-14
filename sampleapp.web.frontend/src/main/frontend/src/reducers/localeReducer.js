@@ -2,7 +2,7 @@ import { createReducer } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
 import {
     UPDATE_LOCALE,
-} from '../actiontypes';
+} from '../reduxactions';
 
 const currentLocale = Cookies.get('locale') || '';
 

@@ -4,7 +4,7 @@ import {
     LOGINSTATE_REQUEST,
     LOGINSTATE_RECEIVE,
     LOGINSTATE_ERROR,
-} from '../actiontypes';
+} from '../reduxactions';
 
 function sendLoginstate(locale) {
     return axios.get('/api/loginstate', { params: { locale } });

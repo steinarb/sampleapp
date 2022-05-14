@@ -3,7 +3,7 @@ import {
     COUNTER_RECEIVE,
     COUNTER_DECREMENT_RECEIVE,
     COUNTER_INCREMENT_RECEIVE,
-} from '../actiontypes';
+} from '../reduxactions';
 
 const counterReducer = createReducer(1, {
     [COUNTER_RECEIVE]: (state, action) => action.payload.counter,

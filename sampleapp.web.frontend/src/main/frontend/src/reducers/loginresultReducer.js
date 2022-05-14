@@ -3,7 +3,7 @@ import {
     LOGIN_RECEIVE,
     LOGOUT_RECEIVE,
     LOGINSTATE_RECEIVE,
-} from '../actiontypes';
+} from '../reduxactions';
 
 const loginresultReducer = createReducer({ authorized: true, user: {} }, {
     [LOGIN_RECEIVE]: (state, action) => action.payload,

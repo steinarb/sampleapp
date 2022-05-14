@@ -4,7 +4,7 @@ import {
     LOGOUT_REQUEST,
     LOGOUT_RECEIVE,
     LOGOUT_ERROR,
-} from '../actiontypes';
+} from '../reduxactions';
 
 function sendLogout(locale) {
     return axios.get('/api/logout', { params: { locale } });

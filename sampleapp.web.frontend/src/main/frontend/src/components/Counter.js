@@ -7,7 +7,7 @@ import {
     COUNTER_INCREMENT_STEP_MODIFY,
     COUNTER_DECREMENT_REQUEST,
     COUNTER_INCREMENT_REQUEST,
-} from '../actiontypes';
+} from '../reduxactions';
 import Locale from './Locale';
 import Minus from './bootstrap/Minus';
 import Plus from './bootstrap/Plus';

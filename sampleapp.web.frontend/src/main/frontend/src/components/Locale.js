@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { UPDATE_LOCALE } from '../actiontypes';
+import { UPDATE_LOCALE } from '../reduxactions';
 
 export default function Locale(props) {
     const { className } = props;

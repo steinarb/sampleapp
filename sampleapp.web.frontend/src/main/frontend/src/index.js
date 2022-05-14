@@ -15,7 +15,7 @@ import {
     LOGINSTATE_REQUEST,
     DEFAULT_LOCALE_REQUEST,
     AVAILABLE_LOCALES_REQUEST,
-} from './actiontypes';
+} from './reduxactions';
 
 const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.includes('bundle.js'))[0].replace('/bundle.js', '');
 const basename = new URL(baseUrl).pathname;

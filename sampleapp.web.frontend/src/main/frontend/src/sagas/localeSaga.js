@@ -3,7 +3,7 @@ import Cookies from 'js-cookie';
 import {
     UPDATE_LOCALE,
     DEFAULT_LOCALE_RECEIVE,
-} from '../actiontypes';
+} from '../reduxactions';
 
 export default function* localeSaga() {
     yield takeLatest(DEFAULT_LOCALE_RECEIVE, setLocaleCookieIfNotPresentAndPutCookieValueAsLocale);

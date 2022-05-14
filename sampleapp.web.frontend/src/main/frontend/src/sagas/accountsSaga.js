@@ -4,7 +4,7 @@ import {
     ACCOUNTS_REQUEST,
     ACCOUNTS_RECEIVE,
     ACCOUNTS_ERROR,
-} from '../actiontypes';
+} from '../reduxactions';
 
 function sendAccounts() {
     return axios.get('/api/accounts');

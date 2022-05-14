@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Redirect } from 'react-router';
-import { LOGIN_REQUEST } from '../actiontypes';
+import { LOGIN_REQUEST } from '../reduxactions';
 import LoginMessage from './LoginMessage';
 
 export default function Login() {

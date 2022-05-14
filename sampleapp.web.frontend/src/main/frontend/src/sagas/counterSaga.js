@@ -12,7 +12,7 @@ import {
     COUNTER_INCREMENT_ERROR,
     LOGIN_RECEIVE,
     LOGINSTATE_RECEIVE,
-} from '../actiontypes';
+} from '../reduxactions';
 
 function getCounter(username) {
     return axios.get('/api/counter/' + username);

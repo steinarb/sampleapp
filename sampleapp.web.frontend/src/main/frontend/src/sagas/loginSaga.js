@@ -4,7 +4,7 @@ import {
     LOGIN_REQUEST,
     LOGIN_RECEIVE,
     LOGIN_ERROR,
-} from '../actiontypes';
+} from '../reduxactions';
 
 function sendLogin(credentials, locale) {
     return axios.post('/api/login', credentials, { params: { locale } });

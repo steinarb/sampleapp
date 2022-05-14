@@ -1,6 +1,6 @@
 import { takeLatest, put } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'connected-react-router';
-import { ACCOUNTS_REQUEST } from '../actiontypes';
+import { ACCOUNTS_REQUEST } from '../reduxactions';
 
 function* locationChange(action) {
     const { location = {} } = action.payload || {};

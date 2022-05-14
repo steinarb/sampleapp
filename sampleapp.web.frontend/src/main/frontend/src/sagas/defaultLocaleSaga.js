@@ -4,7 +4,7 @@ import {
     DEFAULT_LOCALE_REQUEST,
     DEFAULT_LOCALE_RECEIVE,
     DEFAULT_LOCALE_ERROR,
-} from '../actiontypes';
+} from '../reduxactions';
 
 // watcher saga
 export default function* defaultLocaleSaga() {

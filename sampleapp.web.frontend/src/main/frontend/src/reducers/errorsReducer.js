@@ -1,7 +1,7 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
     LOGIN_ERROR,
-} from '../actiontypes';
+} from '../reduxactions';
 
 const errorsReducer = createReducer({}, {
     [LOGIN_ERROR]: (state, action) => {

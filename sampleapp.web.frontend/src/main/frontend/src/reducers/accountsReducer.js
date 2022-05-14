@@ -1,5 +1,5 @@
 import { createReducer } from '@reduxjs/toolkit';
-import { ACCOUNTS_RECEIVE } from '../actiontypes';
+import { ACCOUNTS_RECEIVE } from '../reduxactions';
 
 const accountsReducer = createReducer([], {
     [ACCOUNTS_RECEIVE]: (state, action) => action.payload,

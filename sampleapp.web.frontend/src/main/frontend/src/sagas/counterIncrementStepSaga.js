@@ -10,7 +10,7 @@ import {
     UPDATE_COUNTER_INCREMENT_STEP_RECEIVE,
     UPDATE_COUNTER_INCREMENT_STEP_ERROR,
     COUNTER_INCREMENT_STEP_MODIFY,
-} from '../actiontypes';
+} from '../reduxactions';
 
 function getCounterIncrementStep(username) {
     return axios.get('/api/counter/incrementstep/' + username);

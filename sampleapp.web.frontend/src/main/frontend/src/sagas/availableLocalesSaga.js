@@ -4,7 +4,7 @@ import {
     AVAILABLE_LOCALES_REQUEST,
     AVAILABLE_LOCALES_RECEIVE,
     AVAILABLE_LOCALES_ERROR,
-} from '../actiontypes';
+} from '../reduxactions';
 
 // watcher saga
 export default function* availableLocalesSaga() {
