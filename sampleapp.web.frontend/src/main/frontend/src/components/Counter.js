@@ -9,6 +9,7 @@ import {
     COUNTER_INCREMENT_REQUEST,
 } from '../reduxactions';
 import Locale from './Locale';
+import ChevronLeft from './bootstrap/ChevronLeft';
 import Minus from './bootstrap/Minus';
 import Plus from './bootstrap/Plus';
 
@@ -28,7 +29,7 @@ export default function Counter() {
         <div>
             <nav className="navbar navbar-light bg-light">
                 <NavLink className="btn btn-primary left-align-cell" to="/">
-                    <span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!
+                    <ChevronLeft />&nbsp;{text.gohome}!
                 </NavLink>
                 <h1>{text.counter_for} {firstname}</h1>
                 <Locale />

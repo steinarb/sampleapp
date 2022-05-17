@@ -3,6 +3,7 @@ import { Redirect } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { LOGOUT_REQUEST } from '../reduxactions';
 import Container from './bootstrap/Container';
+import ChevronLeft from './bootstrap/ChevronLeft';
 
 
 export default function Unauthorized() {
@@ -19,7 +20,7 @@ export default function Unauthorized() {
         <div>
             <nav className="navbar navbar-light bg-light">
                 <a className="btn btn-primary left-align-cell" href="../..">
-                    <span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!
+                    <ChevronLeft />&nbsp;{text.gohome}!
                 </a>
                 <h1>{text.noaccess}</h1>
                 <div className="col-sm-2"></div>
