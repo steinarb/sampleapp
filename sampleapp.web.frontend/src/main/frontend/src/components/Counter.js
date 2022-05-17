@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Container } from './bootstrap/Container';
 import {
-    COUNTER_INCREMENT_STEP_MODIFY,
+    INCREMENT_STEP_FIELD_MODIFIED,
     COUNTER_DECREMENT_REQUEST,
     COUNTER_INCREMENT_REQUEST,
 } from '../reduxactions';
@@ -44,7 +44,7 @@ export default function Counter() {
                                 type="number"
                                 pattern="\d+"
                                 value={counterIncrementStep}
-                                onChange={e => dispatch(COUNTER_INCREMENT_STEP_MODIFY(e.target.value))} />
+                                onChange={e => dispatch(INCREMENT_STEP_FIELD_MODIFIED(e.target.value))} />
                         </div>
                     </div>
                 </form>

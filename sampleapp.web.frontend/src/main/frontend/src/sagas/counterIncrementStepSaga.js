@@ -3,13 +3,13 @@ import axios from 'axios';
 import {
     COUNTER_INCREMENT_STEP_REQUEST,
     COUNTER_INCREMENT_STEP_RECEIVE,
-    COUNTER_INCREMENT_STEP_ERROR,
+    COUNTER_INCREMENT_STEP_FAILURE,
     LOGIN_RECEIVE,
     LOGINSTATE_RECEIVE,
     UPDATE_COUNTER_INCREMENT_STEP_REQUEST,
     UPDATE_COUNTER_INCREMENT_STEP_RECEIVE,
-    UPDATE_COUNTER_INCREMENT_STEP_ERROR,
-    COUNTER_INCREMENT_STEP_MODIFY,
+    UPDATE_COUNTER_INCREMENT_STEP_FAILURE,
+    INCREMENT_STEP_FIELD_MODIFIED,
 } from '../reduxactions';
 
 function getCounterIncrementStep(username) {
@@ -26,7 +26,7 @@ function* fetchCounterIncrementStep() {
             yield put(COUNTER_INCREMENT_STEP_RECEIVE(counterIncrementStepresult));
         }
     } catch (error) {
-        yield put(COUNTER_INCREMENT_STEP_ERROR(error));
+        yield put(COUNTER_INCREMENT_STEP_FAILURE(error));
     }
 }
 
@@ -45,7 +45,7 @@ function* updateCounterIncrementStep(action) {
             yield put(UPDATE_COUNTER_INCREMENT_STEP_RECEIVE(counterIncrementStepresult));
         }
     } catch (error) {
-        yield put(UPDATE_COUNTER_INCREMENT_STEP_ERROR(error));
+        yield put(UPDATE_COUNTER_INCREMENT_STEP_FAILURE(error));
     }
 }
 
@@ -59,5 +59,5 @@ export default function* counterIncrementStepSaga() {
     yield takeLatest(LOGIN_RECEIVE, fetchCounterIncrementStep);
     yield takeLatest(LOGINSTATE_RECEIVE, fetchCounterIncrementStep);
     yield takeLatest(UPDATE_COUNTER_INCREMENT_STEP_REQUEST, updateCounterIncrementStep);
-    yield takeLatest(COUNTER_INCREMENT_STEP_MODIFY, updateCounterIncrementStepAfterDelay);
+    yield takeLatest(INCREMENT_STEP_FIELD_MODIFIED, updateCounterIncrementStepAfterDelay);
 }

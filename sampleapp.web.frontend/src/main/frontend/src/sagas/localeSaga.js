@@ -1,13 +1,13 @@
 import { takeLatest, put } from 'redux-saga/effects';
 import Cookies from 'js-cookie';
 import {
-    UPDATE_LOCALE,
+    SELECT_LOCALE,
     DEFAULT_LOCALE_RECEIVE,
 } from '../reduxactions';
 
 export default function* localeSaga() {
     yield takeLatest(DEFAULT_LOCALE_RECEIVE, setLocaleCookieIfNotPresentAndPutCookieValueAsLocale);
-    yield takeLatest(UPDATE_LOCALE, updateLocaleCookie);
+    yield takeLatest(SELECT_LOCALE, updateLocaleCookie);
 }
 
 export function* setLocaleCookieIfNotPresentAndPutCookieValueAsLocale(action) {
@@ -15,7 +15,7 @@ export function* setLocaleCookieIfNotPresentAndPutCookieValueAsLocale(action) {
     if (!currentLocale) {
         Cookies.set('locale', action.payload);
     }
-    yield put(UPDATE_LOCALE(Cookies.get('locale')));
+    yield put(SELECT_LOCALE(Cookies.get('locale')));
 
 }
 

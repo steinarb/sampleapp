@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
     LOGIN_REQUEST,
     LOGIN_RECEIVE,
-    LOGIN_ERROR,
+    LOGIN_FAILURE,
 } from '../reduxactions';
 
 function sendLogin(credentials, locale) {
@@ -17,7 +17,7 @@ function* mottaLoginResult(action) {
         const loginresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(LOGIN_RECEIVE(loginresult));
     } catch (error) {
-        yield put(LOGIN_ERROR(error));
+        yield put(LOGIN_FAILURE(error));
     }
 }
 

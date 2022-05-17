@@ -1,10 +1,10 @@
 import { createReducer } from '@reduxjs/toolkit';
 import {
-    LOGIN_ERROR,
+    LOGIN_FAILURE,
 } from '../reduxactions';
 
 const errorsReducer = createReducer({}, {
-    [LOGIN_ERROR]: (state, action) => {
+    [LOGIN_FAILURE]: (state, action) => {
         const login = action.payload;
         return { ...state, login };
     },

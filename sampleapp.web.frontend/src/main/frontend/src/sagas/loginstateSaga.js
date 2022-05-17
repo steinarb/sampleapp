@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
     LOGINSTATE_REQUEST,
     LOGINSTATE_RECEIVE,
-    LOGINSTATE_ERROR,
+    LOGINSTATE_FAILURE,
 } from '../reduxactions';
 
 function sendLoginstate(locale) {
@@ -17,7 +17,7 @@ function* mottaLoginstateResult() {
         const logoutresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(LOGINSTATE_RECEIVE(logoutresult));
     } catch (error) {
-        yield put(LOGINSTATE_ERROR(error));
+        yield put(LOGINSTATE_FAILURE(error));
     }
 }
 

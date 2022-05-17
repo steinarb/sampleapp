@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
     ACCOUNTS_REQUEST,
     ACCOUNTS_RECEIVE,
-    ACCOUNTS_ERROR,
+    ACCOUNTS_FAILURE,
 } from '../reduxactions';
 
 function sendAccounts() {
@@ -16,7 +16,7 @@ function* mottaAccountsResult() {
         const accountsresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(ACCOUNTS_RECEIVE(accountsresult));
     } catch (error) {
-        yield put(ACCOUNTS_ERROR(error));
+        yield put(ACCOUNTS_FAILURE(error));
     }
 }
 

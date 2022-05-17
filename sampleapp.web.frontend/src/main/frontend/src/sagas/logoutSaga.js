@@ -3,7 +3,7 @@ import axios from 'axios';
 import {
     LOGOUT_REQUEST,
     LOGOUT_RECEIVE,
-    LOGOUT_ERROR,
+    LOGOUT_FAILURE,
 } from '../reduxactions';
 
 function sendLogout(locale) {
@@ -17,7 +17,7 @@ function* mottaLogoutResult() {
         const logoutresult = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(LOGOUT_RECEIVE(logoutresult));
     } catch (error) {
-        yield put(LOGOUT_ERROR(error));
+        yield put(LOGOUT_FAILURE(error));
     }
 }
 

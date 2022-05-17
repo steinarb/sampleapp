@@ -3,13 +3,13 @@ import axios from 'axios';
 import {
     COUNTER_REQUEST,
     COUNTER_RECEIVE,
-    COUNTER_ERROR,
+    COUNTER_FAILURE,
     COUNTER_DECREMENT_REQUEST,
     COUNTER_DECREMENT_RECEIVE,
-    COUNTER_DECREMENT_ERROR,
+    COUNTER_DECREMENT_FAILURE,
     COUNTER_INCREMENT_REQUEST,
     COUNTER_INCREMENT_RECEIVE,
-    COUNTER_INCREMENT_ERROR,
+    COUNTER_INCREMENT_FAILURE,
     LOGIN_RECEIVE,
     LOGINSTATE_RECEIVE,
 } from '../reduxactions';
@@ -28,7 +28,7 @@ function* fetchCounter() {
             yield put(COUNTER_RECEIVE(counterresult));
         }
     } catch (error) {
-        yield put(COUNTER_ERROR(error));
+        yield put(COUNTER_FAILURE(error));
     }
 }
 
@@ -46,7 +46,7 @@ function* decrementCounter() {
             yield put(COUNTER_DECREMENT_RECEIVE(counterresult));
         }
     } catch (error) {
-        yield put(COUNTER_DECREMENT_ERROR(error));
+        yield put(COUNTER_DECREMENT_FAILURE(error));
     }
 }
 
@@ -65,7 +65,7 @@ function* incrementCounter() {
             yield put(COUNTER_INCREMENT_RECEIVE(counterresult));
         }
     } catch (error) {
-        yield put(COUNTER_INCREMENT_ERROR(error));
+        yield put(COUNTER_INCREMENT_FAILURE(error));
     }
 }
 
