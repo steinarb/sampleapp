@@ -18,7 +18,9 @@ export default function Unauthorized() {
     return (
         <div>
             <nav className="navbar navbar-light bg-light">
-                <a className="btn btn-primary left-align-cell" href="../.."><span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!</a>
+                <a className="btn btn-primary left-align-cell" href="../..">
+                    <span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!
+                </a>
                 <h1>{text.noaccess}</h1>
                 <div className="col-sm-2"></div>
             </nav>

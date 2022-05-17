@@ -27,7 +27,9 @@ export default function Counter() {
     return (
         <div>
             <nav className="navbar navbar-light bg-light">
-                <NavLink className="btn btn-primary left-align-cell" to="/"><span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!</NavLink>
+                <NavLink className="btn btn-primary left-align-cell" to="/">
+                    <span className="oi oi-chevron-left" title="chevron left" aria-hidden="true"></span>&nbsp;{text.gohome}!
+                </NavLink>
                 <h1>{text.counter_for} {firstname}</h1>
                 <Locale />
             </nav>
@@ -36,7 +38,13 @@ export default function Counter() {
                     <div className="form-group row">
                         <label htmlFor="amount" className="col-form-label col-5">{text.counterIncrementStep}</label>
                         <div className="col-7">
-                            <input id="amount" className="form-control" type="number" pattern="\d+" value={counterIncrementStep} onChange={e => dispatch(COUNTER_INCREMENT_STEP_MODIFY(e.target.value))} />
+                            <input
+                                id="amount"
+                                className="form-control"
+                                type="number"
+                                pattern="\d+"
+                                value={counterIncrementStep}
+                                onChange={e => dispatch(COUNTER_INCREMENT_STEP_MODIFY(e.target.value))} />
                         </div>
                     </div>
                 </form>
