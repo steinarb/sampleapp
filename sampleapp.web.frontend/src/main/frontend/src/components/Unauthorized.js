@@ -2,7 +2,7 @@ import React from 'react';
 import { Redirect } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { LOGOUT_REQUEST } from '../reduxactions';
-import { Container } from './bootstrap/Container';
+import Container from './bootstrap/Container';
 
 
 export default function Unauthorized() {
