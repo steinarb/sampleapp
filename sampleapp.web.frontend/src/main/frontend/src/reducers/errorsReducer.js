@@ -4,10 +4,7 @@ import {
 } from '../reduxactions';
 
 const errorsReducer = createReducer({}, {
-    [LOGIN_FAILURE]: (state, action) => {
-        const login = action.payload;
-        return { ...state, login };
-    },
+    [LOGIN_FAILURE]: (state, action) => ({ ...state, login: action.payload }),
 });
 
 export default errorsReducer;
