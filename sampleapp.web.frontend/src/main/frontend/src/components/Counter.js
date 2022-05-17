@@ -51,7 +51,7 @@ export default function Counter() {
                 </form>
                 <div className="btn-group">
                     <button className="btn btn-secondary" onClick={() => dispatch(COUNTER_DECREMENT_REQUEST())}><Minus/></button>
-                    <input disable="true" className="btn btn-secondary" value={counter}/>
+                    <input readOnly className="btn btn-secondary" value={counter}/>
                     <button className="btn btn-secondary" onClick={() => dispatch(COUNTER_INCREMENT_REQUEST())}><Plus/></button>
                 </div>
             </Container>
