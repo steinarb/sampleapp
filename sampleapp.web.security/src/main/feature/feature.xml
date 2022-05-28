@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.4.0" name="sampleapp.web.security">
 
-    <!-- Copyright 2021 Steinar Bang                                                     -->
+    <!-- Copyright 2021-2022 Steinar Bang                                                -->
     <!--                                                                                 -->
     <!-- Licensed under the Apache License, Version 2.0 (the "License");                 -->
     <!-- you may not use this file except in compliance with the License.                -->
@@ -15,6 +15,6 @@
 
     <feature name="sampleapp-web-security">
         <feature>scr</feature>
-        <feature>pax-http-whiteboard</feature>
+        <feature>http-whiteboard</feature>
     </feature>
 </features>
