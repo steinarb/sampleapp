@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2022 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,7 @@ public class SampleappProductionDbLiquibaseRunner implements PreHook {
             insertMockData(connect);
             sampleappLiquibase.updateSchema(connect);
         } catch (Exception e) {
-            logError("Failed to create sampleapp derby test database", e);
+            logError("Failed to create sampleapp PostgreSQL database", e);
         }
     }
 
