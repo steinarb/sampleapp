@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import axios from 'axios';
 import './index.css';
 import App from './App';
@@ -35,11 +35,14 @@ store.dispatch(LOGINSTATE_REQUEST());
 store.dispatch(DEFAULT_LOCALE_REQUEST());
 store.dispatch(AVAILABLE_LOCALES_REQUEST());
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
     <Provider store={store}>
         <App history={history} basename={basename} />
     </Provider>,
-    document.getElementById('root'));
+);
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
