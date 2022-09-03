@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Container from './bootstrap/Container';
@@ -22,7 +22,7 @@ export default function Counter() {
     const dispatch = useDispatch();
     const firstname = loginresult.user.firstname;
     if (!loginresult.authorized) {
-        return <Redirect to="/unauthorized" />;
+        return <Navigate to="/unauthorized" />;
     }
 
     return (

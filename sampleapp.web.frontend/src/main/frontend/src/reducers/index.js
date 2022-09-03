@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-import { connectRouter } from 'connected-react-router';
 import loginresult from './loginresultReducer';
 import accounts from './accountsReducer';
 import counterIncrementStep from './counterIncrementStepReducer';
@@ -9,8 +8,8 @@ import availableLocales from './availableLocalesReducer';
 import displayTexts from './displayTextsReducer';
 import errors from './errorsReducer';
 
-export default (history) => combineReducers({
-    router: connectRouter(history),
+export default (routerReducer) => combineReducers({
+    router: routerReducer,
     loginresult,
     accounts,
     counterIncrementStep,

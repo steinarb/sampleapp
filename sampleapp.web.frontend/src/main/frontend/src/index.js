@@ -7,7 +7,7 @@ import * as serviceWorker from './serviceWorker';
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
-import { routerMiddleware } from 'connected-react-router';
+import { createReduxHistoryContext } from "redux-first-history";
 import { createBrowserHistory } from 'history';
 import createRootReducer from './reducers';
 import rootSaga from './sagas';
@@ -21,15 +21,20 @@ const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.i
 const basename = new URL(baseUrl).pathname;
 axios.defaults.baseURL = baseUrl;
 const sagaMiddleware = createSagaMiddleware();
-const history = createBrowserHistory({ basename });
+const {
+  createReduxHistory,
+  routerMiddleware,
+  routerReducer
+} = createReduxHistoryContext({ history: createBrowserHistory() });
 const store = configureStore({
-    reducer: createRootReducer(history),
+    reducer: createRootReducer(routerReducer),
     middleware: [
         sagaMiddleware,
-        routerMiddleware(history),
+        routerMiddleware,
     ],
 });
 sagaMiddleware.run(rootSaga);
+const history = createReduxHistory(store);
 
 store.dispatch(LOGINSTATE_REQUEST());
 store.dispatch(DEFAULT_LOCALE_REQUEST());

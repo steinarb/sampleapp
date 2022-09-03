@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Redirect } from 'react-router';
+import { Navigate } from 'react-router';
 import { LOGIN_REQUEST } from '../reduxactions';
 import LoginMessage from './LoginMessage';
 
@@ -13,7 +13,7 @@ export default function Login() {
 
     if (loginresult.success) {
         const originalRequestUrl = loginresult.originalRequestUrl || '/';
-        return (<Redirect to={originalRequestUrl} />);
+        return (<Navigate to={originalRequestUrl} />);
     }
 
     return (

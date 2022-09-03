@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
-import { ConnectedRouter as Router } from 'connected-react-router';
+import { Routes, Route } from 'react-router-dom';
+import { HistoryRouter as Router } from "redux-first-history/rr6";
 import './App.css';
 import Home from './components/Home';
 import Counter from './components/Counter';
@@ -13,12 +13,12 @@ class App extends Component {
 
         return (
             <Router history={history} basename={basename}>
-                <Switch>
-                    <Route exact path="/" component={Home} />
-                    <Route exact path="/counter" component={Counter} />
-                    <Route exact path="/login" component={Login} />
-                    <Route exact path="/unauthorized" component={Unauthorized} />
-                </Switch>
+                <Routes>
+                    <Route exact path="/" element={<Home/>} />
+                    <Route exact path="/counter" element={<Counter/>} />
+                    <Route exact path="/login" element={<Login/>} />
+                    <Route exact path="/unauthorized" element={<Unauthorized/>} />
+                </Routes>
             </Router>
         );
     }

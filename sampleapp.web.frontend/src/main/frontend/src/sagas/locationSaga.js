@@ -1,5 +1,5 @@
 import { takeLatest, put } from 'redux-saga/effects';
-import { LOCATION_CHANGE } from 'connected-react-router';
+import { LOCATION_CHANGE } from 'redux-first-history';
 import { ACCOUNTS_REQUEST } from '../reduxactions';
 
 function* locationChange(action) {
