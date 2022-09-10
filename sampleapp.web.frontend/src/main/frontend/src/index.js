@@ -25,7 +25,7 @@ const {
   createReduxHistory,
   routerMiddleware,
   routerReducer
-} = createReduxHistoryContext({ history: createBrowserHistory() });
+} = createReduxHistoryContext({ history: createBrowserHistory(), basename });
 const store = configureStore({
     reducer: createRootReducer(routerReducer),
     middleware: [
