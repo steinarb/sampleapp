@@ -38,7 +38,7 @@ public class SampleappIntegrationTest extends KarafTestSupport {
         final MavenArtifactUrlReference sampleappFeatureRepo = maven()
             .groupId("no.priv.bang.sampleapp")
             .artifactId("karaf")
-            .version("LATEST")
+            .versionAsInProject()
             .type("xml")
             .classifier("features");
         Option[] options = new Option[] {
