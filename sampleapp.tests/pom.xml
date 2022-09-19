@@ -24,7 +24,7 @@ under the License.
     </parent>
 
     <artifactId>sampleapp.tests</artifactId>
-    <name>Hangleregistrering integration test</name>
+    <name>Sampleapp integration test</name>
 
     <properties>
     </properties>
