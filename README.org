@@ -25,7 +25,7 @@ The username/password combinations of users in the test db version of authservic
 | jod      | johnnyBoi | no                       |
 
 ** Development status
-[[https://travis-ci.org/steinarb/sampleapp][file:https://travis-ci.org/steinarb/sampleapp.svg?branch=master]]
+[[https://github.com/steinarb/sampleapp/actions/workflows/sampleapp-maven-ci-build.yml][file:https://github.com/steinarb/sampleapp/actions/workflows/sampleapp-maven-ci-build.yml/badge.svg]]
 
 ** Installing the sample application
 
