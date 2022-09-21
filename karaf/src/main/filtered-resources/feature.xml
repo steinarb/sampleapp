@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and limitations
 under the License.
 -->
 
-<features xmlns="http://karaf.apache.org/xmlns/features/v1.4.0" name="sampleapp">
+<features xmlns="http://karaf.apache.org/xmlns/features/v1.6.0" name="sampleapp">
     <repository>mvn:no.priv.bang.authservice/karaf/${authservice.version}/xml/features</repository>
     <repository>mvn:no.priv.bang.sampleapp/sampleapp.db.liquibase/${project.version}/xml/features</repository>
     <repository>mvn:no.priv.bang.sampleapp/sampleapp.services/${project.version}/xml/features</repository>
