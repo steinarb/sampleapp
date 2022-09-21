@@ -28,6 +28,20 @@ The username/password combinations of users in the test db version of authservic
 [[https://github.com/steinarb/sampleapp/actions/workflows/sampleapp-maven-ci-build.yml][file:https://github.com/steinarb/sampleapp/actions/workflows/sampleapp-maven-ci-build.yml/badge.svg]]
 [[https://coveralls.io/github/badges/shields?branch=master][file:https://coveralls.io/repos/github/badges/shields/badge.svg?branch=master]]
 
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/images/project_badges/sonarcloud-white.svg]]
+
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=alert_status#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=sqale_index#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=coverage#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=ncloc#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=code_smells#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=sqale_rating#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=security_rating#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=bugs#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=vulnerabilities#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=duplicated_lines_density#.svg]]
+[[https://sonarcloud.io/summary/new_code?id=steinarb_sampleapp][file:https://sonarcloud.io/api/project_badges/measure?project=steinarb_sampleapp&metric=reliability_rating#.svg]]
+
 ** Installing the sample application
 
 First clone and build the sample application:
