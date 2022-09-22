@@ -47,7 +47,7 @@ public class CounterResource {
         throwForbiddenIfNotLoggedInUser(username);
         return sampleapp
             .getCounterIncrementStep(username)
-            .orElseThrow(() -> new NotFoundException());
+            .orElseThrow(NotFoundException::new);
     }
 
     @POST
@@ -57,7 +57,7 @@ public class CounterResource {
         throwForbiddenIfNotLoggedInUser(updateIncrementStep.getUsername());
         return sampleapp
             .updateCounterIncrementStep(updateIncrementStep)
-            .orElseThrow(() -> new InternalServerErrorException());
+            .orElseThrow(InternalServerErrorException::new);
     }
 
     @GET
@@ -66,7 +66,7 @@ public class CounterResource {
         throwForbiddenIfNotLoggedInUser(username);
         return sampleapp
             .getCounter(username)
-            .orElseThrow(() -> new NotFoundException());
+            .orElseThrow(NotFoundException::new);
     }
 
     @GET
@@ -75,7 +75,7 @@ public class CounterResource {
         throwForbiddenIfNotLoggedInUser(username);
         return sampleapp
             .incrementCounter(username)
-            .orElseThrow(() -> new InternalServerErrorException());
+            .orElseThrow(InternalServerErrorException::new);
     }
 
     @GET
@@ -84,7 +84,7 @@ public class CounterResource {
         throwForbiddenIfNotLoggedInUser(username);
         return sampleapp
             .decrementCounter(username)
-            .orElseThrow(() -> new InternalServerErrorException());
+            .orElseThrow(InternalServerErrorException::new);
     }
 
     private void throwForbiddenIfNotLoggedInUser(String username) {
