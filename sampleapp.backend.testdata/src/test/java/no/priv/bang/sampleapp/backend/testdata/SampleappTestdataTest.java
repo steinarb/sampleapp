@@ -46,7 +46,7 @@ class SampleappTestdataTest {
 
         assertEquals(0, useradmin.getUserRoles().size()); // Verify preconditions
         testdata.activate();
-        assertThat(useradmin.getUserRoles().size()).isPositive();
+        assertThat(useradmin.getUserRoles()).isNotEmpty();
     }
 
     abstract class MockUserManagementService implements UserManagementService {
