@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2022 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,9 +16,12 @@
 package no.priv.bang.sampleapp.db.liquibase.test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -43,6 +46,20 @@ class SampleappTestDbLiquibaseRunnerTest {
         runner.activate();
         runner.prepare(datasource);
         assertAccounts(datasource);
+    }
+
+    @Test
+    void testFailInSettingUpData() throws Exception {
+        DataSource datasource = mock(DataSource.class);
+        when(datasource.getConnection()).thenThrow(SQLException.class);
+
+        MockLogService logservice = new MockLogService();
+        SampleappTestDbLiquibaseRunner runner = new SampleappTestDbLiquibaseRunner();
+        runner.setLogService(logservice);
+        assertThat(logservice.getLogmessages()).isEmpty();
+        runner.activate();
+        runner.prepare(datasource);
+        assertThat(logservice.getLogmessages()).isNotEmpty();
     }
 
     private void assertAccounts(DataSource datasource) throws Exception {

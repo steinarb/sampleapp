@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2022 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,19 +35,23 @@ class SampleappLiquibaseTest {
 
     @Test
     void testCreateSchema() throws Exception {
-        Connection connection = createConnection();
         SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
-        sampleappLiquibase.createInitialSchema(connection);
-        addAccounts(connection);
-        assertAccounts(connection);
-        addCounterIncrementSteps(connection);
-        assertCounterIncrementSteps(connection);
-        int accountIdNotMatchingAccount = 375;
-        assertThrows(SQLException.class,() -> addCounterIncrementStep(connection, accountIdNotMatchingAccount, 10));
-        addCounters(connection);
-        assertCounters(connection);
-        assertThrows(SQLException.class,() -> addCounter(connection, accountIdNotMatchingAccount, 4));
-        sampleappLiquibase.updateSchema(connection);
+
+        sampleappLiquibase.createInitialSchema(createConnection());
+
+        try(var connection = createConnection()) {
+            addAccounts(connection);
+            assertAccounts(connection);
+            addCounterIncrementSteps(connection);
+            assertCounterIncrementSteps(connection);
+            int accountIdNotMatchingAccount = 375;
+            assertThrows(SQLException.class,() -> addCounterIncrementStep(connection, accountIdNotMatchingAccount, 10));
+            addCounters(connection);
+            assertCounters(connection);
+            assertThrows(SQLException.class,() -> addCounter(connection, accountIdNotMatchingAccount, 4));
+        }
+
+        sampleappLiquibase.updateSchema(createConnection());
     }
 
     @Test

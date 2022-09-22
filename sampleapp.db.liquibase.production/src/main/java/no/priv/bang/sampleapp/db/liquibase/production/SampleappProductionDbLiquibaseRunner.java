@@ -29,7 +29,6 @@ import org.osgi.service.log.Logger;
 import liquibase.Liquibase;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.jvm.JdbcConnection;
-import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import no.priv.bang.sampleapp.db.liquibase.SampleappLiquibase;
 
@@ -50,21 +49,33 @@ public class SampleappProductionDbLiquibaseRunner implements PreHook {
 
     @Override
     public void prepare(DataSource datasource) throws SQLException {
+        SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
         try (Connection connect = datasource.getConnection()) {
-            SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
             sampleappLiquibase.createInitialSchema(connect);
-            insertMockData(connect);
+        } catch (Exception e) {
+            logError("Failed to create schema sampleapp PostgreSQL database", e);
+        }
+
+        try (Connection connect = datasource.getConnection()) {
+            insertInitialData(connect);
+        } catch (Exception e) {
+            logError("Failed to insert initial data in sampleapp PostgreSQL database", e);
+        }
+
+        try (Connection connect = datasource.getConnection()) {
             sampleappLiquibase.updateSchema(connect);
         } catch (Exception e) {
-            logError("Failed to create sampleapp PostgreSQL database", e);
+            logError("Failed to modify schema of sampleapp PostgreSQL database", e);
         }
     }
 
-    public void insertMockData(Connection connect) throws LiquibaseException {
+    public void insertInitialData(Connection connect) throws Exception {
         DatabaseConnection databaseConnection = new JdbcConnection(connect);
-        ClassLoaderResourceAccessor classLoaderResourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader());
-        Liquibase liquibase = new Liquibase("sql/data/db-changelog.xml", classLoaderResourceAccessor, databaseConnection);
-        liquibase.update("");
+        try(var classLoaderResourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader())) {
+            try(var liquibase = new Liquibase("sql/data/db-changelog.xml", classLoaderResourceAccessor, databaseConnection)) {
+                liquibase.update("");
+            }
+        }
     }
 
     private void logError(String message, Exception exception) {
