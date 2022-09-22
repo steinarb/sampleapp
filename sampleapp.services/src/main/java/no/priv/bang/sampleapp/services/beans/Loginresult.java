@@ -22,7 +22,7 @@ public class Loginresult {
     private boolean success;
     private String errormessage;
     private boolean authorized;
-    public User user;
+    private User user;
     private String originalRequestUrl;
 
     private Loginresult() {}
