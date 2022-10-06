@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2022 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,6 @@ import javax.sql.DataSource;
 import org.ops4j.pax.jdbc.hook.PreHook;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.log.LogService;
-import org.osgi.service.log.Logger;
-
 import liquibase.Liquibase;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.jvm.JdbcConnection;
@@ -33,13 +29,6 @@ import no.priv.bang.sampleapp.db.liquibase.SampleappLiquibase;
 
 @Component(immediate=true, property = "name=sampleappdb")
 public class SampleappTestDbLiquibaseRunner implements PreHook {
-
-    private Logger logger;
-
-    @Reference
-    public void setLogService(LogService logservice) {
-        this.logger = logservice.getLogger(SampleappTestDbLiquibaseRunner.class);
-    }
 
     @Activate
     public void activate() {
@@ -51,29 +40,33 @@ public class SampleappTestDbLiquibaseRunner implements PreHook {
         SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
         try (Connection connect = datasource.getConnection()) {
             sampleappLiquibase.createInitialSchema(connect);
+        } catch (SQLException e) {
+            throw e;
         } catch (Exception e) {
-            logger.error("Error creating sampleapp test database schema", e);
+            throw new SQLException("Error creating sampleapp test database schema", e);
         }
 
         try (Connection connect = datasource.getConnection()) {
             insertMockData(connect);
-        } catch (Exception e) {
-            logger.error("Error inserting sampleapp test database mock data", e);
         }
 
         try (Connection connect = datasource.getConnection()) {
             sampleappLiquibase.updateSchema(connect);
+        } catch (SQLException e) {
+            throw e;
         } catch (Exception e) {
-            logger.error("Error updating sampleapp test database schema", e);
+            throw new SQLException("Error updating sampleapp test database schema", e);
         }
     }
 
-    public void insertMockData(Connection connect) throws Exception {
+    public void insertMockData(Connection connect) throws SQLException {
         DatabaseConnection databaseConnection = new JdbcConnection(connect);
         try(var classLoaderResourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader())) {
             try(var liquibase = new Liquibase("sql/data/db-changelog.xml", classLoaderResourceAccessor, databaseConnection)) {
                 liquibase.update("");
             }
+        } catch (Exception e) {
+            throw new SQLException("Error inserting sampleapp test database mock data", e);
         }
     }
 

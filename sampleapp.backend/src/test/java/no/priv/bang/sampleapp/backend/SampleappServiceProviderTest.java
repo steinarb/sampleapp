@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2022 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,9 +53,7 @@ class SampleappServiceProviderTest {
         Properties properties = new Properties();
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:sampleapp;create=true");
         datasource = derbyDataSourceFactory.createDataSource(properties);
-        MockLogService logservice = new MockLogService();
         SampleappTestDbLiquibaseRunner runner = new SampleappTestDbLiquibaseRunner();
-        runner.setLogService(logservice);
         runner.activate();
         runner.prepare(datasource);
     }

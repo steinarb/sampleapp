@@ -17,8 +17,7 @@ package no.priv.bang.sampleapp.db.liquibase.production;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,8 +30,6 @@ import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 
-import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
-
 class SampleappProductionDbLiquibaseRunnerTest {
 
     @Test
@@ -42,9 +39,7 @@ class SampleappProductionDbLiquibaseRunnerTest {
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:sampleapp;create=true");
         DataSource datasource = dataSourceFactory.createDataSource(properties);
 
-        MockLogService logservice = new MockLogService();
         SampleappProductionDbLiquibaseRunner runner = new SampleappProductionDbLiquibaseRunner();
-        runner.setLogService(logservice);
         runner.activate();
         runner.prepare(datasource);
         addAccount(datasource, "jd");
@@ -53,18 +48,84 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
 
     @Test
-    void testFailInSettingUpData() throws Exception {
+    void testFailInGettingConnectionWhenCreatingInitialSchema() throws Exception {
         DataSource datasource = mock(DataSource.class);
-        when(datasource.getConnection()).thenThrow(SQLException.class);
+        when(datasource.getConnection()).thenThrow(new SQLException("Failed to get connection"));
 
-        MockLogService logservice = new MockLogService();
-        SampleappProductionDbLiquibaseRunner runner = new SampleappProductionDbLiquibaseRunner();
-        runner.setLogService(logservice);
-        assertThat(logservice.getLogmessages()).isEmpty();
+        var runner = new SampleappProductionDbLiquibaseRunner();
         runner.activate();
-        runner.prepare(datasource);
-        assertThat(logservice.getLogmessages()).isNotEmpty();
+        var e = assertThrows(
+            SQLException.class,
+            () -> runner.prepare(datasource));
+        assertThat(e.getMessage()).startsWith("Failed to get connection");
     }
+
+
+    @Test
+    void testFailWhenCreatingInitialSchema() throws Exception {
+        Connection connection = spy(createDataSource("sampleapp1").getConnection());
+        DataSource datasource = mock(DataSource.class);
+        when(datasource.getConnection()).thenReturn(connection);
+
+        var runner = new SampleappProductionDbLiquibaseRunner();
+        runner.activate();
+        var e = assertThrows(
+            SQLException.class,
+            () -> runner.prepare(datasource));
+        assertThat(e.getMessage()).startsWith("Failed to create schema in sampleapp PostgreSQL database");
+    }
+
+    @Test
+    void testFailWhenAddingMockData() throws Exception {
+        var connection = spy(createDataSource("sampleapp1").getConnection());
+        DataSource datasource = spy(createDataSource("sampleapp2"));
+        when(datasource.getConnection())
+            .thenCallRealMethod()
+            .thenReturn(connection);
+
+        var runner = new SampleappProductionDbLiquibaseRunner();
+        runner.activate();
+        var e = assertThrows(
+            SQLException.class,
+            () -> runner.prepare(datasource));
+        assertThat(e.getMessage()).startsWith("Failed to insert initial data in sampleapp PostgreSQL database");
+    }
+
+
+    @Test
+    void testFailWhenGettingConnectionForUpdatingSchema() throws Exception {
+        DataSource datasource = spy(createDataSource("sampleapp3"));
+        when(datasource.getConnection())
+            .thenCallRealMethod()
+            .thenCallRealMethod()
+            .thenThrow(new SQLException("Failed to get connection"));
+
+        var runner = new SampleappProductionDbLiquibaseRunner();
+        runner.activate();
+        var e = assertThrows(
+            SQLException.class,
+            () -> runner.prepare(datasource));
+        assertThat(e.getMessage()).startsWith("Failed to get connection");
+    }
+
+
+    @Test
+    void testFailWhenUpdatingSchema() throws Exception {
+        var connection = spy(createDataSource("sampleapp4").getConnection());
+        DataSource datasource = spy(createDataSource("sampleapp4"));
+        when(datasource.getConnection())
+            .thenCallRealMethod()
+            .thenCallRealMethod()
+            .thenReturn(connection);
+
+        var runner = new SampleappProductionDbLiquibaseRunner();
+        runner.activate();
+        var e = assertThrows(
+            SQLException.class,
+            () -> runner.prepare(datasource));
+        assertThat(e.getMessage()).startsWith("Failed to modify schema of sampleapp PostgreSQL database");
+    }
+
 
     private void assertAccounts(DataSource datasource) throws Exception {
         try (Connection connection = datasource.getConnection()) {
@@ -99,6 +160,15 @@ class SampleappProductionDbLiquibaseRunnerTest {
             }
         }
         return accountId;
+    }
+
+
+    private DataSource createDataSource(String dbname) throws SQLException {
+        DataSourceFactory dataSourceFactory = new DerbyDataSourceFactory();
+        Properties properties = new Properties();
+        properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:" + dbname + ";create=true");
+        DataSource datasource = dataSourceFactory.createDataSource(properties);
+        return datasource;
     }
 
 }
