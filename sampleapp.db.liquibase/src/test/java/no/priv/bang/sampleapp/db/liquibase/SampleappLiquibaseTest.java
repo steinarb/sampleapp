@@ -16,6 +16,8 @@
 package no.priv.bang.sampleapp.db.liquibase;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -30,6 +32,8 @@ import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 
+import liquibase.exception.LiquibaseException;
+
 class SampleappLiquibaseTest {
     DataSourceFactory derbyDataSourceFactory = new DerbyDataSourceFactory();
 
@@ -37,9 +41,9 @@ class SampleappLiquibaseTest {
     void testCreateSchema() throws Exception {
         SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
 
-        sampleappLiquibase.createInitialSchema(createConnection());
+        sampleappLiquibase.createInitialSchema(createConnection("sampleapp"));
 
-        try(var connection = createConnection()) {
+        try(var connection = createConnection("sampleapp")) {
             addAccounts(connection);
             assertAccounts(connection);
             addCounterIncrementSteps(connection);
@@ -51,14 +55,66 @@ class SampleappLiquibaseTest {
             assertThrows(SQLException.class,() -> addCounter(connection, accountIdNotMatchingAccount, 4));
         }
 
-        sampleappLiquibase.updateSchema(createConnection());
+        sampleappLiquibase.updateSchema(createConnection("sampleapp"));
+    }
+
+    @Test
+    void testCreateSchemaAndFail() throws Exception {
+        var connection = spy(createConnection("sampleapp1"));
+        // A Derby JDBC connection wrapped in a Mockito spy() fails om Connection.setAutoClosable()
+
+        var sampleappLiquibase = new SampleappLiquibase();
+
+        var ex = assertThrows(
+            LiquibaseException.class,
+            () -> sampleappLiquibase.createInitialSchema(connection));
+        assertThat(ex.getMessage()).startsWith("java.sql.SQLException: Cannot set Autocommit On when in a nested connection");
+    }
+
+    @Test
+    void testCreateSchemaAndFailOnConnectionClose() throws Exception {
+        var connection = spy(createConnection("sampleapp2"));
+        doNothing().when(connection).setAutoCommit(anyBoolean());
+        doThrow(Exception.class).when(connection).close();
+
+        var sampleappLiquibase = new SampleappLiquibase();
+
+        var ex = assertThrows(
+            LiquibaseException.class,
+            () -> sampleappLiquibase.createInitialSchema(connection));
+        assertThat(ex.getMessage()).startsWith("java.lang.Exception");
     }
 
     @Test
     void testForceReleaseLocks() throws Exception {
-        Connection connection = createConnection();
+        Connection connection = createConnection("sampleapp");
         SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
         assertDoesNotThrow(() -> sampleappLiquibase.forceReleaseLocks(connection));
+    }
+
+    @Test
+    void testForceReleaseLocksWhenConnectionFails() throws Exception {
+        var connection = spy(createConnection("sampleapp3"));
+        // A Derby JDBC connection wrapped in a Mockito spy() fails om Connection.setAutoClosable()
+
+        SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
+        var ex = assertThrows(
+            LiquibaseException.class,
+            () -> sampleappLiquibase.forceReleaseLocks(connection));
+        assertThat(ex.getMessage()).startsWith("java.sql.SQLException: Cannot set Autocommit On when in a nested connection");
+    }
+
+    @Test
+    void testForceReleaseLocksWhenConnectionFailsOnClose() throws Exception {
+        var connection = spy(createConnection("sampleapp4"));
+        doNothing().when(connection).setAutoCommit(anyBoolean());
+        doThrow(Exception.class).when(connection).close();
+
+        SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
+        var ex = assertThrows(
+            LiquibaseException.class,
+            () -> sampleappLiquibase.forceReleaseLocks(connection));
+        assertThat(ex.getMessage()).startsWith("java.lang.Exception");
     }
 
     private void addAccounts(Connection connection) throws Exception {
@@ -147,9 +203,9 @@ class SampleappLiquibaseTest {
         return -1;
     }
 
-    private Connection createConnection() throws Exception {
+    private Connection createConnection(String dbname) throws Exception {
         Properties properties = new Properties();
-        properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:sampleapp;create=true");
+        properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:" + dbname + ";create=true");
         DataSource dataSource = derbyDataSourceFactory.createDataSource(properties);
         return dataSource.getConnection();
     }

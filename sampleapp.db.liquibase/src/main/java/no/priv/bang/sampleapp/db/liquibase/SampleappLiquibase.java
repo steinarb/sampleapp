@@ -18,33 +18,44 @@ package no.priv.bang.sampleapp.db.liquibase;
 import java.sql.Connection;
 import liquibase.Liquibase;
 import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
 public class SampleappLiquibase {
 
-    public void createInitialSchema(Connection connection) throws Exception {
+    public void createInitialSchema(Connection connection) throws LiquibaseException {
         applyLiquibaseChangelist(connection, "sampleapp-db-changelog/db-changelog-1.0.0.xml");
     }
 
-    public void updateSchema(Connection connection) throws Exception {
+    public void updateSchema(Connection connection) throws LiquibaseException {
         applyLiquibaseChangelist(connection, "sampleapp-db-changelog/db-changelog-1.0.1.xml");
     }
 
-    public void forceReleaseLocks(Connection connection) throws Exception {
+    public void forceReleaseLocks(Connection connection) throws LiquibaseException {
         var databaseConnection = new JdbcConnection(connection);
         try(var classLoaderResourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader())) {
             try(var liquibase = new Liquibase("sampleapp-db-changelog/db-changelog-1.0.0.xml", classLoaderResourceAccessor, databaseConnection)) {
                 liquibase.forceReleaseLocks();
             }
+        } catch (LiquibaseException e) {
+            throw e;
+        } catch (Exception e) {
+            // AutoClosable.close() may throw Exception and Liquibase may throw UnexpectedLiquibaseException
+            throw new LiquibaseException(e);
         }
     }
 
-    private void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource) throws Exception {
+    private void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource) throws LiquibaseException {
         var databaseConnection = new JdbcConnection(connection);
         try(var classLoaderResourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader())) {
             try(var liquibase = new Liquibase(changelistClasspathResource, classLoaderResourceAccessor, databaseConnection)) {
                 liquibase.update("");
             }
+        } catch (LiquibaseException e) {
+            throw e;
+        } catch (Exception e) {
+            // AutoClosable.close() may throw Exception and Liquibase may throw UnexpectedLiquibaseException
+            throw new LiquibaseException(e);
         }
     }
 
