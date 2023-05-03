@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Steinar Bang
+ * Copyright 2021-2023 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,12 +34,14 @@ import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
 
+import static no.priv.bang.sampleapp.services.SampleappConstants.*;
 import no.priv.bang.sampleapp.db.liquibase.test.SampleappTestDbLiquibaseRunner;
 import no.priv.bang.sampleapp.services.beans.Account;
 import no.priv.bang.sampleapp.services.beans.CounterBean;
 import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
 import no.priv.bang.sampleapp.services.beans.LocaleBean;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
+import no.priv.bang.osgiservice.users.Role;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
 class SampleappServiceProviderTest {
@@ -88,6 +90,33 @@ class SampleappServiceProviderTest {
         assertFalse(secondAccountCreate);
         List<Account> accountsAfterSecondCreate = provider.getAccounts();
         assertThat(accountsAfterSecondCreate).isEqualTo(accountsAfter);
+    }
+
+    @Test
+    void testThatRoleIsAddedIfMissing() {
+        var logservice = new MockLogService();
+        var useradmin = mock(UserManagementService.class);
+        var provider = new SampleappServiceProvider();
+        provider.setLogservice(logservice);
+        provider.setDatasource(datasource);
+        provider.setUseradmin(useradmin);
+        provider.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+
+        verify(useradmin, atLeastOnce()).addRole(any());
+    }
+
+    @Test
+    void testThatRoleIsNotAddedIfPresent() {
+        var logservice = new MockLogService();
+        var useradmin = mock(UserManagementService.class);
+        when(useradmin.getRoles()).thenReturn(Collections.singletonList(Role.with().rolename(SAMPLEAPPUSER_ROLE).build()));
+        var provider = new SampleappServiceProvider();
+        provider.setLogservice(logservice);
+        provider.setDatasource(datasource);
+        provider.setUseradmin(useradmin);
+        provider.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
+
+        verify(useradmin, never()).addRole(any());
     }
 
     @Test
