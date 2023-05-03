@@ -118,23 +118,67 @@ To create a new project called "mynewapp":
       cd ~/git/mynewapp/
       mvn install
     #+end_example
- 7. Open the java maven modules of the mynewapp project, in a Java IDE (eclipse or IntelliJ), and use the refactoring of the IDE to rename classes with names starting with "Sampleapp" into classes starting with "Mynewapp" (this is the step that the archetype can't handle, but at least the classes are already in packages they are supposed to be in for the new application)
+ 7. Open the java maven modules of the mynewapp project, in a Java IDE (eclipse or IntelliJ), and use the refactoring of the IDE to rename classes with names starting with "Sampleapp" into classes starting with "Mynewapp" (this is the step that the archetype can't handle, but at least the classes are already in packages they are supposed to be in for the new application), classnames to change:
+    #+begin_example
+      SampleappServiceProvider
+      SampleappServiceProviderTest
+      SampleappService
+      SampleappServiceTest
+      SampleappException
+      SampleappExceptionTest
+      SampleappConstants
+      SampleappLiquibase
+      SampleappLiquibaseTest
+      SampleappTestDbLiquibaseRunner
+      SampleappTestDbLiquibaseRunnerTest
+      SampleappProductionDbLiquibaseRunner
+      SampleappProductionDbLiquibaseRunnerTest
+      SampleappWebApi
+      SampleappWebApiTest
+      SampleappServlet
+      SampleappServletTest
+      SampleappServletContextHelper
+      SampleappShiroFilter
+      SampleappShiroFilterTest
+      SampleappIntegrationTest
+    #+end_example
  8. Build mynewapp from the top with "mvn clean install" ("clean" is to get rid of .class files with the old names)
     #+begin_example
       cd ~/git/mynewapp/
       mvn clean install
     #+end_example
- 9. Correct some Java class member names that hasn't been touched by the renaming (OSGi service injection setter and constants):
+ 9. Fix some Java class member names that hasn't been touched by the renaming (OSGi service injection setter and constants):
     #+begin_example
       find . -name \*.java | xargs sed -i 's/Sampleapp/Mynewapp/g'
       find . -name \*.java | xargs sed -i 's/SAMPLEAPP/MYNEWAPP/g'
     #+end_example
- 10. Install mynewapp in a karaf instance
+ 10. Fix some leftover Sampleapp texts
+     #+begin_example
+       find . -name pom.xml | xargs sed -i 's/Sampleapp/Mynewapp/g'
+       find . -name feature.xml | xargs sed -i 's/Sampleapp/Mynewapp/g'
+       find . -name \*.html | xargs sed -i 's/Sampleapp/Mynewapp/g'
+       find . -name package.json | xargs sed -i 's/Sampleapp/Mynewapp/g'
+       find . -name package-lock.json | xargs sed -i 's/Sampleapp/Mynewapp/g'
+       find ./mynewapp.web.frontend/src/main/frontend/src -name \*.js | xargs sed -i 's/Sampleapp/Mynewapp/g'
+     #+end_example
+ 11. Fix copyright dates
+     #+begin_example
+       find . -name pom.xml | xargs sed -i 's/2021-2022/2023/g'
+       find . -name feature.xml | xargs sed -i 's/2021-2022/2023/g'
+       find . -name *.java | xargs sed -i 's/2021-2022/2023/g'
+       find . -name pom.xml | xargs sed -i 's/2021-2023/2023/g'
+       find . -name feature.xml | xargs sed -i 's/2021-2023/2023/g'
+       find . -name *.java | xargs sed -i 's/2021-2023/2023/g'
+       find . -name pom.xml | xargs sed -i 's/2021/2023/g'
+       find . -name feature.xml | xargs sed -i 's/2021/2023/g'
+       find . -name *.java | xargs sed -i 's/2021/2023/g'
+     #+end_example
+ 12. Install mynewapp in a karaf instance
      #+begin_example
        feature:repo-add mvn:com.mycompany.mynewapp/karaf/LATEST/xml/features
        feature:install mynewapp-with-derby
      #+end_example
- 11. Verify that the application is running on http://localhost:8181/mynewapp
+ 13. Verify that the application is running on http://localhost:8181/mynewapp
 
 ** Configuring a new default locale
 
