@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
@@ -290,12 +291,11 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     private void addRolesIfNotpresent() {
-        String sampleappuser = SAMPLEAPPUSER_ROLE;
-        List<Role> roles = useradmin.getRoles();
-        Optional<Role> existingRole = roles.stream().filter(r -> sampleappuser.equals(r.getRolename())).findFirst();
-        if (!existingRole.isPresent()) {
-            useradmin.addRole(Role.with().id(-1).rolename(sampleappuser).description("Bruker av applikasjonen sampleapp").build());
-        }
+        var sampleapproles = Map.of(SAMPLEAPPUSER_ROLE, "Bruker av applikasjonen sampleapp");
+        Set<String> existingroles = useradmin.getRoles().stream().map(r -> r.getRolename()).collect(Collectors.toSet());
+        sampleapproles.entrySet().stream()
+            .filter(r -> !existingroles.contains(r.getKey()))
+            .forEach(r ->  useradmin.addRole(Role.with().id(-1).rolename(r.getKey()).description(r.getValue()).build()));
     }
 
     Map<String, String> transformResourceBundleToMap(Locale locale) {
