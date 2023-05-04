@@ -102,7 +102,7 @@ class SampleappServiceProviderTest {
         provider.setUseradmin(useradmin);
         provider.activate(Collections.singletonMap("defaultlocale", "nb_NO"));
 
-        verify(useradmin, atLeastOnce()).addRole(any());
+        verify(useradmin, times(1)).addRole(any());
     }
 
     @Test
