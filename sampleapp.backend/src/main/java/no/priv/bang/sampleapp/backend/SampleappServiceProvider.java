@@ -292,7 +292,7 @@ public class SampleappServiceProvider implements SampleappService {
 
     private void addRolesIfNotpresent() {
         var sampleapproles = Map.of(SAMPLEAPPUSER_ROLE, "Bruker av applikasjonen sampleapp");
-        Set<String> existingroles = useradmin.getRoles().stream().map(r -> r.getRolename()).collect(Collectors.toSet());
+        Set<String> existingroles = useradmin.getRoles().stream().map(Role::getRolename).collect(Collectors.toSet());
         sampleapproles.entrySet().stream()
             .filter(r -> !existingroles.contains(r.getKey()))
             .forEach(r ->  useradmin.addRole(Role.with().id(-1).rolename(r.getKey()).description(r.getValue()).build()));
