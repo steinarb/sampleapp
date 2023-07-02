@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Steinar Bang
+ * Copyright 2021-2023 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,10 @@ import javax.sql.DataSource;
 import org.ops4j.pax.jdbc.hook.PreHook;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
-import liquibase.Liquibase;
-import liquibase.database.DatabaseConnection;
-import liquibase.database.jvm.JdbcConnection;
-import liquibase.resource.ClassLoaderResourceAccessor;
+
+import liquibase.Scope;
+import liquibase.ThreadLocalScopeManager;
+import liquibase.exception.LiquibaseException;
 import no.priv.bang.sampleapp.db.liquibase.SampleappLiquibase;
 
 @Component(immediate=true, property = "name=sampleappdb")
@@ -34,11 +34,12 @@ public class SampleappProductionDbLiquibaseRunner implements PreHook {
     @Activate
     public void activate() {
         // Called after all injections have been satisfied and before the PreHook service is exposed
+        Scope.setScopeManager(new ThreadLocalScopeManager());
     }
 
     @Override
     public void prepare(DataSource datasource) throws SQLException {
-        SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
+        var sampleappLiquibase = new SampleappLiquibase();
         try (Connection connect = datasource.getConnection()) {
             sampleappLiquibase.createInitialSchema(connect);
         } catch (SQLException e) {
@@ -48,7 +49,9 @@ public class SampleappProductionDbLiquibaseRunner implements PreHook {
         }
 
         try (Connection connect = datasource.getConnection()) {
-            insertInitialData(connect);
+            insertInitialData(connect, sampleappLiquibase);
+        } catch (Exception e) {
+            throw new SQLException("Failed to insert initial data into sampleapp PostgreSQL database", e);
         }
 
         try (Connection connect = datasource.getConnection()) {
@@ -60,15 +63,8 @@ public class SampleappProductionDbLiquibaseRunner implements PreHook {
         }
     }
 
-    public void insertInitialData(Connection connect) throws SQLException {
-        DatabaseConnection databaseConnection = new JdbcConnection(connect);
-        try(var classLoaderResourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader())) {
-            try(var liquibase = new Liquibase("sql/data/db-changelog.xml", classLoaderResourceAccessor, databaseConnection)) {
-                liquibase.update("");
-            }
-        } catch (Exception e) {
-            throw new SQLException("Failed to insert initial data in sampleapp PostgreSQL database", e);
-        }
+    public void insertInitialData(Connection connect, SampleappLiquibase sampleappLiquibase) throws LiquibaseException {
+        sampleappLiquibase.applyLiquibaseChangelist(connect, "sql/data/db-changelog.xml", getClass().getClassLoader());
     }
 
 }

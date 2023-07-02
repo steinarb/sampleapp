@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Steinar Bang
+ * Copyright 2021-2023 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,7 +88,7 @@ class SampleappProductionDbLiquibaseRunnerTest {
         var e = assertThrows(
             SQLException.class,
             () -> runner.prepare(datasource));
-        assertThat(e.getMessage()).startsWith("Failed to insert initial data in sampleapp PostgreSQL database");
+        assertThat(e.getMessage()).startsWith("Failed to insert initial data into sampleapp PostgreSQL database");
     }
 
 
