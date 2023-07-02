@@ -39,7 +39,7 @@ public class SampleappTestDbLiquibaseRunner implements PreHook {
     @Override
     public void prepare(DataSource datasource) throws SQLException {
         var sampleappLiquibase = new SampleappLiquibase();
-        try (Connection connect = datasource.getConnection()) {
+        try (var connect = datasource.getConnection()) {
             sampleappLiquibase.createInitialSchema(connect);
         } catch (SQLException e) {
             throw e;
@@ -47,13 +47,13 @@ public class SampleappTestDbLiquibaseRunner implements PreHook {
             throw new SQLException("Error creating sampleapp test database schema", e);
         }
 
-        try (Connection connect = datasource.getConnection()) {
+        try (var connect = datasource.getConnection()) {
             insertMockData(connect, sampleappLiquibase);
         } catch (Exception e) {
             throw new SQLException("Error inserting sampleapp test database mock data", e);
         }
 
-        try (Connection connect = datasource.getConnection()) {
+        try (var connect = datasource.getConnection()) {
             sampleappLiquibase.updateSchema(connect);
         } catch (SQLException e) {
             throw e;

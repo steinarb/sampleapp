@@ -40,7 +40,7 @@ public class SampleappProductionDbLiquibaseRunner implements PreHook {
     @Override
     public void prepare(DataSource datasource) throws SQLException {
         var sampleappLiquibase = new SampleappLiquibase();
-        try (Connection connect = datasource.getConnection()) {
+        try (var connect = datasource.getConnection()) {
             sampleappLiquibase.createInitialSchema(connect);
         } catch (SQLException e) {
             throw e;
@@ -48,13 +48,13 @@ public class SampleappProductionDbLiquibaseRunner implements PreHook {
             throw new SQLException("Failed to create schema in sampleapp PostgreSQL database", e);
         }
 
-        try (Connection connect = datasource.getConnection()) {
+        try (var connect = datasource.getConnection()) {
             insertInitialData(connect, sampleappLiquibase);
         } catch (Exception e) {
             throw new SQLException("Failed to insert initial data into sampleapp PostgreSQL database", e);
         }
 
-        try (Connection connect = datasource.getConnection()) {
+        try (var connect = datasource.getConnection()) {
             sampleappLiquibase.updateSchema(connect);
         } catch (SQLException e) {
             throw e;
