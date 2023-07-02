@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Steinar Bang
+ * Copyright 2021-2023 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,20 +29,6 @@ public class SampleappLiquibase {
 
     public void updateSchema(Connection connection) throws LiquibaseException {
         applyLiquibaseChangelist(connection, "sampleapp-db-changelog/db-changelog-1.0.1.xml");
-    }
-
-    public void forceReleaseLocks(Connection connection) throws LiquibaseException {
-        var databaseConnection = new JdbcConnection(connection);
-        try(var classLoaderResourceAccessor = new ClassLoaderResourceAccessor(getClass().getClassLoader())) {
-            try(var liquibase = new Liquibase("sampleapp-db-changelog/db-changelog-1.0.0.xml", classLoaderResourceAccessor, databaseConnection)) {
-                liquibase.forceReleaseLocks();
-            }
-        } catch (LiquibaseException e) {
-            throw e;
-        } catch (Exception e) {
-            // AutoClosable.close() may throw Exception and Liquibase may throw UnexpectedLiquibaseException
-            throw new LiquibaseException(e);
-        }
     }
 
     private void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource) throws LiquibaseException {
