@@ -32,7 +32,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.stream.Collectors;
-
 import javax.sql.DataSource;
 
 import org.osgi.service.component.annotations.Activate;
@@ -229,7 +228,7 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public List<LocaleBean> availableLocales() {
-        return Arrays.asList(Locale.forLanguageTag("nb-NO"), Locale.UK).stream().map(l -> LocaleBean.with().locale(l).build()).collect(Collectors.toList());
+        return Arrays.asList(Locale.forLanguageTag("nb-NO"), Locale.UK).stream().map(l -> LocaleBean.with().locale(l).build()).toList();
     }
 
     @Override
