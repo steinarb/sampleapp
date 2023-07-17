@@ -184,8 +184,8 @@ public class SampleappServiceProvider implements SampleappService {
     @Override
     public Optional<CounterBean> incrementCounter(String username) {
         try(Connection connection = datasource.getConnection()) {
-            int incrementStep = findCounterIncrementStep(connection, username);
-            int counter = findCounter(connection, username);
+            var incrementStep = findCounterIncrementStep(connection, username);
+            var counter = findCounter(connection, username);
 
             try(PreparedStatement statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
                 statement.setInt(1, counter + incrementStep);
@@ -204,8 +204,8 @@ public class SampleappServiceProvider implements SampleappService {
     @Override
     public Optional<CounterBean> decrementCounter(String username) {
         try(Connection connection = datasource.getConnection()) {
-            int incrementStep = findCounterIncrementStep(connection, username);
-            int counter = findCounter(connection, username);
+            var incrementStep = findCounterIncrementStep(connection, username);
+            var counter = findCounter(connection, username);
 
             try(PreparedStatement statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
                 statement.setInt(1, counter - incrementStep);
