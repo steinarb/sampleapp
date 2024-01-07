@@ -4,7 +4,7 @@ import axios from 'axios';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, Tuple } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import { Provider } from 'react-redux';
 import { createReduxHistoryContext } from "redux-first-history";
@@ -28,10 +28,7 @@ const {
 } = createReduxHistoryContext({ history: createBrowserHistory(), basename });
 const store = configureStore({
     reducer: createRootReducer(routerReducer),
-    middleware: [
-        sagaMiddleware,
-        routerMiddleware,
-    ],
+    middleware: () => new Tuple(sagaMiddleware, routerMiddleware),
 });
 sagaMiddleware.run(rootSaga);
 const history = createReduxHistory(store);
