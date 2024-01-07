@@ -5,10 +5,11 @@ import {
     COUNTER_INCREMENT_RECEIVE,
 } from '../reduxactions';
 
-const counterReducer = createReducer(1, {
-    [COUNTER_RECEIVE]: (state, action) => action.payload.counter,
-    [COUNTER_DECREMENT_RECEIVE]: (state, action) => action.payload.counter,
-    [COUNTER_INCREMENT_RECEIVE]: (state, action) => action.payload.counter,
+const counterReducer = createReducer(1, builder => {
+    builder
+        .addCase(COUNTER_RECEIVE, (state, action) => action.payload.counter)
+        .addCase(COUNTER_DECREMENT_RECEIVE, (state, action) => action.payload.counter)
+        .addCase(COUNTER_INCREMENT_RECEIVE, (state, action) => action.payload.counter);
 });
 
 export default counterReducer;

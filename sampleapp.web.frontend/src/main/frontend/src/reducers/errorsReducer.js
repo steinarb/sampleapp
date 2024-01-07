@@ -13,18 +13,19 @@ import {
     DISPLAY_TEXTS_FAILURE,
 } from '../reduxactions';
 
-const errorsReducer = createReducer({}, {
-    [LOGIN_FAILURE]: (state, action) => ({ ...state, login: action.payload }),
-    [LOGOUT_FAILURE]: (state, action) => ({ ...state, logout: action.payload }),
-    [ACCOUNTS_FAILURE]: (state, action) => ({ ...state, accounts: action.payload }),
-    [COUNTER_INCREMENT_STEP_FAILURE]: (state, action) => ({ ...state, fetchIncrementStep: action.payload }),
-    [UPDATE_COUNTER_INCREMENT_STEP_FAILURE]: (state, action) => ({ ...state, saveModifiedIncrementStep: action.payload }),
-    [COUNTER_FAILURE]: (state, action) => ({ ...state, fetchCounter: action.payload }),
-    [COUNTER_DECREMENT_FAILURE]: (state, action) => ({ ...state, counterDecrement: action.payload }),
-    [COUNTER_INCREMENT_FAILURE]: (state, action) => ({ ...state, counterIncrement: action.payload }),
-    [DEFAULT_LOCALE_FAILURE]: (state, action) => ({ ...state, fetchDefaultLocale: action.payload }),
-    [AVAILABLE_LOCALES_FAILURE]: (state, action) => ({ ...state, fetchAvailableLocales: action.payload }),
-    [DISPLAY_TEXTS_FAILURE]: (state, action) => ({ ...state, displayTexts: action.payload }),
+const errorsReducer = createReducer({}, builder => {
+    builder
+        .addCase(LOGIN_FAILURE, (state, action) => ({ ...state, login: action.payload }))
+        .addCase(LOGOUT_FAILURE, (state, action) => ({ ...state, logout: action.payload }))
+        .addCase(ACCOUNTS_FAILURE, (state, action) => ({ ...state, accounts: action.payload }))
+        .addCase(COUNTER_INCREMENT_STEP_FAILURE, (state, action) => ({ ...state, fetchIncrementStep: action.payload }))
+        .addCase(UPDATE_COUNTER_INCREMENT_STEP_FAILURE, (state, action) => ({ ...state, saveModifiedIncrementStep: action.payload }))
+        .addCase(COUNTER_FAILURE, (state, action) => ({ ...state, fetchCounter: action.payload }))
+        .addCase(COUNTER_DECREMENT_FAILURE, (state, action) => ({ ...state, counterDecrement: action.payload }))
+        .addCase(COUNTER_INCREMENT_FAILURE, (state, action) => ({ ...state, counterIncrement: action.payload }))
+        .addCase(DEFAULT_LOCALE_FAILURE, (state, action) => ({ ...state, fetchDefaultLocale: action.payload }))
+        .addCase(AVAILABLE_LOCALES_FAILURE, (state, action) => ({ ...state, fetchAvailableLocales: action.payload }))
+        .addCase(DISPLAY_TEXTS_FAILURE, (state, action) => ({ ...state, displayTexts: action.payload }));
 });
 
 export default errorsReducer;

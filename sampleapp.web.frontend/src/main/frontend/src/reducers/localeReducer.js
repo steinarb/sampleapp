@@ -6,8 +6,9 @@ import {
 
 const currentLocale = Cookies.get('locale') || '';
 
-const localeReducer = createReducer(currentLocale, {
-    [SELECT_LOCALE]: (state, action) => action.payload,
+const localeReducer = createReducer(currentLocale, builder => {
+    builder
+        .addCase(SELECT_LOCALE, (state, action) => action.payload);
 });
 
 export default localeReducer;
