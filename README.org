@@ -141,6 +141,8 @@ To create a new project called "mynewapp":
       SampleappShiroFilter
       SampleappShiroFilterTest
       SampleappIntegrationTest
+      SampleappTestdata
+      SampleappTestdataTest
     #+end_example
  8. Build mynewapp from the top with "mvn clean install" ("clean" is to get rid of .class files with the old names)
     #+begin_example
@@ -163,14 +165,11 @@ To create a new project called "mynewapp":
      #+end_example
  11. Fix copyright dates
      #+begin_example
-       find . -name pom.xml | xargs sed -i 's/2021-2022/2024/g'
-       find . -name feature.xml | xargs sed -i 's/2021-2022/2024/g'
+       find . -name *.xml | xargs sed -i 's/2021-2022/2024/g'
        find . -name *.java | xargs sed -i 's/2021-2022/2024/g'
-       find . -name pom.xml | xargs sed -i 's/2021-2023/2024/g'
-       find . -name feature.xml | xargs sed -i 's/2021-2023/2024/g'
+       find . -name *.xml | xargs sed -i 's/2021-2023/2024/g'
        find . -name *.java | xargs sed -i 's/2021-2023/2024/g'
-       find . -name pom.xml | xargs sed -i 's/2021/2024/g'
-       find . -name feature.xml | xargs sed -i 's/2021/2024/g'
+       find . -name *.xml | xargs sed -i 's/2021/2024/g'
        find . -name *.java | xargs sed -i 's/2021/2024/g'
      #+end_example
  12. Install mynewapp in a karaf instance
