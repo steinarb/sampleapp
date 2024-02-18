@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,23 +24,23 @@ class CredentialsTest {
 
     @Test
     void testCreate() {
-        String username = "jd";
-        String password = "johnniboi";
-        Credentials bean = Credentials.with().username(username).password(password).build();
+        var username = "jd";
+        var password = "johnniboi";
+        var bean = Credentials.with().username(username).password(password).build();
         assertEquals(username, bean.getUsername());
         assertEquals(password, bean.getPassword());
     }
 
     @Test
     void testNoArgsConstructor() {
-        Credentials bean = Credentials.with().build();
+        var bean = Credentials.with().build();
         assertNull(bean.getUsername());
         assertNull(bean.getPassword());
     }
 
     @Test
     void testToString() {
-        Credentials bean = Credentials.with().build();
+        var bean = Credentials.with().build();
         assertThat(bean.toString()).startsWith("Credentials [");
     }
 

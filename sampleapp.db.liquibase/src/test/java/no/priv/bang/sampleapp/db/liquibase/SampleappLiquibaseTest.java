@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
-
-import javax.sql.DataSource;
 
 import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
@@ -39,7 +34,7 @@ class SampleappLiquibaseTest {
 
     @Test
     void testCreateSchema() throws Exception {
-        SampleappLiquibase sampleappLiquibase = new SampleappLiquibase();
+        var sampleappLiquibase = new SampleappLiquibase();
 
         sampleappLiquibase.createInitialSchema(createConnection("sampleapp"));
 
@@ -90,11 +85,11 @@ class SampleappLiquibaseTest {
     }
 
     private void assertAccounts(Connection connection) throws Exception {
-        String sql = "select count(*) from sampleapp_accounts";
-        try(PreparedStatement statement = connection.prepareStatement(sql)) {
-            try(ResultSet results = statement.executeQuery()) {
+        var sql = "select count(*) from sampleapp_accounts";
+        try(var statement = connection.prepareStatement(sql)) {
+            try(var results = statement.executeQuery()) {
                 if (results.next()) {
-                    int count = results.getInt(1);
+                    var count = results.getInt(1);
                     assertEquals(1, count);
                 }
             }
@@ -106,8 +101,8 @@ class SampleappLiquibaseTest {
     }
 
     private void assertCounterIncrementSteps(Connection connection) throws Exception {
-        try(Statement statement = connection.createStatement()) {
-            try(ResultSet results = statement.executeQuery("select * from counter_increment_steps")) {
+        try(var statement = connection.createStatement()) {
+            try(var results = statement.executeQuery("select * from counter_increment_steps")) {
                 assertTrue(results.next());
                 assertEquals(findAccountId(connection, "admin"), results.getInt(2));
                 assertEquals(10, results.getInt(3));
@@ -120,8 +115,8 @@ class SampleappLiquibaseTest {
     }
 
     private void assertCounters(Connection connection) throws Exception {
-        try(Statement statement = connection.createStatement()) {
-            try(ResultSet results = statement.executeQuery("select * from counters")) {
+        try(var statement = connection.createStatement()) {
+            try(var results = statement.executeQuery("select * from counters")) {
                 assertTrue(results.next());
                 assertEquals(findAccountId(connection, "admin"), results.getInt(2));
                 assertEquals(3, results.getInt(3));
@@ -130,8 +125,8 @@ class SampleappLiquibaseTest {
     }
 
     private int addAccount(Connection connection, String username) throws Exception {
-        String sql = "insert into sampleapp_accounts (username) values (?)";
-        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+        var sql = "insert into sampleapp_accounts (username) values (?)";
+        try(var statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
             statement.executeUpdate();
         }
@@ -140,8 +135,8 @@ class SampleappLiquibaseTest {
     }
 
     private void addCounterIncrementStep(Connection connection, int accountid, int counterIncrementStep) throws Exception {
-        String sql = "insert into counter_increment_steps (account_id, counter_increment_step) values (?, ?)";
-        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+        var sql = "insert into counter_increment_steps (account_id, counter_increment_step) values (?, ?)";
+        try(var statement = connection.prepareStatement(sql)) {
             statement.setInt(1, accountid);
             statement.setInt(2, counterIncrementStep);
             statement.executeUpdate();
@@ -149,8 +144,8 @@ class SampleappLiquibaseTest {
     }
 
     private void addCounter(Connection connection, int accountid, int count) throws Exception {
-        String sql = "insert into counters (account_id, counter) values (?, ?)";
-        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+        var sql = "insert into counters (account_id, counter) values (?, ?)";
+        try(var statement = connection.prepareStatement(sql)) {
             statement.setInt(1, accountid);
             statement.setInt(2, count);
             statement.executeUpdate();
@@ -158,10 +153,10 @@ class SampleappLiquibaseTest {
     }
 
     private int findAccountId(Connection connection, String username) throws Exception {
-        String sql = "select account_id from sampleapp_accounts where username=?";
-        try(PreparedStatement statement = connection.prepareStatement(sql)) {
+        var sql = "select account_id from sampleapp_accounts where username=?";
+        try(var statement = connection.prepareStatement(sql)) {
             statement.setString(1, username);
-            try(ResultSet results = statement.executeQuery()) {
+            try(var results = statement.executeQuery()) {
                 if (results.next()) {
                     return results.getInt(1);
                 }
@@ -172,9 +167,9 @@ class SampleappLiquibaseTest {
     }
 
     private Connection createConnection(String dbname) throws Exception {
-        Properties properties = new Properties();
+        var properties = new Properties();
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:" + dbname + ";create=true");
-        DataSource dataSource = derbyDataSourceFactory.createDataSource(properties);
+        var dataSource = derbyDataSourceFactory.createDataSource(properties);
         return dataSource.getConnection();
     }
 

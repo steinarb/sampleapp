@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,110 +40,110 @@ class CounterResourceTest extends ShiroTestBase {
 
     @Test
     void testGetCounterIncrementStep() {
-        int incrementStepValue = 1;
-        SampleappService sampleapp = mock(SampleappService.class);
-        Optional<CounterIncrementStepBean> optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
+        var incrementStepValue = 1;
+        var sampleapp = mock(SampleappService.class);
+        var optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
         when(sampleapp.getCounterIncrementStep(anyString())).thenReturn(optionalIncrementStep);
-        CounterResource resource = new CounterResource();
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jad";
-        CounterIncrementStepBean bean = resource.getCounterIncrementStep(username);
+        var username = "jad";
+        var bean = resource.getCounterIncrementStep(username);
         assertNotNull(bean);
         assertEquals(incrementStepValue, bean.getCounterIncrementStep());
     }
 
     @Test
     void testGetCounterIncrementStepWhenNotFound() {
-        SampleappService sampleapp = mock(SampleappService.class);
-        CounterResource resource = new CounterResource();
+        var sampleapp = mock(SampleappService.class);
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jad";
+        var username = "jad";
         assertThrows(NotFoundException.class, () -> resource.getCounterIncrementStep(username));
     }
 
     @Test
     void testGetCounterIncrementStepWhenWrongUsername() {
-        SampleappService sampleapp = mock(SampleappService.class);
-        CounterResource resource = new CounterResource();
+        var sampleapp = mock(SampleappService.class);
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jod";
+        var username = "jod";
         assertThrows(ForbiddenException.class, () -> resource.getCounterIncrementStep(username));
     }
 
     @Test
     void testGetCounterIncrementStepWhenNoUsername() {
-        SampleappService sampleapp = mock(SampleappService.class);
-        CounterResource resource = new CounterResource();
+        var sampleapp = mock(SampleappService.class);
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "";
+        var username = "";
         assertThrows(ForbiddenException.class, () -> resource.getCounterIncrementStep(username));
     }
 
     @Test
     void testPostCounterIncrementStep() {
-        int incrementStepValue = 2;
-        SampleappService sampleapp = mock(SampleappService.class);
-        Optional<CounterIncrementStepBean> optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
+        var incrementStepValue = 2;
+        var sampleapp = mock(SampleappService.class);
+        var optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
         when(sampleapp.updateCounterIncrementStep(any())).thenReturn(optionalIncrementStep);
-        CounterResource resource = new CounterResource();
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jad";
-        CounterIncrementStepBean updateIncrementStep = CounterIncrementStepBean.with()
+        var username = "jad";
+        var updateIncrementStep = CounterIncrementStepBean.with()
             .username(username)
             .counterIncrementStep(incrementStepValue)
             .build();
-        CounterIncrementStepBean bean = resource.updateCounterIncrementStep(updateIncrementStep);
+        var bean = resource.updateCounterIncrementStep(updateIncrementStep);
         assertNotNull(bean);
         assertEquals(incrementStepValue, bean.getCounterIncrementStep());
     }
 
     @Test
     void testGetCounter() {
-        int counterValue = 3;
-        SampleappService sampleapp = mock(SampleappService.class);
-        Optional<CounterBean> counter = Optional.of(CounterBean.with().counter(counterValue).build());
+        var counterValue = 3;
+        var sampleapp = mock(SampleappService.class);
+        var counter = Optional.of(CounterBean.with().counter(counterValue).build());
         when(sampleapp.getCounter(anyString())).thenReturn(counter);
-        CounterResource resource = new CounterResource();
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jad";
-        CounterBean bean = resource.getCounter(username);
+        var username = "jad";
+        var bean = resource.getCounter(username);
         assertNotNull(bean);
         assertEquals(counterValue, bean.getCounter());
     }
 
     @Test
     void testGetCounterWhenNotFound() {
-        SampleappService sampleapp = mock(SampleappService.class);
-        CounterResource resource = new CounterResource();
+        var sampleapp = mock(SampleappService.class);
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jad";
+        var username = "jad";
         assertThrows(NotFoundException.class, () -> resource.getCounter(username));
     }
 
     @Test
     void testIncrementCounter() {
-        int counterValue = 3;
-        SampleappService sampleapp = mock(SampleappService.class);
-        Optional<CounterBean> counter = Optional.of(CounterBean.with().counter(counterValue).build());
+        var counterValue = 3;
+        var sampleapp = mock(SampleappService.class);
+        var counter = Optional.of(CounterBean.with().counter(counterValue).build());
         when(sampleapp.incrementCounter(anyString())).thenReturn(counter);
-        CounterResource resource = new CounterResource();
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jad";
-        CounterBean bean = resource.incrementCounter(username);
+        var username = "jad";
+        var bean = resource.incrementCounter(username);
         assertNotNull(bean);
         assertEquals(counterValue, bean.getCounter());
     }
 
     @Test
     void testDecrementCounter() {
-        int counterValue = 3;
-        SampleappService sampleapp = mock(SampleappService.class);
-        Optional<CounterBean> counter = Optional.of(CounterBean.with().counter(counterValue).build());
+        var counterValue = 3;
+        var sampleapp = mock(SampleappService.class);
+        var counter = Optional.of(CounterBean.with().counter(counterValue).build());
         when(sampleapp.decrementCounter(anyString())).thenReturn(counter);
-        CounterResource resource = new CounterResource();
+        var resource = new CounterResource();
         resource.sampleapp = sampleapp;
-        String username = "jad";
-        CounterBean bean = resource.decrementCounter(username);
+        var username = "jad";
+        var bean = resource.decrementCounter(username);
         assertNotNull(bean);
         assertEquals(counterValue, bean.getCounter());
     }

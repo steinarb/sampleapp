@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.Collections;
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 import no.priv.bang.sampleapp.services.SampleappService;
@@ -31,12 +29,12 @@ class AccountsResourceTest {
 
     @Test
     void testGetAccounts() {
-        AccountsResource resource = new AccountsResource();
-        SampleappService sampleapp = mock(SampleappService.class);
-        Account account = Account.with().accountId(123).build();
+        var resource = new AccountsResource();
+        var sampleapp = mock(SampleappService.class);
+        var account = Account.with().accountId(123).build();
         when(sampleapp.getAccounts()).thenReturn(Collections.singletonList(account));
         resource.sampleapp = sampleapp;
-        List<Account> accounts = resource.getAccounts();
+        var accounts = resource.getAccounts();
         assertNotNull(accounts);
         assertThat(accounts).isNotEmpty();
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,47 +19,40 @@ import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 
-import no.priv.bang.sampleapp.services.beans.Account;
-import no.priv.bang.sampleapp.services.beans.CounterBean;
 import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
-import no.priv.bang.sampleapp.services.beans.LocaleBean;
 
 class SampleappServiceTest {
 
     @Test
     void testOfAllOfTheMethods() {
-        SampleappService service = mock(SampleappService.class);
-        String username = "jad";
-        boolean created = service.lazilyCreateAccount(username);
+        var service = mock(SampleappService.class);
+        var username = "jad";
+        var created = service.lazilyCreateAccount(username);
         assertFalse(created);
-        List<Account> accounts = service.getAccounts();
+        var accounts = service.getAccounts();
         assertThat(accounts).isEmpty();
-        Optional<CounterIncrementStepBean> incrementStep = service.getCounterIncrementStep(username);
+        var incrementStep = service.getCounterIncrementStep(username);
         assertTrue(incrementStep.isEmpty());
-        Optional<CounterIncrementStepBean> updatedStep = service.updateCounterIncrementStep(CounterIncrementStepBean.with().build());
+        var updatedStep = service.updateCounterIncrementStep(CounterIncrementStepBean.with().build());
         assertTrue(updatedStep.isEmpty());
-        Optional<CounterBean> counter = service.getCounter(username);
+        var counter = service.getCounter(username);
         assertTrue(counter.isEmpty());
-        Optional<CounterBean> incrementedCounter = service.incrementCounter(username);
+        var incrementedCounter = service.incrementCounter(username);
         assertTrue(incrementedCounter.isEmpty());
-        Optional<CounterBean> decrementedCounter = service.decrementCounter(username);
+        var decrementedCounter = service.decrementCounter(username);
         assertTrue(decrementedCounter.isEmpty());
-        Locale defaultLocale = service.defaultLocale();
+        var defaultLocale = service.defaultLocale();
         assertNull(defaultLocale);
-        List<LocaleBean> availableLocales = service.availableLocales();
+        var availableLocales = service.availableLocales();
         assertThat(availableLocales).isEmpty();
-        Locale locale = Locale.UK;
-        Map<String, String> texts = service.displayTexts(locale);
+        var locale = Locale.UK;
+        var texts = service.displayTexts(locale);
         assertThat(texts).isEmpty();
-        String key = "loggedout";
-        String text = service.displayText(key, locale.toString());
+        var key = "loggedout";
+        var text = service.displayText(key, locale.toString());
         assertNull(text);
     }
 

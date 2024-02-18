@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
@@ -34,12 +32,12 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
     @Test
     void testCreateAndVerifySomeDataInSomeTables() throws Exception {
-        DataSourceFactory dataSourceFactory = new DerbyDataSourceFactory();
-        Properties properties = new Properties();
+        var dataSourceFactory = new DerbyDataSourceFactory();
+        var properties = new Properties();
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:sampleapp;create=true");
-        DataSource datasource = dataSourceFactory.createDataSource(properties);
+        var datasource = dataSourceFactory.createDataSource(properties);
 
-        SampleappProductionDbLiquibaseRunner runner = new SampleappProductionDbLiquibaseRunner();
+        var runner = new SampleappProductionDbLiquibaseRunner();
         runner.activate();
         runner.prepare(datasource);
         addAccount(datasource, "jd");
@@ -49,7 +47,7 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
     @Test
     void testFailInGettingConnectionWhenCreatingInitialSchema() throws Exception {
-        DataSource datasource = mock(DataSource.class);
+        var datasource = mock(DataSource.class);
         when(datasource.getConnection()).thenThrow(new SQLException("Failed to get connection"));
 
         var runner = new SampleappProductionDbLiquibaseRunner();
@@ -63,8 +61,8 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
     @Test
     void testFailWhenCreatingInitialSchema() throws Exception {
-        Connection connection = spy(createDataSource("sampleapp1").getConnection());
-        DataSource datasource = mock(DataSource.class);
+        var connection = spy(createDataSource("sampleapp1").getConnection());
+        var datasource = mock(DataSource.class);
         when(datasource.getConnection()).thenReturn(connection);
 
         var runner = new SampleappProductionDbLiquibaseRunner();
@@ -78,7 +76,7 @@ class SampleappProductionDbLiquibaseRunnerTest {
     @Test
     void testFailWhenAddingMockData() throws Exception {
         var connection = spy(createDataSource("sampleapp1").getConnection());
-        DataSource datasource = spy(createDataSource("sampleapp2"));
+        var datasource = spy(createDataSource("sampleapp2"));
         when(datasource.getConnection())
             .thenCallRealMethod()
             .thenReturn(connection);
@@ -94,7 +92,7 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
     @Test
     void testFailWhenGettingConnectionForUpdatingSchema() throws Exception {
-        DataSource datasource = spy(createDataSource("sampleapp3"));
+        var datasource = spy(createDataSource("sampleapp3"));
         when(datasource.getConnection())
             .thenCallRealMethod()
             .thenCallRealMethod()
@@ -112,7 +110,7 @@ class SampleappProductionDbLiquibaseRunnerTest {
     @Test
     void testFailWhenUpdatingSchema() throws Exception {
         var connection = spy(createDataSource("sampleapp4").getConnection());
-        DataSource datasource = spy(createDataSource("sampleapp4"));
+        var datasource = spy(createDataSource("sampleapp4"));
         when(datasource.getConnection())
             .thenCallRealMethod()
             .thenCallRealMethod()
@@ -128,9 +126,9 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
 
     private void assertAccounts(DataSource datasource) throws Exception {
-        try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("select * from sampleapp_accounts")) {
-                try (ResultSet results = statement.executeQuery()) {
+        try (var connection = datasource.getConnection()) {
+            try(var statement = connection.prepareStatement("select * from sampleapp_accounts")) {
+                try (var results = statement.executeQuery()) {
                     assertAccount(results, "jd");
                 }
             }
@@ -143,17 +141,17 @@ class SampleappProductionDbLiquibaseRunnerTest {
     }
 
     private int addAccount(DataSource datasource, String username) throws Exception {
-        try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("insert into sampleapp_accounts (username) values (?)")) {
+        try (var connection = datasource.getConnection()) {
+            try(var statement = connection.prepareStatement("insert into sampleapp_accounts (username) values (?)")) {
                 statement.setString(1, username);
                 statement.executeUpdate();
             }
         }
         int accountId = -1;
-        try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
+        try (var connection = datasource.getConnection()) {
+            try(var statement = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
                 statement.setString(1, username);
-                try (ResultSet results = statement.executeQuery()) {
+                try (var results = statement.executeQuery()) {
                     results.next();
                     accountId = results.getInt(1);
                 }
@@ -164,10 +162,10 @@ class SampleappProductionDbLiquibaseRunnerTest {
 
 
     private DataSource createDataSource(String dbname) throws SQLException {
-        DataSourceFactory dataSourceFactory = new DerbyDataSourceFactory();
-        Properties properties = new Properties();
+        var dataSourceFactory = new DerbyDataSourceFactory();
+        var properties = new Properties();
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:" + dbname + ";create=true");
-        DataSource datasource = dataSourceFactory.createDataSource(properties);
+        var datasource = dataSourceFactory.createDataSource(properties);
         return datasource;
     }
 

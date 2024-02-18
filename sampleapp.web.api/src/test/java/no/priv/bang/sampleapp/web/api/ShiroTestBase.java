@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,16 +49,16 @@ public class ShiroTestBase {
     }
 
     protected void loginUser(String username, String password) {
-        HttpSession session = mock(HttpSession.class);
-        MockHttpServletRequest dummyrequest = new MockHttpServletRequest();
+        var session = mock(HttpSession.class);
+        var dummyrequest = new MockHttpServletRequest();
         dummyrequest.setSession(session);
-        MockHttpServletResponse dummyresponse = new MockHttpServletResponse();
+        var dummyresponse = new MockHttpServletResponse();
         loginUser(dummyrequest, dummyresponse, username, password);
     }
 
     protected void loginUser(HttpServletRequest request, HttpServletResponse response, String username, String password) {
-        WebSubject subject = createSubjectAndBindItToThread(request, response);
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password.toCharArray(), true);
+        var subject = createSubjectAndBindItToThread(request, response);
+        var token = new UsernamePasswordToken(username, password.toCharArray(), true);
         subject.login(token);
     }
 
@@ -67,32 +67,32 @@ public class ShiroTestBase {
     }
 
     protected WebSubject createSubjectWithNullPrincipalAndBindItToThread() {
-        WebSubject subject = mock(WebSubject.class);
+        var subject = mock(WebSubject.class);
         ThreadContext.bind(subject);
         return subject;
     }
 
     protected WebSubject createSubjectAndBindItToThread() {
-        MockHttpServletRequest originalRequest = new MockHttpServletRequest();
+        var originalRequest = new MockHttpServletRequest();
         return createSubjectFromOriginalRequestAndBindItToThread(originalRequest);
     }
 
     protected WebSubject createSubjectFromOriginalRequestAndBindItToThread(MockHttpServletRequest originalRequest) {
-        MockHttpSession session = new MockHttpSession();
+        var session = new MockHttpSession();
         originalRequest.setSession(session);
-        MockHttpServletResponse dummyresponse = new MockHttpServletResponse();
+        var dummyresponse = new MockHttpServletResponse();
         return createSubjectAndBindItToThread(originalRequest, dummyresponse);
     }
 
     protected WebSubject createSubjectAndBindItToThread(HttpServletRequest request, HttpServletResponse response) {
-        WebSubject subject = new WebSubject.Builder(getSecurityManager(), request, response).buildWebSubject();
+        var subject = new WebSubject.Builder(getSecurityManager(), request, response).buildWebSubject();
         ThreadContext.bind(subject);
         return subject;
     }
 
     public static WebSecurityManager getSecurityManager() {
         if (securitymanager == null) {
-            WebIniSecurityManagerFactory securityManagerFactory = new WebIniSecurityManagerFactory(Ini.fromResourcePath("classpath:test.shiro.ini"));
+            var securityManagerFactory = new WebIniSecurityManagerFactory(Ini.fromResourcePath("classpath:test.shiro.ini"));
             securitymanager = (WebSecurityManager) securityManagerFactory.getInstance();
             realm = findRealmFromSecurityManager(securitymanager);
         }
@@ -101,8 +101,8 @@ public class ShiroTestBase {
     }
 
     private static SimpleAccountRealm findRealmFromSecurityManager(WebSecurityManager securitymanager) {
-        RealmSecurityManager realmSecurityManager = (RealmSecurityManager) securitymanager;
-        Collection<Realm> realms = realmSecurityManager.getRealms();
+        var realmSecurityManager = (RealmSecurityManager) securitymanager;
+        var realms = realmSecurityManager.getRealms();
         return (SimpleAccountRealm) realms.iterator().next();
     }
 
@@ -116,7 +116,7 @@ public class ShiroTestBase {
 
     private static SimpleAccount findUserFromRealm(SimpleAccountRealm realm, String username) {
         try {
-            Method getUserMethod = SimpleAccountRealm.class.getDeclaredMethod("getUser", String.class);
+            var getUserMethod = SimpleAccountRealm.class.getDeclaredMethod("getUser", String.class);
             getUserMethod.setAccessible(true);
             return (SimpleAccount) getUserMethod.invoke(realm, username);
         } catch (Exception e) {

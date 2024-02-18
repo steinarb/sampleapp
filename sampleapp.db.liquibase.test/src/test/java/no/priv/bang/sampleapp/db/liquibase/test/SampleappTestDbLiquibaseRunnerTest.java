@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2022 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@ package no.priv.bang.sampleapp.db.liquibase.test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -33,9 +30,9 @@ class SampleappTestDbLiquibaseRunnerTest {
 
     @Test
     void testCreateAndVerifySomeDataInSomeTables() throws Exception {
-        DataSource datasource = createDataSource("sampleapp");
+        var datasource = createDataSource("sampleapp");
 
-        SampleappTestDbLiquibaseRunner runner = new SampleappTestDbLiquibaseRunner();
+        var runner = new SampleappTestDbLiquibaseRunner();
         runner.activate();
         runner.prepare(datasource);
         assertAccounts(datasource);
@@ -43,7 +40,7 @@ class SampleappTestDbLiquibaseRunnerTest {
 
     @Test
     void testFailInGettingConnectionWhenCreatingInitialSchema() throws Exception {
-        DataSource datasource = mock(DataSource.class);
+        var datasource = mock(DataSource.class);
         when(datasource.getConnection()).thenThrow(new SQLException("Failed to get connection"));
 
         var runner = new SampleappTestDbLiquibaseRunner();
@@ -56,8 +53,8 @@ class SampleappTestDbLiquibaseRunnerTest {
 
     @Test
     void testFailWhenCreatingInitialSchema() throws Exception {
-        Connection connection = spy(createDataSource("sampleapp1").getConnection());
-        DataSource datasource = mock(DataSource.class);
+        var connection = spy(createDataSource("sampleapp1").getConnection());
+        var datasource = mock(DataSource.class);
         when(datasource.getConnection()).thenReturn(connection);
 
         var runner = new SampleappTestDbLiquibaseRunner();
@@ -71,7 +68,7 @@ class SampleappTestDbLiquibaseRunnerTest {
     @Test
     void testFailWhenAddingMockData() throws Exception {
         var connection = spy(createDataSource("sampleapp1").getConnection());
-        DataSource datasource = spy(createDataSource("sampleapp2"));
+        var datasource = spy(createDataSource("sampleapp2"));
         when(datasource.getConnection())
             .thenCallRealMethod()
             .thenReturn(connection);
@@ -86,13 +83,13 @@ class SampleappTestDbLiquibaseRunnerTest {
 
     @Test
     void testFailWhenGettingConnectionForUpdatingSchema() throws Exception {
-        DataSource datasource = spy(createDataSource("sampleapp3"));
+        var datasource = spy(createDataSource("sampleapp3"));
         when(datasource.getConnection())
             .thenCallRealMethod()
             .thenCallRealMethod()
             .thenThrow(new SQLException("Failed to get connection"));
 
-        SampleappTestDbLiquibaseRunner runner = new SampleappTestDbLiquibaseRunner();
+        var runner = new SampleappTestDbLiquibaseRunner();
         runner.activate();
         var e = assertThrows(
             SQLException.class,
@@ -103,7 +100,7 @@ class SampleappTestDbLiquibaseRunnerTest {
     @Test
     void testFailWhenUpdatingSchema() throws Exception {
         var connection = spy(createDataSource("sampleapp4").getConnection());
-        DataSource datasource = spy(createDataSource("sampleapp4"));
+        var datasource = spy(createDataSource("sampleapp4"));
         when(datasource.getConnection())
             .thenCallRealMethod()
             .thenCallRealMethod()
@@ -118,10 +115,10 @@ class SampleappTestDbLiquibaseRunnerTest {
     }
 
     private void assertAccounts(DataSource datasource) throws Exception {
-        int resultcount = 0;
-        try (Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("select * from sampleapp_accounts")) {
-                try (ResultSet results = statement.executeQuery()) {
+        var resultcount = 0;
+        try (var connection = datasource.getConnection()) {
+            try(var statement = connection.prepareStatement("select * from sampleapp_accounts")) {
+                try (var results = statement.executeQuery()) {
                     while (results.next()) {
                         ++resultcount;
                     }
@@ -132,10 +129,10 @@ class SampleappTestDbLiquibaseRunnerTest {
     }
 
     private DataSource createDataSource(String dbname) throws SQLException {
-        DataSourceFactory dataSourceFactory = new DerbyDataSourceFactory();
-        Properties properties = new Properties();
+        var dataSourceFactory = new DerbyDataSourceFactory();
+        var properties = new Properties();
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:" + dbname + ";create=true");
-        DataSource datasource = dataSourceFactory.createDataSource(properties);
+        var datasource = dataSourceFactory.createDataSource(properties);
         return datasource;
     }
 

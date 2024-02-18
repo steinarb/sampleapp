@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,6 @@ package no.priv.bang.sampleapp.web.security;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Collection;
-
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.Ini;
 import org.apache.shiro.mgt.RealmSecurityManager;
@@ -29,7 +25,6 @@ import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.shiro.session.mgt.eis.MemorySessionDAO;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.web.env.IniWebEnvironment;
-import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -46,22 +41,22 @@ class SampleappShiroFilterTest {
 
     @Test
     void testAuthenticate() {
-        SampleappShiroFilter filter = new SampleappShiroFilter();
+        var filter = new SampleappShiroFilter();
         filter.setRealm(realm);
         filter.setSession(session);
         filter.activate();
-        WebSecurityManager securitymanager = filter.getSecurityManager();
-        AuthenticationToken token = new UsernamePasswordToken("jad", "1ad".toCharArray());
-        AuthenticationInfo info = securitymanager.authenticate(token);
+        var securitymanager = filter.getSecurityManager();
+        var token = new UsernamePasswordToken("jad", "1ad".toCharArray());
+        var info = securitymanager.authenticate(token);
         assertEquals(1, info.getPrincipals().asList().size());
     }
 
     private static Realm getRealmFromIniFile() {
-        IniWebEnvironment environment = new IniWebEnvironment();
+        var environment = new IniWebEnvironment();
         environment.setIni(Ini.fromResourcePath("classpath:test.shiro.ini"));
         environment.init();
-        RealmSecurityManager securitymanager = RealmSecurityManager.class.cast(environment.getWebSecurityManager());
-        Collection<Realm> realms = securitymanager.getRealms();
+        var securitymanager = RealmSecurityManager.class.cast(environment.getWebSecurityManager());
+        var realms = securitymanager.getRealms();
         return (SimpleAccountRealm) realms.iterator().next();
     }
 }
