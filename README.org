@@ -169,6 +169,7 @@ To create a new project called "mynewapp":
        find . -name *.java | xargs sed -i 's/2021-2022/2024/g'
        find . -name *.xml | xargs sed -i 's/2021-2023/2024/g'
        find . -name *.java | xargs sed -i 's/2021-2023/2024/g'
+       find . -name *.java | xargs sed -i 's/2021-2024/2024/g'
        find . -name *.xml | xargs sed -i 's/2021/2024/g'
        find . -name *.java | xargs sed -i 's/2021/2024/g'
      #+end_example
