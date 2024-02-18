@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,7 @@ package no.priv.bang.sampleapp.backend;
 
 import static no.priv.bang.sampleapp.services.SampleappConstants.*;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -30,7 +27,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
@@ -46,7 +42,6 @@ import no.priv.bang.sampleapp.services.beans.CounterBean;
 import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
 import no.priv.bang.sampleapp.services.beans.LocaleBean;
 import no.priv.bang.osgiservice.users.Role;
-import no.priv.bang.osgiservice.users.User;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
 @Component(service=SampleappService.class, immediate=true, property= { "defaultlocale=nb_NO" })
@@ -81,25 +76,25 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public boolean lazilyCreateAccount(String username) {
-        try(Connection connection = datasource.getConnection()) {
+        try(var connection = datasource.getConnection()) {
             int accountid = findAccount(connection, username);
 
             if (accountid != -1) {
                 return false;
             }
 
-            try(PreparedStatement createAccount = connection.prepareStatement("insert into sampleapp_accounts (username) values (?)")) {
+            try(var createAccount = connection.prepareStatement("insert into sampleapp_accounts (username) values (?)")) {
                 createAccount.setString(1, username);
                 createAccount.executeUpdate();
             }
 
             accountid = findAccount(connection, username);
-            try(PreparedStatement createIncrementStep = connection.prepareStatement("insert into counter_increment_steps (account_id) values (?)")) {
+            try(var createIncrementStep = connection.prepareStatement("insert into counter_increment_steps (account_id) values (?)")) {
                 createIncrementStep.setInt(1, accountid);
                 createIncrementStep.executeUpdate();
             }
 
-            try(PreparedStatement createCounter = connection.prepareStatement("insert into counters (account_id) values (?)")) {
+            try(var createCounter = connection.prepareStatement("insert into counters (account_id) values (?)")) {
                 createCounter.setInt(1, accountid);
                 createCounter.executeUpdate();
             }
@@ -114,15 +109,15 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public List<Account> getAccounts() {
-        List<Account> accounts = new ArrayList<>();
-        try(Connection connection = datasource.getConnection()) {
-            try(Statement statement = connection.createStatement()) {
-                try(ResultSet results = statement.executeQuery("select * from sampleapp_accounts")) {
+        var accounts = new ArrayList<Account>();
+        try(var connection = datasource.getConnection()) {
+            try(var statement = connection.createStatement()) {
+                try(var results = statement.executeQuery("select * from sampleapp_accounts")) {
                     while(results.next()) {
-                        int accountId = results.getInt(1);
-                        String username = results.getString(2);
-                        User user = useradmin.getUser(username);
-                        Account account = Account.with().accountId(accountId).user(user).build();
+                        var accountId = results.getInt(1);
+                        var username = results.getString(2);
+                        var user = useradmin.getUser(username);
+                        var account = Account.with().accountId(accountId).user(user).build();
                         accounts.add(account);
                     }
                 }
@@ -137,10 +132,10 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public Optional<CounterIncrementStepBean> getCounterIncrementStep(String username) {
-        try(Connection connection = datasource.getConnection()) {
-            Integer counterIncrementStep = findCounterIncrementStep(connection, username);
+        try(var connection = datasource.getConnection()) {
+            var counterIncrementStep = findCounterIncrementStep(connection, username);
             if (counterIncrementStep != null) {
-                CounterIncrementStepBean bean = CounterIncrementStepBean.with()
+                var bean = CounterIncrementStepBean.with()
                     .username(username)
                     .counterIncrementStep(counterIncrementStep)
                     .build();
@@ -155,9 +150,9 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public Optional<CounterIncrementStepBean> updateCounterIncrementStep(CounterIncrementStepBean updatedIncrementStep) {
-        String username = updatedIncrementStep.getUsername();
-        try(Connection connection = datasource.getConnection()) {
-            try(PreparedStatement statement = connection.prepareStatement("update counter_increment_steps set counter_increment_step=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
+        var username = updatedIncrementStep.getUsername();
+        try(var connection = datasource.getConnection()) {
+            try(var statement = connection.prepareStatement("update counter_increment_steps set counter_increment_step=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
                 statement.setInt(1, updatedIncrementStep.getCounterIncrementStep());
                 statement.setString(2, username);
                 statement.executeUpdate();
@@ -172,7 +167,7 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public Optional<CounterBean> getCounter(String username) {
-        try(Connection connection = datasource.getConnection()) {
+        try(var connection = datasource.getConnection()) {
             return findAndCreateCounterBean(connection, username);
         } catch (SQLException e) {
             logger.error("No counter could be found for user \"{}\"", username, e);
@@ -183,11 +178,11 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public Optional<CounterBean> incrementCounter(String username) {
-        try(Connection connection = datasource.getConnection()) {
+        try(var connection = datasource.getConnection()) {
             var incrementStep = findCounterIncrementStep(connection, username);
             var counter = findCounter(connection, username);
 
-            try(PreparedStatement statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
+            try(var statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
                 statement.setInt(1, counter + incrementStep);
                 statement.setString(2, username);
                 statement.executeUpdate();
@@ -203,11 +198,11 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public Optional<CounterBean> decrementCounter(String username) {
-        try(Connection connection = datasource.getConnection()) {
+        try(var connection = datasource.getConnection()) {
             var incrementStep = findCounterIncrementStep(connection, username);
             var counter = findCounter(connection, username);
 
-            try(PreparedStatement statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
+            try(var statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
                 statement.setInt(1, counter - incrementStep);
                 statement.setString(2, username);
                 statement.executeUpdate();
@@ -238,15 +233,15 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public String displayText(String key, String locale) {
-        Locale active = locale == null || locale.isEmpty() ? defaultLocale : Locale.forLanguageTag(locale.replace('_', '-'));
-        ResourceBundle bundle = ResourceBundle.getBundle(DISPLAY_TEXT_RESOURCES, active);
+        var active = locale == null || locale.isEmpty() ? defaultLocale : Locale.forLanguageTag(locale.replace('_', '-'));
+        var bundle = ResourceBundle.getBundle(DISPLAY_TEXT_RESOURCES, active);
         return bundle.getString(key);
     }
 
     private int findAccount(Connection connection, String username) throws SQLException {
-        try(PreparedStatement findAccount = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
+        try(var findAccount = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
             findAccount.setString(1, username);
-            try(ResultSet results = findAccount.executeQuery()) {
+            try(var results = findAccount.executeQuery()) {
                 while (results.next()) {
                     return results.getInt(1);
                 }
@@ -257,9 +252,9 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     private Integer findCounterIncrementStep(Connection connection, String username) throws SQLException {
-        try(PreparedStatement statement = connection.prepareStatement("select * from counter_increment_steps c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
+        try(var statement = connection.prepareStatement("select * from counter_increment_steps c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
             statement.setString(1, username);
-            try(ResultSet results = statement.executeQuery()) {
+            try(var results = statement.executeQuery()) {
                 while(results.next()) {
                     return results.getInt(3);
                 }
@@ -270,9 +265,9 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     private Integer findCounter(Connection connection, String username) throws SQLException {
-        try(PreparedStatement statement = connection.prepareStatement("select * from counters c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
+        try(var statement = connection.prepareStatement("select * from counters c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
             statement.setString(1, username);
-            try(ResultSet results = statement.executeQuery()) {
+            try(var results = statement.executeQuery()) {
                 while(results.next()) {
                     return results.getInt(3);
                 }
@@ -283,7 +278,7 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     private Optional<CounterBean> findAndCreateCounterBean(Connection connection, String username) throws SQLException {
-        Integer counter = findCounter(connection, username);
+        var counter = findCounter(connection, username);
         return counter != null ?
             Optional.of(CounterBean.with().counter(counter).build()) :
             Optional.empty();
@@ -291,15 +286,15 @@ public class SampleappServiceProvider implements SampleappService {
 
     private void addRolesIfNotpresent() {
         var sampleapproles = Map.of(SAMPLEAPPUSER_ROLE, "Bruker av applikasjonen sampleapp");
-        Set<String> existingroles = useradmin.getRoles().stream().map(Role::getRolename).collect(Collectors.toSet());
+        var existingroles = useradmin.getRoles().stream().map(Role::getRolename).collect(Collectors.toSet());
         sampleapproles.entrySet().stream()
             .filter(r -> !existingroles.contains(r.getKey()))
             .forEach(r ->  useradmin.addRole(Role.with().id(-1).rolename(r.getKey()).description(r.getValue()).build()));
     }
 
     Map<String, String> transformResourceBundleToMap(Locale locale) {
-        Map<String, String> map = new HashMap<>();
-        ResourceBundle bundle = ResourceBundle.getBundle(DISPLAY_TEXT_RESOURCES, locale);
+        var map = new HashMap<String, String>();
+        var bundle = ResourceBundle.getBundle(DISPLAY_TEXT_RESOURCES, locale);
         Enumeration<String> keys = bundle.getKeys();
         while(keys.hasMoreElements()) {
             String key = keys.nextElement();
