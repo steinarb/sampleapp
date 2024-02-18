@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public class LocaleBean extends Immutable { // NOSONAR Immutable handles added f
         private LocaleBeanBuilder() {}
 
         public LocaleBean build() {
-            LocaleBean localeBean = new LocaleBean();
+            var localeBean = new LocaleBean();
             localeBean.code = locale != null ? locale.toString() : null;
             localeBean.displayLanguage = locale != null ? locale.getDisplayLanguage(locale) : null;
             return localeBean;

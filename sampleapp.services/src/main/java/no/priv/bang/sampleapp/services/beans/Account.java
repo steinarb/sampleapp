@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ public class Account extends Immutable {
         User user;
 
         public Account build() {
-            Account account = new Account();
+            var account = new Account();
             account.accountId = this.accountId;
             account.user = this.user;
             return account;
