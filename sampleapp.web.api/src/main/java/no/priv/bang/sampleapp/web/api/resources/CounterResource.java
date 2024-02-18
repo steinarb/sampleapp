@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
-
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.services.beans.CounterBean;
 import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
@@ -88,8 +86,8 @@ public class CounterResource {
     }
 
     private void throwForbiddenIfNotLoggedInUser(String username) {
-        Subject subject = SecurityUtils.getSubject();
-        String loggedInUsername = (String) subject.getPrincipal();
+        var subject = SecurityUtils.getSubject();
+        var loggedInUsername = (String) subject.getPrincipal();
         if (username.isEmpty() || !loggedInUsername.equals(username)) {
             throw new ForbiddenException();
         }
