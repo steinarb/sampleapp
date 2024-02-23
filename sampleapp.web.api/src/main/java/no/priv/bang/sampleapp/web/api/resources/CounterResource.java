@@ -26,12 +26,17 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresUser;
+
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.services.beans.CounterBean;
 import no.priv.bang.sampleapp.services.beans.CounterIncrementStepBean;
 
 @Path("counter")
 @Produces(MediaType.APPLICATION_JSON)
+@RequiresUser
+@RequiresRoles("sampleappuser")
 public class CounterResource {
 
     @Inject
