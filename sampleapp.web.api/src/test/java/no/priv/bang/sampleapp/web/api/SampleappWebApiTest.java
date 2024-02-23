@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -65,7 +66,7 @@ class SampleappWebApiTest extends ShiroTestBase {
     @Test
     void testLogin() throws Exception {
         var username = "jd";
-        var password = "johnnyBoi";
+        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
         var credentials = Credentials.with().username(username).password(password).build();
         var logservice = new MockLogService();
         var sampleapp = mock(SampleappService.class);
@@ -84,7 +85,7 @@ class SampleappWebApiTest extends ShiroTestBase {
     @Test
     void testLoginWrongPassword() throws Exception {
         var username = "jd";
-        var password = "johnniBoi";
+        var password = Base64.getEncoder().encodeToString("johnniBoi".getBytes());
         var credentials = Credentials.with().username(username).password(password).build();
         var logservice = new MockLogService();
         var sampleapp = mock(SampleappService.class);

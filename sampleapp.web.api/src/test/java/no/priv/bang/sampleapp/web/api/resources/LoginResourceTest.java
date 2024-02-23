@@ -18,6 +18,8 @@ package no.priv.bang.sampleapp.web.api.resources;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.util.Base64;
+
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.util.WebUtils;
 
@@ -46,7 +48,7 @@ class LoginResourceTest extends ShiroTestBase {
         resource.sampleapp = sampleapp;
         resource.useradmin = useradmin;
         var username = "jd";
-        var password = "johnnyBoi";
+        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
         createSubjectAndBindItToThread();
         var credentials = Credentials.with().username(username).password(password).build();
         var locale = "nb_NO";
@@ -66,7 +68,7 @@ class LoginResourceTest extends ShiroTestBase {
         resource.sampleapp = sampleapp;
         resource.useradmin = useradmin;
         var username = "jad";
-        var password = "1ad";
+        var password = Base64.getEncoder().encodeToString("1ad".getBytes());
         createSubjectAndBindItToThread();
         var credentials = Credentials.with().username(username).password(password).build();
         var locale = "nb_NO";
@@ -86,7 +88,7 @@ class LoginResourceTest extends ShiroTestBase {
         resource.sampleapp = sampleapp;
         resource.useradmin = useradmin;
         var username = "jd";
-        var password = "johnnyBoi";
+        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
         var originalRequest = new MockHttpServletRequest();
         originalRequest.setRequestURI("/sampleapp/");
         createSubjectFromOriginalRequestAndBindItToThread(originalRequest);
@@ -108,7 +110,7 @@ class LoginResourceTest extends ShiroTestBase {
         resource.sampleapp = sampleapp;
         resource.setLogservice(logservice);
         var username = "jd";
-        var password = "feil";
+        var password = Base64.getEncoder().encodeToString("feil".getBytes());
         createSubjectAndBindItToThread();
         var credentials = Credentials.with().username(username).password(password).build();
         var locale = "nb_NO";
@@ -126,7 +128,7 @@ class LoginResourceTest extends ShiroTestBase {
         resource.sampleapp = sampleapp;
         resource.setLogservice(logservice);
         var username = "jdd";
-        var password = "feil";
+        var password = Base64.getEncoder().encodeToString("feil".getBytes());
         createSubjectAndBindItToThread();
         var credentials = Credentials.with().username(username).password(password).build();
         var locale = "nb_NO";
