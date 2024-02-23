@@ -20,6 +20,8 @@ import static org.mockito.Mockito.*;
 
 import java.util.Base64;
 
+import javax.ws.rs.InternalServerErrorException;
+
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.util.WebUtils;
 
@@ -28,47 +30,138 @@ import static org.assertj.core.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import com.mockrunner.mock.web.MockHttpServletRequest;
+import com.mockrunner.mock.web.MockServletContext;
 
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.services.beans.Credentials;
 import no.priv.bang.sampleapp.web.api.ShiroTestBase;
 import no.priv.bang.authservice.definitions.AuthserviceException;
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
+import no.priv.bang.osgiservice.users.User;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
 class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLogin() {
-        var request = new MockHttpServletRequest();
-        var sampleapp = mock(SampleappService.class);
-        var useradmin = mock(UserManagementService.class);
-        var resource = new LoginResource();
-        resource.request = request;
-        resource.sampleapp = sampleapp;
-        resource.useradmin = useradmin;
         var username = "jd";
         var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
+        var sampleapp = mock(SampleappService.class);
+        var useradmin = mock(UserManagementService.class);
+        when(useradmin.getUser(anyString())).thenReturn(User.with().username(username).build());
+        var logservice = new MockLogService();
+        var httpRequest = new MockHttpServletRequest().setRequestURI("/sampleapp/");
+        var webcontext = new MockServletContext();
+        webcontext.setContextPath("/sampleapp");
+        var resource = new LoginResource();
+        resource.webcontext = webcontext;
+        resource.request = httpRequest;
+        resource.setLogservice(logservice);
+        resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
         createSubjectAndBindItToThread();
-        var credentials = Credentials.with().username(username).password(password).build();
+        WebUtils.saveRequest(httpRequest);
         var locale = "nb_NO";
-        var result = resource.login(locale, credentials);
-        assertTrue(result.getSuccess());
-        assertTrue(result.isAuthorized());
-        assertNull(result.getOriginalRequestUrl());
+        var credentials = Credentials.with().username(username).password(password).build();
+        var resultat = resource.login(locale, credentials);
+        assertTrue(resultat.getSuccess());
+        assertEquals(username, resultat.getUser().getUsername());
+        assertEquals("/", resultat.getOriginalRequestUrl());
+    }
+
+    @Test
+    void testLoginDifferentPath() {
+        var username = "jd";
+        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
+        var sampleapp = mock(SampleappService.class);
+        var useradmin = mock(UserManagementService.class);
+        when(useradmin.getUser(anyString())).thenReturn(User.with().username(username).build());
+        var logservice = new MockLogService();
+        var httpRequest = new MockHttpServletRequest().setRequestURI("/sampleapp/counter");
+        var webcontext = new MockServletContext();
+        webcontext.setContextPath("/sampleapp");
+        var resource = new LoginResource();
+        resource.webcontext = webcontext;
+        resource.request = httpRequest;
+        resource.setLogservice(logservice);
+        resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
+        createSubjectAndBindItToThread();
+        WebUtils.saveRequest(httpRequest);
+        var locale = "nb_NO";
+        var credentials = Credentials.with().username(username).password(password).build();
+        var resultat = resource.login(locale, credentials);
+        assertTrue(resultat.getSuccess());
+        assertEquals(username, resultat.getUser().getUsername());
+        assertEquals("/counter", resultat.getOriginalRequestUrl());
+    }
+
+    @Test
+    void testLoginWithEmptyWebContextPath() {
+        var username = "jd";
+        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
+        var sampleapp = mock(SampleappService.class);
+        var useradmin = mock(UserManagementService.class);
+        when(useradmin.getUser(anyString())).thenReturn(User.with().username(username).build());
+        var logservice = new MockLogService();
+        var httpRequest = new MockHttpServletRequest().setRequestURI("/");
+        var webcontext = new MockServletContext();
+        webcontext.setContextPath("");
+        var resource = new LoginResource();
+        resource.webcontext = webcontext;
+        resource.request = httpRequest;
+        resource.setLogservice(logservice);
+        resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
+        createSubjectAndBindItToThread();
+        WebUtils.saveRequest(httpRequest);
+        var locale = "nb_NO";
+        var credentials = Credentials.with().username(username).password(password).build();
+        var resultat = resource.login(locale, credentials);
+        assertTrue(resultat.getSuccess());
+        assertEquals(username, resultat.getUser().getUsername());
+        assertEquals("/", resultat.getOriginalRequestUrl());
+    }
+
+    @Test
+    void testLoginNoWebContext() {
+        var username = "jd";
+        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
+        var sampleapp = mock(SampleappService.class);
+        var useradmin = mock(UserManagementService.class);
+        when(useradmin.getUser(anyString())).thenReturn(User.with().username(username).build());
+        var logservice = new MockLogService();
+        var httpRequest = new MockHttpServletRequest().setRequestURI("/sampleapp/");
+        var resource = new LoginResource();
+        resource.request = httpRequest;
+        resource.setLogservice(logservice);
+        resource.sampleapp = sampleapp;
+        resource.useradmin = useradmin;
+        createSubjectAndBindItToThread();
+        WebUtils.saveRequest(httpRequest);
+        var locale = "nb_NO";
+        var credentials = Credentials.with().username(username).password(password).build();
+        assertThrows(InternalServerErrorException.class, () -> resource.login(locale, credentials));
+        assertThat(logservice.getLogmessages()).hasSize(1);
+        assertThat(logservice.getLogmessages().get(0)).contains("NullPointerException");
     }
 
     @Test
     void testLoginByUserWithoutRole() {
         var request = new MockHttpServletRequest();
+        var logservice = new MockLogService();
         var sampleapp = mock(SampleappService.class);
         var useradmin = mock(UserManagementService.class);
+        var webcontext = new MockServletContext();
+        webcontext.setContextPath("/sampleapp");
         var resource = new LoginResource();
+        resource.webcontext = webcontext;
         resource.request = request;
+        resource.setLogservice(logservice);
         resource.sampleapp = sampleapp;
         resource.useradmin = useradmin;
-        var username = "jad";
-        var password = Base64.getEncoder().encodeToString("1ad".getBytes());
+        var username = "jd";
+        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
         createSubjectAndBindItToThread();
         var credentials = Credentials.with().username(username).password(password).build();
         var locale = "nb_NO";
@@ -81,14 +174,19 @@ class LoginResourceTest extends ShiroTestBase {
     void testLoginWithOriginalRequestUrl() {
         var request = new MockHttpServletRequest()
             .setContextPath("/sampleapp");
+        var logservice = new MockLogService();
         var sampleapp = mock(SampleappService.class);
         var useradmin = mock(UserManagementService.class);
+        var webcontext = new MockServletContext();
+        webcontext.setContextPath("/sampleapp");
         var resource = new LoginResource();
+        resource.webcontext = webcontext;
         resource.request = request;
+        resource.setLogservice(logservice);
         resource.sampleapp = sampleapp;
         resource.useradmin = useradmin;
-        var username = "jd";
-        var password = Base64.getEncoder().encodeToString("johnnyBoi".getBytes());
+        var username = "jad";
+        var password = Base64.getEncoder().encodeToString("1ad".getBytes());
         var originalRequest = new MockHttpServletRequest();
         originalRequest.setRequestURI("/sampleapp/");
         createSubjectFromOriginalRequestAndBindItToThread(originalRequest);
@@ -176,8 +274,8 @@ class LoginResourceTest extends ShiroTestBase {
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
         resource.useradmin = useradmin;
-        var username = "jd";
-        var password = "johnnyBoi";
+        var username = "jad";
+        var password = "1ad";
         var subject = createSubjectAndBindItToThread();
         var token = new UsernamePasswordToken(username, password.toCharArray(), true);
         subject.login(token);
@@ -197,8 +295,8 @@ class LoginResourceTest extends ShiroTestBase {
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
         resource.useradmin = useradmin;
-        var username = "jad";
-        var password = "1ad";
+        var username = "jd";
+        var password = "johnnyBoi";
         var subject = createSubjectAndBindItToThread();
         var token = new UsernamePasswordToken(username, password.toCharArray(), true);
         subject.login(token);

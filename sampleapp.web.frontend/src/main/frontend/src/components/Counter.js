@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Container from './bootstrap/Container';
@@ -21,9 +20,6 @@ export default function Counter() {
     const counter = useSelector(state => state.counter);
     const dispatch = useDispatch();
     const firstname = loginresult.user.firstname;
-    if (!loginresult.authorized) {
-        return <Navigate to="/unauthorized" />;
-    }
 
     return (
         <div>

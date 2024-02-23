@@ -11,6 +11,7 @@ import locationSaga from './locationSaga';
 import accountsSaga from './accountsSaga';
 import counterIncrementStepSaga from './counterIncrementStepSaga';
 import counterSaga from './counterSaga';
+import reloadOnLogoutSaga from './reloadOnLogoutSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -25,5 +26,6 @@ export default function* rootSaga() {
         fork(accountsSaga),
         fork(counterIncrementStepSaga),
         fork(counterSaga),
+        fork(reloadOnLogoutSaga),
     ]);
 }

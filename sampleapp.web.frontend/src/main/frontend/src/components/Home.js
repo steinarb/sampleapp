@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navigate } from 'react-router';
 import { NavLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Container from './bootstrap/Container';
@@ -14,10 +13,6 @@ export default function Home() {
     const accountCount = useSelector(state => state.accounts.length);
     const dispatch = useDispatch();
     const { username, firstname, lastname, email } = loginresult.user;
-
-    if (!loginresult.authorized) {
-        return <Navigate to="/unauthorized" />;
-    }
 
     return (
         <div>

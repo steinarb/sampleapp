@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Navigate } from 'react-router';
 import { LOGIN_REQUEST } from '../reduxactions';
 import LoginMessage from './LoginMessage';
 
 export default function Login() {
+    const basename = useSelector(state => state.basename);
     const loginresult = useSelector(state => state.loginresult);
     const text = useSelector(state => state.displayTexts);
     const dispatch = useDispatch();
@@ -12,8 +12,8 @@ export default function Login() {
     const [ password, setPassword ] = useState('');
 
     if (loginresult.success) {
-        const originalRequestUrl = loginresult.originalRequestUrl || '/';
-        return (<Navigate to={originalRequestUrl} />);
+        const originalRequestUrl = findReloadUrl(basename, loginresult.originalRequestUrl);
+        location.href = originalRequestUrl;
     }
 
     return (
@@ -58,4 +58,14 @@ export default function Login() {
             </div>
         </div>
     );
+}
+
+function findReloadUrl(basename, originalRequestUrl) {
+    // If originalRequestUrl is empty go to the top.
+    // If originalRequest is /unauthorized go to the top and let shiro decide where to redirect to
+    if (!originalRequestUrl || originalRequestUrl === '/unauthorized') {
+        return basename + '/';
+    }
+
+    return basename + originalRequestUrl;
 }

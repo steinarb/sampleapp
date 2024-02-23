@@ -1,5 +1,4 @@
 import React from 'react';
-import { Navigate } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { LOGOUT_REQUEST } from '../reduxactions';
 import Container from './bootstrap/Container';
@@ -11,10 +10,6 @@ export default function Unauthorized() {
     const text = useSelector(state => state.displayTexts);
     const username = loginresult.user.username;
     const dispatch = useDispatch();
-
-    if (!loginresult.success) {
-        return <Navigate to="/login" />;
-    }
 
     return (
         <div>

@@ -7,6 +7,7 @@ import locale from './localeReducer';
 import availableLocales from './availableLocalesReducer';
 import displayTexts from './displayTextsReducer';
 import errors from './errorsReducer';
+import basename from './basenameReducer';
 
 export default (routerReducer) => combineReducers({
     router: routerReducer,
@@ -18,4 +19,5 @@ export default (routerReducer) => combineReducers({
     availableLocales,
     displayTexts,
     errors,
+    basename,
 });

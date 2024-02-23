@@ -15,6 +15,7 @@ import {
     LOGINSTATE_REQUEST,
     DEFAULT_LOCALE_REQUEST,
     AVAILABLE_LOCALES_REQUEST,
+    SET_BASENAME,
 } from './reduxactions';
 
 const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.includes('bundle.js'))[0].replace('/bundle.js', '');
@@ -30,6 +31,7 @@ const store = configureStore({
     reducer: createRootReducer(routerReducer),
     middleware: () => new Tuple(sagaMiddleware, routerMiddleware),
 });
+store.dispatch(SET_BASENAME(basename));
 sagaMiddleware.run(rootSaga);
 const history = createReduxHistory(store);
 

@@ -46,3 +46,5 @@ export const AVAILABLE_LOCALES_FAILURE = createAction('AVAILABLE_LOCALES_FAILURE
 export const DISPLAY_TEXTS_REQUEST = createAction('DISPLAY_TEXTS_REQUEST');
 export const DISPLAY_TEXTS_RECEIVE = createAction('DISPLAY_TEXTS_RECEIVE');
 export const DISPLAY_TEXTS_FAILURE = createAction('DISPLAY_TEXTS_FAILURE');
+
+export const SET_BASENAME = createAction('SET_BASENAME');
