@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-Copyright 2021-2023 Steinar Bang
+Copyright 2021-2024 Steinar Bang
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -194,6 +194,17 @@ under the License.
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-web</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-jaxrs</artifactId>
+            <exclusions>
+                <!-- the version of rs-apo pulled in by shiro-jaxrs conflicts with rs-api from jersey -->
+                <exclusion>
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>javax.ws.rs-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
