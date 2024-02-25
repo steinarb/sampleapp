@@ -58,7 +58,7 @@ public class LoginResource {
     private Logger logger;
 
     @Inject
-    public ServletContext webcontext;
+    ServletContext webcontext;
 
     @Context
     HttpServletRequest request;
