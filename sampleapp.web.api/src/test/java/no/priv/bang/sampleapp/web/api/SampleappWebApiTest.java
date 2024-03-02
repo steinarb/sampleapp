@@ -36,6 +36,7 @@ import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
 
 import org.glassfish.jersey.server.ServerProperties;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.osgi.service.log.LogService;
 
@@ -62,6 +63,11 @@ class SampleappWebApiTest extends ShiroTestBase {
     public static final ObjectMapper mapper = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         .findAndRegisterModules();
+
+    @BeforeEach
+    void beforeEachTest() {
+        removeWebSubjectFromThread();
+    }
 
     @Test
     void testLogin() throws Exception {
