@@ -145,6 +145,40 @@ class SampleappWebApiTest extends ShiroTestBase {
     }
 
     @Test
+    void testGetCounterIncrementStepWhenNotLoggedIn() throws Exception {
+        var incrementStepValue = 1;
+        var logservice = new MockLogService();
+        var sampleapp = mock(SampleappService.class);
+        var optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
+        when(sampleapp.getCounterIncrementStep(anyString())).thenReturn(optionalIncrementStep);
+        var useradmin = mock(UserManagementService.class);
+        var servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
+        var request = buildGetUrl("/counter/incrementstep/jad");
+        var response = new MockHttpServletResponse();
+
+        createSubjectAndBindItToThread();
+        servlet.service(request, response);
+        assertEquals(401, response.getStatus());
+    }
+
+    @Test
+    void testGetCounterIncrementStepWhenUserLacksRole() throws Exception {
+        var incrementStepValue = 1;
+        var logservice = new MockLogService();
+        var sampleapp = mock(SampleappService.class);
+        var optionalIncrementStep = Optional.of(CounterIncrementStepBean.with().counterIncrementStep(incrementStepValue).build());
+        when(sampleapp.getCounterIncrementStep(anyString())).thenReturn(optionalIncrementStep);
+        var useradmin = mock(UserManagementService.class);
+        var servlet = simulateDSComponentActivationAndWebWhiteboardConfiguration(sampleapp , useradmin, logservice);
+        var request = buildGetUrl("/counter/incrementstep/jad");
+        var response = new MockHttpServletResponse();
+
+        loginUser(request, response, "jd", "johnnyBoi");
+        servlet.service(request, response);
+        assertEquals(403, response.getStatus());
+    }
+
+    @Test
     void testGetCounterIncrementStepWhenNotFound() throws Exception {
         var logservice = new MockLogService();
         var sampleapp = mock(SampleappService.class);
