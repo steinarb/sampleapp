@@ -17,21 +17,16 @@ package no.priv.bang.sampleapp.web.api;
 
 import static org.mockito.Mockito.mock;
 
-import java.lang.reflect.Method;
-import java.util.Collection;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authc.SimpleAccount;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.config.Ini;
 import org.apache.shiro.mgt.RealmSecurityManager;
-import org.apache.shiro.realm.Realm;
 import org.apache.shiro.realm.SimpleAccountRealm;
 import org.apache.shiro.util.ThreadContext;
-import org.apache.shiro.web.config.WebIniSecurityManagerFactory;
+import org.apache.shiro.web.env.IniWebEnvironment;
 import org.apache.shiro.web.mgt.WebSecurityManager;
 import org.apache.shiro.web.subject.WebSubject;
 
@@ -92,8 +87,10 @@ public class ShiroTestBase {
 
     public static WebSecurityManager getSecurityManager() {
         if (securitymanager == null) {
-            var securityManagerFactory = new WebIniSecurityManagerFactory(Ini.fromResourcePath("classpath:test.shiro.ini"));
-            securitymanager = (WebSecurityManager) securityManagerFactory.getInstance();
+            var env = new IniWebEnvironment();
+            env.setConfigLocations("classpath:test.shiro.ini");
+            env.init();
+            securitymanager = env.getWebSecurityManager();
             realm = findRealmFromSecurityManager(securitymanager);
         }
 
