@@ -6,8 +6,8 @@ import {
     ACCOUNTS_FAILURE,
 } from '../reduxactions';
 
-function sendAccounts() {
-    return axios.get('/api/accounts');
+export default function* accountsSaga() {
+    yield takeLatest(ACCOUNTS_REQUEST, mottaAccountsResult);
 }
 
 function* mottaAccountsResult() {
@@ -20,6 +20,6 @@ function* mottaAccountsResult() {
     }
 }
 
-export default function* accountsSaga() {
-    yield takeLatest(ACCOUNTS_REQUEST, mottaAccountsResult);
+function sendAccounts() {
+    return axios.get('/api/accounts');
 }

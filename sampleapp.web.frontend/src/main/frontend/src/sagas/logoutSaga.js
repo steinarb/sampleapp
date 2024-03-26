@@ -6,8 +6,8 @@ import {
     LOGOUT_FAILURE,
 } from '../reduxactions';
 
-function sendLogout(locale) {
-    return axios.get('/api/logout', { params: { locale } });
+export default function* logoutSaga() {
+    yield takeLatest(LOGOUT_REQUEST, mottaLogoutResult);
 }
 
 function* mottaLogoutResult() {
@@ -21,6 +21,6 @@ function* mottaLogoutResult() {
     }
 }
 
-export default function* logoutSaga() {
-    yield takeLatest(LOGOUT_REQUEST, mottaLogoutResult);
+function sendLogout(locale) {
+    return axios.get('/api/logout', { params: { locale } });
 }

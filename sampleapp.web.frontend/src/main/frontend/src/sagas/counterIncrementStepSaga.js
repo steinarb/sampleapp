@@ -12,8 +12,12 @@ import {
     INCREMENT_STEP_FIELD_MODIFIED,
 } from '../reduxactions';
 
-function getCounterIncrementStep(username) {
-    return axios.get('/api/counter/incrementstep/' + username);
+export default function* counterIncrementStepSaga() {
+    yield takeLatest(COUNTER_INCREMENT_STEP_REQUEST, fetchCounterIncrementStep);
+    yield takeLatest(LOGIN_RECEIVE, fetchCounterIncrementStep);
+    yield takeLatest(LOGINSTATE_RECEIVE, fetchCounterIncrementStep);
+    yield takeLatest(UPDATE_COUNTER_INCREMENT_STEP_REQUEST, updateCounterIncrementStep);
+    yield takeLatest(INCREMENT_STEP_FIELD_MODIFIED, updateCounterIncrementStepAfterDelay);
 }
 
 function* fetchCounterIncrementStep() {
@@ -30,8 +34,8 @@ function* fetchCounterIncrementStep() {
     }
 }
 
-function postCounterIncrementStep(updatedCounterIncrementStep) {
-    return axios.post('/api/counter/incrementstep/', updatedCounterIncrementStep);
+function getCounterIncrementStep(username) {
+    return axios.get('/api/counter/incrementstep/' + username);
 }
 
 function* updateCounterIncrementStep(action) {
@@ -49,15 +53,11 @@ function* updateCounterIncrementStep(action) {
     }
 }
 
+function postCounterIncrementStep(updatedCounterIncrementStep) {
+    return axios.post('/api/counter/incrementstep/', updatedCounterIncrementStep);
+}
+
 function* updateCounterIncrementStepAfterDelay(action) {
     yield delay(2000);
     yield put(UPDATE_COUNTER_INCREMENT_STEP_REQUEST(action.payload));
-}
-
-export default function* counterIncrementStepSaga() {
-    yield takeLatest(COUNTER_INCREMENT_STEP_REQUEST, fetchCounterIncrementStep);
-    yield takeLatest(LOGIN_RECEIVE, fetchCounterIncrementStep);
-    yield takeLatest(LOGINSTATE_RECEIVE, fetchCounterIncrementStep);
-    yield takeLatest(UPDATE_COUNTER_INCREMENT_STEP_REQUEST, updateCounterIncrementStep);
-    yield takeLatest(INCREMENT_STEP_FIELD_MODIFIED, updateCounterIncrementStepAfterDelay);
 }

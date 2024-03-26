@@ -14,8 +14,12 @@ import {
     LOGINSTATE_RECEIVE,
 } from '../reduxactions';
 
-function getCounter(username) {
-    return axios.get('/api/counter/' + username);
+export default function* counterSaga() {
+    yield takeLatest(COUNTER_REQUEST, fetchCounter);
+    yield takeLatest(LOGIN_RECEIVE, fetchCounter);
+    yield takeLatest(LOGINSTATE_RECEIVE, fetchCounter);
+    yield takeLatest(COUNTER_DECREMENT_REQUEST, decrementCounter);
+    yield takeLatest(COUNTER_INCREMENT_REQUEST, incrementCounter);
 }
 
 function* fetchCounter() {
@@ -32,8 +36,8 @@ function* fetchCounter() {
     }
 }
 
-function getDecrementCounter(username) {
-    return axios.get('/api/counter/' + username + '/decrement');
+function getCounter(username) {
+    return axios.get('/api/counter/' + username);
 }
 
 function* decrementCounter() {
@@ -69,10 +73,6 @@ function* incrementCounter() {
     }
 }
 
-export default function* counterSaga() {
-    yield takeLatest(COUNTER_REQUEST, fetchCounter);
-    yield takeLatest(LOGIN_RECEIVE, fetchCounter);
-    yield takeLatest(LOGINSTATE_RECEIVE, fetchCounter);
-    yield takeLatest(COUNTER_DECREMENT_REQUEST, decrementCounter);
-    yield takeLatest(COUNTER_INCREMENT_REQUEST, incrementCounter);
+function getDecrementCounter(username) {
+    return axios.get('/api/counter/' + username + '/decrement');
 }

@@ -6,8 +6,8 @@ import {
     LOGINSTATE_FAILURE,
 } from '../reduxactions';
 
-function sendLoginstate(locale) {
-    return axios.get('/api/loginstate', { params: { locale } });
+export default function* loginstateSaga() {
+    yield takeLatest(LOGINSTATE_REQUEST, mottaLoginstateResult);
 }
 
 function* mottaLoginstateResult() {
@@ -21,6 +21,6 @@ function* mottaLoginstateResult() {
     }
 }
 
-export default function* loginstateSaga() {
-    yield takeLatest(LOGINSTATE_REQUEST, mottaLoginstateResult);
+function sendLoginstate(locale) {
+    return axios.get('/api/loginstate', { params: { locale } });
 }

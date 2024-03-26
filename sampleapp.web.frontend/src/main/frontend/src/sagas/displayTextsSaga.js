@@ -13,10 +13,6 @@ export default function* displayTextsSaga() {
     yield takeLatest(SELECT_LOCALE, receiveDisplayTextsSaga);
 }
 
-function doDisplayTexts(locale) {
-    return axios.get('/api/displaytexts', { params: { locale } });
-}
-
 // worker saga
 function* receiveDisplayTextsSaga(action) {
     try {
@@ -26,4 +22,8 @@ function* receiveDisplayTextsSaga(action) {
     } catch (error) {
         yield put(DISPLAY_TEXTS_FAILURE(error));
     }
+}
+
+function doDisplayTexts(locale) {
+    return axios.get('/api/displaytexts', { params: { locale } });
 }

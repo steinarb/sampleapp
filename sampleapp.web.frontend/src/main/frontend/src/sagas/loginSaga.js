@@ -6,8 +6,8 @@ import {
     LOGIN_FAILURE,
 } from '../reduxactions';
 
-function sendLogin(credentials, locale) {
-    return axios.post('/api/login', credentials, { params: { locale } });
+export default function* loginSaga() {
+    yield takeLatest(LOGIN_REQUEST, mottaLoginResult);
 }
 
 function* mottaLoginResult(action) {
@@ -21,6 +21,6 @@ function* mottaLoginResult(action) {
     }
 }
 
-export default function* loginSaga() {
-    yield takeLatest(LOGIN_REQUEST, mottaLoginResult);
+function sendLogin(credentials, locale) {
+    return axios.post('/api/login', credentials, { params: { locale } });
 }

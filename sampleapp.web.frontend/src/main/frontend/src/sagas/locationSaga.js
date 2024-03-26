@@ -2,6 +2,10 @@ import { takeLatest, put, select } from 'redux-saga/effects';
 import { LOCATION_CHANGE } from 'redux-first-history';
 import { ACCOUNTS_REQUEST } from '../reduxactions';
 
+export default function* locationSaga() {
+    yield takeLatest(LOCATION_CHANGE, locationChange);
+}
+
 function* locationChange(action) {
     const { location = {} } = action.payload || {};
     const basename = yield select(state => state.router.basename);
@@ -10,10 +14,6 @@ function* locationChange(action) {
     if (pathname === '/') {
         yield put(ACCOUNTS_REQUEST());
     }
-}
-
-export default function* locationSaga() {
-    yield takeLatest(LOCATION_CHANGE, locationChange);
 }
 
 function findPathname(location, basename) {
