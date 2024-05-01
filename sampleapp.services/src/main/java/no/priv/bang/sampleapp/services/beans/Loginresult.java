@@ -52,18 +52,18 @@ public class Loginresult {
         return "Loginresult [success=" + success + ", errormessage=" + errormessage + ", authorized=" + authorized + "originalRequestUrl=" + originalRequestUrl + "]";
     }
 
-    public static LoginresultBuilder with() {
-        return new LoginresultBuilder();
+    public static Builder with() {
+        return new Builder();
     }
 
-    public static class LoginresultBuilder {
+    public static class Builder {
         private boolean success;
         private String errormessage;
         private boolean authorized;
         private User user;
         private String originalRequestUrl;
 
-        private LoginresultBuilder() {}
+        private Builder() {}
 
         public Loginresult build() {
             var loginresult = new Loginresult();
@@ -75,27 +75,27 @@ public class Loginresult {
             return loginresult;
         }
 
-        public LoginresultBuilder success(boolean success) {
+        public Builder success(boolean success) {
             this.success = success;
             return this;
         }
 
-        public LoginresultBuilder errormessage(String errormessage) {
+        public Builder errormessage(String errormessage) {
             this.errormessage = errormessage;
             return this;
         }
 
-        public LoginresultBuilder authorized(boolean authorized) {
+        public Builder authorized(boolean authorized) {
             this.authorized = authorized;
             return this;
         }
 
-        public LoginresultBuilder user(User user) {
+        public Builder user(User user) {
             this.user = user;
             return this;
         }
 
-        public LoginresultBuilder originalRequestUrl(String originalRequestUrl) {
+        public Builder originalRequestUrl(String originalRequestUrl) {
             this.originalRequestUrl = originalRequestUrl;
             return this;
         }

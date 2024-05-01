@@ -29,11 +29,11 @@ public class Account extends Immutable {
         return user;
     }
 
-    public static AccountBuilder with() {
-        return new AccountBuilder();
+    public static Builder with() {
+        return new Builder();
     }
 
-    public static class AccountBuilder {
+    public static class Builder {
         int accountId;
         User user;
 
@@ -44,11 +44,11 @@ public class Account extends Immutable {
             return account;
         }
 
-        public AccountBuilder accountId(int accountId) {
+        public Builder accountId(int accountId) {
             this.accountId = accountId;
             return this;
         }
-        public AccountBuilder user(User user) {
+        public Builder user(User user) {
             this.user = user;
             return this;
         }

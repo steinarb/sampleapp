@@ -23,8 +23,8 @@ public class CounterIncrementStepBean extends Immutable {
 
     private CounterIncrementStepBean() {}
 
-    public static CounterIncrementStepBeanBuilder with() {
-        return new CounterIncrementStepBeanBuilder();
+    public static Builder with() {
+        return new Builder();
     }
 
     public String getUsername() {
@@ -35,11 +35,11 @@ public class CounterIncrementStepBean extends Immutable {
         return counterIncrementStep;
     }
 
-    public static class CounterIncrementStepBeanBuilder {
+    public static class Builder {
         private String username;
         private int counterIncrementStep;
 
-        private CounterIncrementStepBeanBuilder() {}
+        private Builder() {}
 
         public CounterIncrementStepBean build() {
             var counterIncrementStepBean = new CounterIncrementStepBean();
@@ -48,12 +48,12 @@ public class CounterIncrementStepBean extends Immutable {
             return counterIncrementStepBean;
         }
 
-        public CounterIncrementStepBeanBuilder username(String username) {
+        public Builder username(String username) {
             this.username = username;
             return this;
         }
 
-        public CounterIncrementStepBeanBuilder counterIncrementStep(int counterIncrementStep) {
+        public Builder counterIncrementStep(int counterIncrementStep) {
             this.counterIncrementStep = counterIncrementStep;
             return this;
         }

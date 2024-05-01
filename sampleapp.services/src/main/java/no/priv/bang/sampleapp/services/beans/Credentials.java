@@ -35,15 +35,15 @@ public class Credentials {
         return "Credentials [username=" + username + ", password=" + password + "]";
     }
 
-    public static CredentialsBuilder with() {
-        return new CredentialsBuilder();
+    public static Builder with() {
+        return new Builder();
     }
 
-    public static class CredentialsBuilder {
+    public static class Builder {
         private String username;
         private String password;
 
-        private CredentialsBuilder() {}
+        private Builder() {}
 
         public Credentials build() {
             var credentials = new Credentials();
@@ -52,12 +52,12 @@ public class Credentials {
             return credentials;
         }
 
-        public CredentialsBuilder username(String username) {
+        public Builder username(String username) {
             this.username = username;
             return this;
         }
 
-        public CredentialsBuilder password(String password) {
+        public Builder password(String password) {
             this.password = password;
             return this;
         }

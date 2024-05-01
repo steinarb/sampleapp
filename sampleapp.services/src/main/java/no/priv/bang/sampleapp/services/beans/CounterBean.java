@@ -22,18 +22,18 @@ public class CounterBean extends Immutable {
 
     private CounterBean() {}
 
-    public static CounterBeanBuilder with() {
-        return new CounterBeanBuilder();
+    public static Builder with() {
+        return new Builder();
     }
 
     public Integer getCounter() {
         return counter;
     }
 
-    public static class CounterBeanBuilder {
+    public static class Builder {
         private int counter;
 
-        private CounterBeanBuilder() {}
+        private Builder() {}
 
         public CounterBean build() {
             var counterBean = new CounterBean();
@@ -41,7 +41,7 @@ public class CounterBean extends Immutable {
             return counterBean;
         }
 
-        public CounterBeanBuilder counter(int counter) {
+        public Builder counter(int counter) {
             this.counter = counter;
             return this;
         }

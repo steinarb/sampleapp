@@ -34,14 +34,14 @@ public class LocaleBean extends Immutable { // NOSONAR Immutable handles added f
         return displayLanguage;
     }
 
-    public static LocaleBeanBuilder with() {
-        return new LocaleBeanBuilder();
+    public static Builder with() {
+        return new Builder();
     }
 
-    public static class LocaleBeanBuilder {
+    public static class Builder {
         private Locale locale;
 
-        private LocaleBeanBuilder() {}
+        private Builder() {}
 
         public LocaleBean build() {
             var localeBean = new LocaleBean();
@@ -50,7 +50,7 @@ public class LocaleBean extends Immutable { // NOSONAR Immutable handles added f
             return localeBean;
         }
 
-        public LocaleBeanBuilder locale(Locale locale) {
+        public Builder locale(Locale locale) {
             this.locale = locale;
             return this;
         }
