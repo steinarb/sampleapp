@@ -15,25 +15,7 @@
  */
 package no.priv.bang.sampleapp.services.beans;
 
-public class Credentials {
-
-    private String username;
-    private String password;
-
-    private Credentials() {}
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String toString() {
-        return "Credentials [username=" + username + ", password=" + password + "]";
-    }
+public record Credentials(String username, String password) {
 
     public static Builder with() {
         return new Builder();
@@ -46,10 +28,7 @@ public class Credentials {
         private Builder() {}
 
         public Credentials build() {
-            var credentials = new Credentials();
-            credentials.username = this.username;
-            credentials.password = this.password;
-            return credentials;
+            return new Credentials(this.username, this.password);
         }
 
         public Builder username(String username) {

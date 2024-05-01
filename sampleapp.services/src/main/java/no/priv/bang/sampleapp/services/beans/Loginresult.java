@@ -17,40 +17,7 @@ package no.priv.bang.sampleapp.services.beans;
 
 import no.priv.bang.osgiservice.users.User;
 
-public class Loginresult {
-
-    private boolean success;
-    private String errormessage;
-    private boolean authorized;
-    private User user;
-    private String originalRequestUrl;
-
-    private Loginresult() {}
-
-    public boolean getSuccess() {
-        return success;
-    }
-
-    public String getErrormessage() {
-        return errormessage;
-    }
-
-    public boolean isAuthorized() {
-        return authorized;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getOriginalRequestUrl() {
-        return originalRequestUrl;
-    }
-
-    @Override
-    public String toString() {
-        return "Loginresult [success=" + success + ", errormessage=" + errormessage + ", authorized=" + authorized + "originalRequestUrl=" + originalRequestUrl + "]";
-    }
+public record Loginresult(boolean success, String errormessage, boolean authorized, User user, String originalRequestUrl) {
 
     public static Builder with() {
         return new Builder();
@@ -66,13 +33,7 @@ public class Loginresult {
         private Builder() {}
 
         public Loginresult build() {
-            var loginresult = new Loginresult();
-            loginresult.success = this.success;
-            loginresult.errormessage = this.errormessage;
-            loginresult.authorized = authorized;
-            loginresult.user = user;
-            loginresult.originalRequestUrl = originalRequestUrl;
-            return loginresult;
+            return new Loginresult(this.success, this.errormessage, authorized, user, originalRequestUrl);
         }
 
         public Builder success(boolean success) {

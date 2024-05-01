@@ -15,12 +15,7 @@
  */
 package no.priv.bang.sampleapp.services.beans;
 
-import no.priv.bang.beans.immutable.Immutable;
-
-public class CounterBean extends Immutable {
-    private Integer counter;
-
-    private CounterBean() {}
+public record CounterBean(Integer counter) {
 
     public static Builder with() {
         return new Builder();
@@ -36,9 +31,7 @@ public class CounterBean extends Immutable {
         private Builder() {}
 
         public CounterBean build() {
-            var counterBean = new CounterBean();
-            counterBean.counter = counter;
-            return counterBean;
+            return new CounterBean(counter);
         }
 
         public Builder counter(int counter) {

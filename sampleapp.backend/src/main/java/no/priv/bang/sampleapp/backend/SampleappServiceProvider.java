@@ -150,10 +150,10 @@ public class SampleappServiceProvider implements SampleappService {
 
     @Override
     public Optional<CounterIncrementStepBean> updateCounterIncrementStep(CounterIncrementStepBean updatedIncrementStep) {
-        var username = updatedIncrementStep.getUsername();
+        var username = updatedIncrementStep.username();
         try(var connection = datasource.getConnection()) {
             try(var statement = connection.prepareStatement("update counter_increment_steps set counter_increment_step=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
-                statement.setInt(1, updatedIncrementStep.getCounterIncrementStep());
+                statement.setInt(1, updatedIncrementStep.counterIncrementStep());
                 statement.setString(2, username);
                 statement.executeUpdate();
             }

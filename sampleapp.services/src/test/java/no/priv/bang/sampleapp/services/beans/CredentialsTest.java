@@ -27,21 +27,21 @@ class CredentialsTest {
         var username = "jd";
         var password = "johnniboi";
         var bean = Credentials.with().username(username).password(password).build();
-        assertEquals(username, bean.getUsername());
-        assertEquals(password, bean.getPassword());
+        assertEquals(username, bean.username());
+        assertEquals(password, bean.password());
     }
 
     @Test
     void testNoArgsConstructor() {
         var bean = Credentials.with().build();
-        assertNull(bean.getUsername());
-        assertNull(bean.getPassword());
+        assertNull(bean.username());
+        assertNull(bean.password());
     }
 
     @Test
     void testToString() {
         var bean = Credentials.with().build();
-        assertThat(bean.toString()).startsWith("Credentials [");
+        assertThat(bean.toString()).startsWith("Credentials[");
     }
 
 }

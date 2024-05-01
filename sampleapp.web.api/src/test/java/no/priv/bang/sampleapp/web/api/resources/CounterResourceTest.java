@@ -48,7 +48,7 @@ class CounterResourceTest extends ShiroTestBase {
         var username = "jad";
         var bean = resource.getCounterIncrementStep(username);
         assertNotNull(bean);
-        assertEquals(incrementStepValue, bean.getCounterIncrementStep());
+        assertEquals(incrementStepValue, bean.counterIncrementStep());
     }
 
     @Test
@@ -75,7 +75,7 @@ class CounterResourceTest extends ShiroTestBase {
             .build();
         var bean = resource.updateCounterIncrementStep(updateIncrementStep);
         assertNotNull(bean);
-        assertEquals(incrementStepValue, bean.getCounterIncrementStep());
+        assertEquals(incrementStepValue, bean.counterIncrementStep());
     }
 
     @Test

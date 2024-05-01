@@ -30,8 +30,8 @@ class CounterIncrementStepBeanTest {
             .counterIncrementStep(counterIncrementStep)
             .build();
         assertNotNull(bean);
-        assertEquals(username, bean.getUsername());
-        assertEquals(counterIncrementStep, bean.getCounterIncrementStep());
+        assertEquals(username, bean.username());
+        assertEquals(counterIncrementStep, bean.counterIncrementStep());
     }
 
 }

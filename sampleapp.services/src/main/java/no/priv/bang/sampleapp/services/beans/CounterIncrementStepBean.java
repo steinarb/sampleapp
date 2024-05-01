@@ -15,24 +15,10 @@
  */
 package no.priv.bang.sampleapp.services.beans;
 
-import no.priv.bang.beans.immutable.Immutable;
-
-public class CounterIncrementStepBean extends Immutable {
-    private String username;
-    private Integer counterIncrementStep;
-
-    private CounterIncrementStepBean() {}
+public record CounterIncrementStepBean(String username, Integer counterIncrementStep) {
 
     public static Builder with() {
         return new Builder();
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public Integer getCounterIncrementStep() {
-        return counterIncrementStep;
     }
 
     public static class Builder {
@@ -42,10 +28,7 @@ public class CounterIncrementStepBean extends Immutable {
         private Builder() {}
 
         public CounterIncrementStepBean build() {
-            var counterIncrementStepBean = new CounterIncrementStepBean();
-            counterIncrementStepBean.username = this.username;
-            counterIncrementStepBean.counterIncrementStep = this.counterIncrementStep;
-            return counterIncrementStepBean;
+            return new CounterIncrementStepBean(this.username, this.counterIncrementStep);
         }
 
         public Builder username(String username) {
