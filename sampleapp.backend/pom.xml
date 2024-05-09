@@ -22,9 +22,9 @@ under the License.
         <artifactId>sampleapp</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
-    <artifactId>sampleapp.backend</artifactId>
+    <artifactId>sampleapp.backendx</artifactId>
 
-    <name>Sampleapp business-logikk</name>
+    <name>Sampleapp business logic</name>
 
     <properties>
         <karaf-feature-name>sampleapp-backend</karaf-feature-name>
