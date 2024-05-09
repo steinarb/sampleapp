@@ -42,7 +42,7 @@ class LoginresultTest {
         assertTrue(bean.success());
         assertEquals(errormessage, bean.errormessage());
         assertTrue(bean.authorized());
-        assertEquals(username, bean.user().getUsername());
+        assertEquals(username, bean.user().username());
         assertEquals(originalRequestUrl, bean.originalRequestUrl());
     }
 

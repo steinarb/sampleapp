@@ -49,7 +49,7 @@ public class SampleappTestdata {
     }
 
     void addRolesForTestusers() {
-        var sampleappuser = useradmin.getRoles().stream().filter(r -> SAMPLEAPPUSER_ROLE.equals(r.getRolename())).findFirst().get(); // NOSONAR testkode
+        var sampleappuser = useradmin.getRoles().stream().filter(r -> SAMPLEAPPUSER_ROLE.equals(r.rolename())).findFirst().get(); // NOSONAR testkode
         var jad = useradmin.getUser("jad");
         useradmin.addUserRoles(UserRoles.with().user(jad).roles(Arrays.asList(sampleappuser)).build());
     }

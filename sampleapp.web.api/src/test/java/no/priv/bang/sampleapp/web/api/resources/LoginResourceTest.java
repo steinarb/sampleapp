@@ -65,7 +65,7 @@ class LoginResourceTest extends ShiroTestBase {
         var credentials = Credentials.with().username(username).password(password).build();
         var resultat = resource.login(locale, credentials);
         assertTrue(resultat.success());
-        assertEquals(username, resultat.user().getUsername());
+        assertEquals(username, resultat.user().username());
         assertEquals("/", resultat.originalRequestUrl());
     }
 
@@ -92,7 +92,7 @@ class LoginResourceTest extends ShiroTestBase {
         var credentials = Credentials.with().username(username).password(password).build();
         var resultat = resource.login(locale, credentials);
         assertTrue(resultat.success());
-        assertEquals(username, resultat.user().getUsername());
+        assertEquals(username, resultat.user().username());
         assertEquals("/counter", resultat.originalRequestUrl());
     }
 
@@ -119,7 +119,7 @@ class LoginResourceTest extends ShiroTestBase {
         var credentials = Credentials.with().username(username).password(password).build();
         var resultat = resource.login(locale, credentials);
         assertTrue(resultat.success());
-        assertEquals(username, resultat.user().getUsername());
+        assertEquals(username, resultat.user().username());
         assertEquals("/", resultat.originalRequestUrl());
     }
 
@@ -241,7 +241,7 @@ class LoginResourceTest extends ShiroTestBase {
         var resource = new LoginResource();
         resource.useradmin = useradmin;
         var user = resource.findUserSafely("null");
-        assertNull(user.getUsername());
+        assertNull(user.username());
     }
 
     @Test
