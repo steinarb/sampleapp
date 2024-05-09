@@ -28,7 +28,7 @@ class CounterBeanTest {
             .counter(counter)
             .build();
         assertNotNull(bean);
-        assertEquals(counter, bean.getCounter());
+        assertEquals(counter, bean.counter());
     }
 
 }

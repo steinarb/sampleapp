@@ -253,7 +253,7 @@ class SampleappWebApiTest extends ShiroTestBase {
         servlet.service(request, response);
         assertEquals(200, response.getStatus());
         var bean = mapper.readValue(response.getOutputStreamBinaryContent(), CounterBean.class);
-        assertEquals(counterValue, bean.getCounter());
+        assertEquals(counterValue, bean.counter());
     }
 
     @Test
@@ -286,7 +286,7 @@ class SampleappWebApiTest extends ShiroTestBase {
         servlet.service(request, response);
         assertEquals(200, response.getStatus());
         var bean = mapper.readValue(response.getOutputStreamBinaryContent(), CounterBean.class);
-        assertEquals(counterValue, bean.getCounter());
+        assertEquals(counterValue, bean.counter());
     }
 
     @Test
@@ -319,7 +319,7 @@ class SampleappWebApiTest extends ShiroTestBase {
         servlet.service(request, response);
         assertEquals(200, response.getStatus());
         var bean = mapper.readValue(response.getOutputStreamBinaryContent(), CounterBean.class);
-        assertEquals(counterValue, bean.getCounter());
+        assertEquals(counterValue, bean.counter());
     }
 
     @Test

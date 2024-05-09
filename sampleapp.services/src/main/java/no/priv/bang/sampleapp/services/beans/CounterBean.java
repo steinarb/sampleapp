@@ -21,10 +21,6 @@ public record CounterBean(Integer counter) {
         return new Builder();
     }
 
-    public Integer getCounter() {
-        return counter;
-    }
-
     public static class Builder {
         private int counter;
 

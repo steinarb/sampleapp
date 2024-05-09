@@ -80,7 +80,7 @@ class SampleappServiceProviderTest {
         var defaultInitialCounterValue = 0;
         var counter = provider.getCounter("jad");
         assertThat(counter).isNotEmpty();
-        assertEquals(defaultInitialCounterValue, counter.get().getCounter());
+        assertEquals(defaultInitialCounterValue, counter.get().counter());
         var secondAccountCreate = provider.lazilyCreateAccount("jad");
         assertFalse(secondAccountCreate);
         var accountsAfterSecondCreate = provider.getAccounts();
@@ -174,9 +174,9 @@ class SampleappServiceProviderTest {
         assertThat(updatedIncrementStep.counterIncrementStep()).isGreaterThan(initialCounterIncrementStep.counterIncrementStep());
 
         // Increment and verify the expected result
-        var expectedIncrementedValue = initialCounterValue.getCounter() + updatedIncrementStep.counterIncrementStep();
+        var expectedIncrementedValue = initialCounterValue.counter() + updatedIncrementStep.counterIncrementStep();
         var incrementedValue = provider.incrementCounter("on").orElseThrow();
-        assertEquals(expectedIncrementedValue, incrementedValue.getCounter());
+        assertEquals(expectedIncrementedValue, incrementedValue.counter());
 
         // Decrement and verify the expected result
         var decrementedValue = provider.decrementCounter("on").orElseThrow();

@@ -89,7 +89,7 @@ class CounterResourceTest extends ShiroTestBase {
         var username = "jad";
         var bean = resource.getCounter(username);
         assertNotNull(bean);
-        assertEquals(counterValue, bean.getCounter());
+        assertEquals(counterValue, bean.counter());
     }
 
     @Test
@@ -112,7 +112,7 @@ class CounterResourceTest extends ShiroTestBase {
         var username = "jad";
         var bean = resource.incrementCounter(username);
         assertNotNull(bean);
-        assertEquals(counterValue, bean.getCounter());
+        assertEquals(counterValue, bean.counter());
     }
 
     @Test
@@ -126,7 +126,7 @@ class CounterResourceTest extends ShiroTestBase {
         var username = "jad";
         var bean = resource.decrementCounter(username);
         assertNotNull(bean);
-        assertEquals(counterValue, bean.getCounter());
+        assertEquals(counterValue, bean.counter());
     }
 
 }
