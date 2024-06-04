@@ -114,8 +114,8 @@ public class SampleappServiceProvider implements SampleappService {
             try(var statement = connection.createStatement()) {
                 try(var results = statement.executeQuery("select * from sampleapp_accounts")) {
                     while(results.next()) {
-                        var accountId = results.getInt(1);
-                        var username = results.getString(2);
+                        var accountId = results.getInt("account_id");
+                        var username = results.getString("username");
                         var user = useradmin.getUser(username);
                         var account = Account.with().accountId(accountId).user(user).build();
                         accounts.add(account);
@@ -243,7 +243,7 @@ public class SampleappServiceProvider implements SampleappService {
             findAccount.setString(1, username);
             try(var results = findAccount.executeQuery()) {
                 while (results.next()) {
-                    return results.getInt(1);
+                    return results.getInt("account_id");
                 }
             }
         }
@@ -256,7 +256,7 @@ public class SampleappServiceProvider implements SampleappService {
             statement.setString(1, username);
             try(var results = statement.executeQuery()) {
                 while(results.next()) {
-                    return results.getInt(3);
+                    return results.getInt("counter_increment_step");
                 }
             }
         }
@@ -269,7 +269,7 @@ public class SampleappServiceProvider implements SampleappService {
             statement.setString(1, username);
             try(var results = statement.executeQuery()) {
                 while(results.next()) {
-                    return results.getInt(3);
+                    return results.getInt("counter");
                 }
             }
         }
