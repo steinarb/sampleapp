@@ -29,8 +29,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.MediaType;
@@ -363,7 +361,7 @@ class SampleappWebApiTest extends ShiroTestBase {
     void testAvailableLocales() throws Exception {
         // Set up REST API servlet with mocked services
         var sampleapp = mock(SampleappService.class);
-        when(sampleapp.availableLocales()).thenReturn(Collections.singletonList(Locale.forLanguageTag("nb-NO")).stream().map(l -> LocaleBean.with().locale(l).build()).collect(Collectors.toList()));
+        when(sampleapp.availableLocales()).thenReturn(Collections.singletonList(Locale.forLanguageTag("nb-NO")).stream().map(l -> LocaleBean.with().locale(l).build()).toList());
         MockLogService logservice = new MockLogService();
 
         var useradmin = mock(UserManagementService.class);
