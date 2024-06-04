@@ -112,7 +112,7 @@ public class SampleappServiceProvider implements SampleappService {
         var accounts = new ArrayList<Account>();
         try(var connection = datasource.getConnection()) {
             try(var statement = connection.createStatement()) {
-                try(var results = statement.executeQuery("select * from sampleapp_accounts")) {
+                try(var results = statement.executeQuery("select account_id, username from sampleapp_accounts")) {
                     while(results.next()) {
                         var accountId = results.getInt("account_id");
                         var username = results.getString("username");
@@ -239,7 +239,7 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     private int findAccount(Connection connection, String username) throws SQLException {
-        try(var findAccount = connection.prepareStatement("select * from sampleapp_accounts where username=?")) {
+        try(var findAccount = connection.prepareStatement("select account_id from sampleapp_accounts where username=?")) {
             findAccount.setString(1, username);
             try(var results = findAccount.executeQuery()) {
                 while (results.next()) {
@@ -252,7 +252,7 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     private Integer findCounterIncrementStep(Connection connection, String username) throws SQLException {
-        try(var statement = connection.prepareStatement("select * from counter_increment_steps c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
+        try(var statement = connection.prepareStatement("select counter_increment_step from counter_increment_steps c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
             statement.setString(1, username);
             try(var results = statement.executeQuery()) {
                 while(results.next()) {
@@ -265,7 +265,7 @@ public class SampleappServiceProvider implements SampleappService {
     }
 
     private Integer findCounter(Connection connection, String username) throws SQLException {
-        try(var statement = connection.prepareStatement("select * from counters c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
+        try(var statement = connection.prepareStatement("select counter from counters c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
             statement.setString(1, username);
             try(var results = statement.executeQuery()) {
                 while(results.next()) {
