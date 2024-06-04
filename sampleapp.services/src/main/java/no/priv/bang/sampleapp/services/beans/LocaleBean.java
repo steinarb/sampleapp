@@ -31,7 +31,7 @@ public record LocaleBean(String code, String displayLanguage) {
         private Builder() {}
 
         public LocaleBean build() {
-            var locale = ofNullable(this.locale).map(l -> l.toString()).orElse(null);
+            var locale = ofNullable(this.locale).map(Object::toString).orElse(null);
             var displayLanguage = ofNullable(this.locale).map(l -> l.getDisplayLanguage(l)).orElse(null);
             return new LocaleBean(locale, displayLanguage);
         }

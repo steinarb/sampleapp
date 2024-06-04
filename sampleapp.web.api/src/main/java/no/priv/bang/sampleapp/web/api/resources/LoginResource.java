@@ -39,6 +39,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.web.util.SavedRequest;
 import org.apache.shiro.web.util.WebUtils;
 import org.osgi.service.log.LogService;
 import org.osgi.service.log.Logger;
@@ -87,7 +88,7 @@ public class LoginResource {
             var savedRequest = Optional.ofNullable(WebUtils.getSavedRequest(request));
             var contextpath = webcontext.getContextPath();
             var originalRequestUrl =  savedRequest
-                .map(request -> request.getRequestUrl())
+                .map(SavedRequest::getRequestUrl)
                 .map(url -> url.replace(contextpath, ""))
                 .orElse("/");
             var authorized = subject.hasRole(SAMPLEAPPUSER_ROLE);
