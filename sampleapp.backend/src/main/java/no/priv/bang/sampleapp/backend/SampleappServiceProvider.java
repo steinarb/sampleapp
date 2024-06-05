@@ -15,6 +15,7 @@
  */
 package no.priv.bang.sampleapp.backend;
 
+import static java.util.Optional.empty;
 import static no.priv.bang.sampleapp.services.SampleappConstants.*;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -133,19 +134,13 @@ public class SampleappServiceProvider implements SampleappService {
     @Override
     public Optional<CounterIncrementStepBean> getCounterIncrementStep(String username) {
         try(var connection = datasource.getConnection()) {
-            var counterIncrementStep = findCounterIncrementStep(connection, username);
-            if (counterIncrementStep != null) {
-                var bean = CounterIncrementStepBean.with()
-                    .username(username)
-                    .counterIncrementStep(counterIncrementStep)
-                    .build();
-                return Optional.of(bean);
-            }
+            return findCounterIncrementStep(connection, username)
+                .map(step -> CounterIncrementStepBean.with().username(username).counterIncrementStep(step).build());
         } catch (SQLException e) {
             logger.error("No increment steps could be found for user \"{}\"", username, e);
         }
 
-        return Optional.empty();
+        return empty();
     }
 
     @Override
@@ -159,7 +154,7 @@ public class SampleappServiceProvider implements SampleappService {
             }
         } catch (SQLException e) {
             logger.error("Unable to update increment step for user \"{}\"", username, e);
-            return Optional.empty();
+            return empty();
         }
 
         return getCounterIncrementStep(username);
@@ -179,11 +174,11 @@ public class SampleappServiceProvider implements SampleappService {
     @Override
     public Optional<CounterBean> incrementCounter(String username) {
         try(var connection = datasource.getConnection()) {
-            var incrementStep = findCounterIncrementStep(connection, username);
-            var counter = findCounter(connection, username);
+            var incrementStep = findCounterIncrementStep(connection, username).orElse(0);
+            var updatedcounter = findCounter(connection, username).map(counter -> counter + incrementStep).orElse(0);
 
             try(var statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
-                statement.setInt(1, counter + incrementStep);
+                statement.setInt(1, updatedcounter);
                 statement.setString(2, username);
                 statement.executeUpdate();
             }
@@ -193,17 +188,17 @@ public class SampleappServiceProvider implements SampleappService {
             logger.warn("Failed to increment counter for user \"{}\"", username, e);
         }
 
-        return Optional.empty();
+        return empty();
     }
 
     @Override
     public Optional<CounterBean> decrementCounter(String username) {
         try(var connection = datasource.getConnection()) {
-            var incrementStep = findCounterIncrementStep(connection, username);
-            var counter = findCounter(connection, username);
+            var incrementStep = findCounterIncrementStep(connection, username).orElse(0);
+            var updatedCounter = findCounter(connection, username).map(counter -> counter - incrementStep).orElse(0);
 
             try(var statement = connection.prepareStatement("update counters set counter=? where account_id in (select account_id from sampleapp_accounts where username=?)")) {
-                statement.setInt(1, counter - incrementStep);
+                statement.setInt(1, updatedCounter);
                 statement.setString(2, username);
                 statement.executeUpdate();
             }
@@ -251,37 +246,34 @@ public class SampleappServiceProvider implements SampleappService {
         return -1;
     }
 
-    private Integer findCounterIncrementStep(Connection connection, String username) throws SQLException {
+    private Optional<Integer> findCounterIncrementStep(Connection connection, String username) throws SQLException {
         try(var statement = connection.prepareStatement("select counter_increment_step from counter_increment_steps c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
             statement.setString(1, username);
             try(var results = statement.executeQuery()) {
                 while(results.next()) {
-                    return results.getInt("counter_increment_step");
+                    return Optional.of(results.getInt("counter_increment_step"));
                 }
             }
         }
 
-        return null;
+        return empty();
     }
 
-    private Integer findCounter(Connection connection, String username) throws SQLException {
+    private Optional<Integer> findCounter(Connection connection, String username) throws SQLException {
         try(var statement = connection.prepareStatement("select counter from counters c join sampleapp_accounts a on c.account_id=a.account_id where a.username=?")) {
             statement.setString(1, username);
             try(var results = statement.executeQuery()) {
                 while(results.next()) {
-                    return results.getInt("counter");
+                    return Optional.of(results.getInt("counter"));
                 }
             }
         }
 
-        return null;
+        return empty();
     }
 
     private Optional<CounterBean> findAndCreateCounterBean(Connection connection, String username) throws SQLException {
-        var counter = findCounter(connection, username);
-        return counter != null ?
-            Optional.of(CounterBean.with().counter(counter).build()) :
-            Optional.empty();
+        return findCounter(connection, username).map(c -> CounterBean.with().counter(c).build());
     }
 
     private void addRolesIfNotpresent() {
