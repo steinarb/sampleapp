@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2023 Steinar Bang
+ * Copyright 2021-2024 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,12 @@
  */
 package no.priv.bang.sampleapp.db.liquibase;
 
+import static liquibase.Scope.Attr.database;
+import static liquibase.Scope.Attr.resourceAccessor;
+import static liquibase.command.core.UpdateCommandStep.CHANGELOG_FILE_ARG;
+import static liquibase.command.core.helpers.DatabaseChangelogCommandStep.CHANGELOG_PARAMETERS;
+import static liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep.DATABASE_ARG;
+
 import java.sql.Connection;
 import java.util.Map;
 
@@ -22,9 +28,6 @@ import liquibase.Scope;
 import liquibase.Scope.ScopedRunner;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.command.CommandScope;
-import liquibase.command.core.UpdateCommandStep;
-import liquibase.command.core.helpers.DatabaseChangelogCommandStep;
-import liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
@@ -41,15 +44,15 @@ public class SampleappLiquibase {
     }
 
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
-        try (var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
+        try (var liquibaseDatabase = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
             Map<String, Object> scopeObjects = Map.of(
-                Scope.Attr.database.name(), database,
-                Scope.Attr.resourceAccessor.name(), new ClassLoaderResourceAccessor(classLoader));
+                database.name(), liquibaseDatabase,
+                resourceAccessor.name(), new ClassLoaderResourceAccessor(classLoader));
 
             Scope.child(scopeObjects, (ScopedRunner<?>) () -> new CommandScope("update")
-                        .addArgumentValue(DbUrlConnectionArgumentsCommandStep.DATABASE_ARG, database)
-                        .addArgumentValue(UpdateCommandStep.CHANGELOG_FILE_ARG, changelistClasspathResource)
-                        .addArgumentValue(DatabaseChangelogCommandStep.CHANGELOG_PARAMETERS, new ChangeLogParameters(database))
+                        .addArgumentValue(DATABASE_ARG, liquibaseDatabase)
+                        .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
+                        .addArgumentValue(CHANGELOG_PARAMETERS, new ChangeLogParameters(liquibaseDatabase))
                         .execute());
         } catch (LiquibaseException e) {
             throw e;
