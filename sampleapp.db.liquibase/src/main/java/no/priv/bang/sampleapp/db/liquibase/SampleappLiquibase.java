@@ -42,11 +42,11 @@ public class SampleappLiquibase {
     }
 
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
-        try (var liquibaseDatabase = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
+        try (var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
             Scope.child(scopeObjects(classLoader), () -> new CommandScope("update")
-                        .addArgumentValue(DATABASE_ARG, liquibaseDatabase)
+                        .addArgumentValue(DATABASE_ARG, database)
                         .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
-                        .addArgumentValue(CHANGELOG_PARAMETERS, new ChangeLogParameters(liquibaseDatabase))
+                        .addArgumentValue(CHANGELOG_PARAMETERS, new ChangeLogParameters(database))
                         .execute());
         } catch (LiquibaseException e) {
             throw e;
