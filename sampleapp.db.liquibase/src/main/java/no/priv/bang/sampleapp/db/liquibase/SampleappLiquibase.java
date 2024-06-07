@@ -15,7 +15,6 @@
  */
 package no.priv.bang.sampleapp.db.liquibase;
 
-import static liquibase.Scope.Attr.database;
 import static liquibase.Scope.Attr.resourceAccessor;
 import static liquibase.command.core.UpdateCommandStep.CHANGELOG_FILE_ARG;
 import static liquibase.command.core.helpers.DatabaseChangelogCommandStep.CHANGELOG_PARAMETERS;
@@ -27,7 +26,6 @@ import java.util.Map;
 import liquibase.Scope;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.command.CommandScope;
-import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
@@ -45,7 +43,7 @@ public class SampleappLiquibase {
 
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
         try (var liquibaseDatabase = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
-            Scope.child(scopeObjects(classLoader, liquibaseDatabase), () -> {
+            Scope.child(scopeObjects(classLoader), () -> {
                     new CommandScope("update")
                         .addArgumentValue(DATABASE_ARG, liquibaseDatabase)
                         .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
@@ -60,10 +58,8 @@ public class SampleappLiquibase {
         }
     }
 
-    private Map<String, Object> scopeObjects(ClassLoader classLoader, Database liquibaseDatabase) {
-        return Map.of(
-            database.name(), liquibaseDatabase,
-            resourceAccessor.name(), new ClassLoaderResourceAccessor(classLoader));
+    private Map<String, Object> scopeObjects(ClassLoader classLoader) {
+        return Map.of(resourceAccessor.name(), new ClassLoaderResourceAccessor(classLoader));
     }
 
     private void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource) throws LiquibaseException {
