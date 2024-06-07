@@ -15,23 +15,16 @@
  */
 package no.priv.bang.sampleapp.db.liquibase;
 
-import static liquibase.Scope.Attr.database;
-import static liquibase.Scope.Attr.resourceAccessor;
 import static liquibase.command.core.UpdateCommandStep.CHANGELOG_FILE_ARG;
 import static liquibase.command.core.helpers.DatabaseChangelogCommandStep.CHANGELOG_PARAMETERS;
 import static liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep.DATABASE_ARG;
 
 import java.sql.Connection;
-import java.util.Map;
-
-import liquibase.Scope;
-import liquibase.Scope.ScopedRunner;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.command.CommandScope;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.LiquibaseException;
-import liquibase.resource.ClassLoaderResourceAccessor;
 
 public class SampleappLiquibase {
 
@@ -45,15 +38,11 @@ public class SampleappLiquibase {
 
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
         try (var liquibaseDatabase = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
-            Map<String, Object> scopeObjects = Map.of(
-                database.name(), liquibaseDatabase,
-                resourceAccessor.name(), new ClassLoaderResourceAccessor(classLoader));
-
-            Scope.child(scopeObjects, (ScopedRunner<?>) () -> new CommandScope("update")
-                        .addArgumentValue(DATABASE_ARG, liquibaseDatabase)
-                        .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
-                        .addArgumentValue(CHANGELOG_PARAMETERS, new ChangeLogParameters(liquibaseDatabase))
-                        .execute());
+            new CommandScope("update")
+                .addArgumentValue(DATABASE_ARG, liquibaseDatabase)
+                .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
+                .addArgumentValue(CHANGELOG_PARAMETERS, new ChangeLogParameters(liquibaseDatabase))
+                .execute();
         } catch (LiquibaseException e) {
             throw e;
         } catch (Exception e) {
