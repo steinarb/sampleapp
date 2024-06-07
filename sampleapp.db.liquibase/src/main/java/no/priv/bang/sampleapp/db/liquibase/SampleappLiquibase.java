@@ -25,7 +25,6 @@ import java.sql.Connection;
 import java.util.Map;
 
 import liquibase.Scope;
-import liquibase.Scope.ScopedRunner;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.command.CommandScope;
 import liquibase.database.Database;
@@ -46,12 +45,13 @@ public class SampleappLiquibase {
 
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
         try (var liquibaseDatabase = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
-            Scope.child(scopeObjects(classLoader, liquibaseDatabase),
-                        (ScopedRunner<?>) () -> new CommandScope("update")
+            Scope.child(scopeObjects(classLoader, liquibaseDatabase), () -> {
+                    new CommandScope("update")
                         .addArgumentValue(DATABASE_ARG, liquibaseDatabase)
                         .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
                         .addArgumentValue(CHANGELOG_PARAMETERS, new ChangeLogParameters(liquibaseDatabase))
-                        .execute());
+                        .execute();
+                });
         } catch (LiquibaseException e) {
             throw e;
         } catch (Exception e) {
