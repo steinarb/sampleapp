@@ -47,4 +47,7 @@ export const DISPLAY_TEXTS_REQUEST = createAction('DISPLAY_TEXTS_REQUEST');
 export const DISPLAY_TEXTS_RECEIVE = createAction('DISPLAY_TEXTS_RECEIVE');
 export const DISPLAY_TEXTS_FAILURE = createAction('DISPLAY_TEXTS_FAILURE');
 
+export const UNAUTHORIZED_401 = createAction('UNAUTHORIZED_401');
+export const FORBIDDEN_403 = createAction('FORBIDDEN_403');
+
 export const SET_BASENAME = createAction('SET_BASENAME');
