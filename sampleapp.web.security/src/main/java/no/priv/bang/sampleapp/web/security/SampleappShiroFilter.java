@@ -63,6 +63,7 @@ public class SampleappShiroFilter extends AbstractShiroFilter { // NOSONAR
 
     @Activate
     public void activate() {
+        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         var environment = new IniWebEnvironment();
         environment.setIni(INI_FILE);
         environment.setServletContext(getServletContext());
