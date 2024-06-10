@@ -17,14 +17,12 @@ package no.priv.bang.sampleapp.db.liquibase;
 
 import static liquibase.Scope.Attr.resourceAccessor;
 import static liquibase.command.core.UpdateCommandStep.CHANGELOG_FILE_ARG;
-import static liquibase.command.core.helpers.DatabaseChangelogCommandStep.CHANGELOG_PARAMETERS;
 import static liquibase.command.core.helpers.DbUrlConnectionArgumentsCommandStep.DATABASE_ARG;
 
 import java.sql.Connection;
 import java.util.Map;
 
 import liquibase.Scope;
-import liquibase.changelog.ChangeLogParameters;
 import liquibase.command.CommandScope;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
@@ -44,10 +42,9 @@ public class SampleappLiquibase {
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
         try (var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
             Scope.child(scopeObjects(classLoader), () -> new CommandScope("update")
-                        .addArgumentValue(DATABASE_ARG, database)
-                        .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
-                        .addArgumentValue(CHANGELOG_PARAMETERS, new ChangeLogParameters(database))
-                        .execute());
+                .addArgumentValue(DATABASE_ARG, database)
+                .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
+                .execute());
         } catch (LiquibaseException e) {
             throw e;
         } catch (Exception e) {
