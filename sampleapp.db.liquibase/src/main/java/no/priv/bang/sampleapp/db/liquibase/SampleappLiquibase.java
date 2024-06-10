@@ -24,8 +24,10 @@ import java.util.Map;
 
 import liquibase.Scope;
 import liquibase.command.CommandScope;
+import liquibase.database.Database;
 import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
+import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.resource.ClassLoaderResourceAccessor;
 
@@ -40,7 +42,7 @@ public class SampleappLiquibase {
     }
 
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
-        try (var database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection))) {
+        try (var database = findCorrectDatabaseImplementation(connection)) {
             Scope.child(scopeObjects(classLoader), () -> new CommandScope("update")
                 .addArgumentValue(DATABASE_ARG, database)
                 .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
@@ -55,6 +57,10 @@ public class SampleappLiquibase {
 
     private Map<String, Object> scopeObjects(ClassLoader classLoader) {
         return Map.of(resourceAccessor.name(), new ClassLoaderResourceAccessor(classLoader));
+    }
+
+    private Database findCorrectDatabaseImplementation(Connection connection) throws DatabaseException {
+        return DatabaseFactory.getInstance().findCorrectDatabaseImplementation(new JdbcConnection(connection));
     }
 
     private void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource) throws LiquibaseException {
