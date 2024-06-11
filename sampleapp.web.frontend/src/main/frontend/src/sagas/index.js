@@ -13,6 +13,7 @@ import counterIncrementStepSaga from './counterIncrementStepSaga';
 import counterSaga from './counterSaga';
 import reloadOnLogoutSaga from './reloadOnLogoutSaga';
 import unauthorizedOrForbiddenSaga from './unauthorizedOrForbiddenSaga';
+import navigateToLoginOrUnauthorizedSaga from './navigateToLoginOrUnauthorizedSaga';
 
 export default function* rootSaga() {
     yield all([
@@ -29,5 +30,6 @@ export default function* rootSaga() {
         fork(counterSaga),
         fork(reloadOnLogoutSaga),
         fork(unauthorizedOrForbiddenSaga),
+        fork(navigateToLoginOrUnauthorizedSaga),
     ]);
 }
