@@ -43,7 +43,7 @@ public class SampleappLiquibase {
 
     public void applyLiquibaseChangelist(Connection connection, String changelistClasspathResource, ClassLoader classLoader) throws LiquibaseException {
         try (var database = findCorrectDatabaseImplementation(connection)) {
-            Scope.child(scopeObjects(classLoader), () -> new CommandScope("update")
+            Scope.child(scopeObjectsWithClassPathResourceAccessor(classLoader), () -> new CommandScope("update")
                 .addArgumentValue(DATABASE_ARG, database)
                 .addArgumentValue(CHANGELOG_FILE_ARG, changelistClasspathResource)
                 .execute());
@@ -55,7 +55,7 @@ public class SampleappLiquibase {
         }
     }
 
-    private Map<String, Object> scopeObjects(ClassLoader classLoader) {
+    private Map<String, Object> scopeObjectsWithClassPathResourceAccessor(ClassLoader classLoader) {
         return Map.of(resourceAccessor.name(), new ClassLoaderResourceAccessor(classLoader));
     }
 
