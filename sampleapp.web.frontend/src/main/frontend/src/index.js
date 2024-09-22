@@ -18,7 +18,7 @@ import {
     SET_BASENAME,
 } from './reduxactions';
 
-const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.includes('bundle.js'))[0].replace('/bundle.js', '');
+const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.includes('assets/'))[0].replace(/\/assets\/.*/, '');
 const basename = new URL(baseUrl).pathname;
 axios.defaults.baseURL = baseUrl;
 const sagaMiddleware = createSagaMiddleware();
