@@ -17,7 +17,7 @@ export default function* displayTextsSaga() {
 function* receiveDisplayTextsSaga(action) {
     try {
         const response = yield call(doDisplayTexts, action.payload);
-        const displayTexts = (response.headers['content-type'] == 'application/json') ? response.data : {};
+        const displayTexts = (response.headers['content-type'] === 'application/json') ? response.data : {};
         yield put(DISPLAY_TEXTS_RECEIVE(displayTexts));
     } catch (error) {
         yield put(DISPLAY_TEXTS_FAILURE(error));

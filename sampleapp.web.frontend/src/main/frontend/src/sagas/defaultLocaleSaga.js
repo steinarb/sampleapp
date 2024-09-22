@@ -15,7 +15,7 @@ export default function* defaultLocaleSaga() {
 function* receiveDefaultLocaleSaga() {
     try {
         const response = yield call(doDefaultLocale);
-        const defaultLocale = (response.headers['content-type'] == 'application/json') ? response.data : '';
+        const defaultLocale = (response.headers['content-type'] === 'application/json') ? response.data : '';
         yield put(DEFAULT_LOCALE_RECEIVE(defaultLocale));
     } catch (error) {
         yield put(DEFAULT_LOCALE_FAILURE(error));

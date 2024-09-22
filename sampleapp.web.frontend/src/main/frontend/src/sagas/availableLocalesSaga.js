@@ -15,7 +15,7 @@ export default function* availableLocalesSaga() {
 function* receiveAvailableLocalesSaga() {
     try {
         const response = yield call(doAvailableLocales);
-        const availableLocales = (response.headers['content-type'] == 'application/json') ? response.data : [];
+        const availableLocales = (response.headers['content-type'] === 'application/json') ? response.data : [];
         yield put(AVAILABLE_LOCALES_RECEIVE(availableLocales));
     } catch (error) {
         yield put(AVAILABLE_LOCALES_FAILURE(error));
