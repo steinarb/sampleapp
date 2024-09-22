@@ -7,5 +7,5 @@ export default function* reloadOnLogoutSaga() {
 
 function reloadPageInBrowserOnSuccessfulLogout() {
     // Reload page in browser to let shiro handle redirect to login page
-    location.reload();
+    window.location.reload();
 }

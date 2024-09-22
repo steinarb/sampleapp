@@ -13,7 +13,7 @@ export default function Login() {
 
     if (loginresult.success) {
         const originalRequestUrl = findReloadUrl(basename, loginresult.originalRequestUrl);
-        location.href = originalRequestUrl;
+        window.location.href = originalRequestUrl;
     }
 
     return (

@@ -10,5 +10,5 @@ export default function* reloadWhenAuthenticatedOrUnauthorizedSaga() {
 }
 
 function reloadCurrentPage() {
-    location.reload();
+    window.location.reload();
 }
