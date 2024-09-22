@@ -9,7 +9,7 @@ import displayTexts from './displayTextsReducer';
 import errors from './errorsReducer';
 import basename from './basenameReducer';
 
-export default (routerReducer) => combineReducers({
+const combinedReducers = (routerReducer) => combineReducers({
     router: routerReducer,
     loginresult,
     accounts,
@@ -21,3 +21,5 @@ export default (routerReducer) => combineReducers({
     errors,
     basename,
 });
+
+export default combinedReducers;
