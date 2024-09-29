@@ -1,9 +1,9 @@
-import eslint from 'vite-plugin-eslint';
 import { defineConfig } from 'vite';
+import eslintPlugin from "@nabla/vite-plugin-eslint";
 
 export default defineConfig({
     minified: false,
-    plugins: [eslint()],
+    plugins: [eslintPlugin()],
     build: {
         manifest: true,
         rollupOptions: {
