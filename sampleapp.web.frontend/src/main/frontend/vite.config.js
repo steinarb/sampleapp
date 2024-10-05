@@ -2,9 +2,9 @@ import { defineConfig } from 'vite';
 import eslintPlugin from "@nabla/vite-plugin-eslint";
 
 export default defineConfig({
-    minified: false,
     plugins: [eslintPlugin()],
     build: {
+        minify: false,
         manifest: true,
         rollupOptions: {
             // overwrite default .html entry
