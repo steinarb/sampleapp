@@ -23,6 +23,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import javax.sql.DataSource;
+
 import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
@@ -35,10 +37,11 @@ class SampleappLiquibaseTest {
     @Test
     void testCreateSchema() throws Exception {
         var sampleappLiquibase = new SampleappLiquibase();
+        var datasource = createDataSource("sampleapp");
 
-        sampleappLiquibase.createInitialSchema(createConnection("sampleapp"));
+        sampleappLiquibase.createInitialSchema(datasource.getConnection());
 
-        try(var connection = createConnection("sampleapp")) {
+        try(var connection = datasource.getConnection()) {
             addAccounts(connection);
             assertAccounts(connection);
             addCounterIncrementSteps(connection);
@@ -50,12 +53,13 @@ class SampleappLiquibaseTest {
             assertThrows(SQLException.class,() -> addCounter(connection, accountIdNotMatchingAccount, 4));
         }
 
-        sampleappLiquibase.updateSchema(createConnection("sampleapp"));
+        sampleappLiquibase.updateSchema(datasource.getConnection());
     }
 
     @Test
     void testCreateSchemaAndFail() throws Exception {
-        var connection = spy(createConnection("sampleapp1"));
+        var datasource = createDataSource("sampleapp");
+        var connection = spy(datasource.getConnection());
         // A Derby JDBC connection wrapped in a Mockito spy() fails om Connection.setAutoClosable()
 
         var sampleappLiquibase = new SampleappLiquibase();
@@ -68,7 +72,8 @@ class SampleappLiquibaseTest {
 
     @Test
     void testCreateSchemaAndFailOnConnectionClose() throws Exception {
-        var connection = spy(createConnection("sampleapp2"));
+        var datasource = createDataSource("sampleapp2");
+        var connection = spy(datasource.getConnection());
         doNothing().when(connection).setAutoCommit(anyBoolean());
         doThrow(Exception.class).when(connection).close();
 
@@ -166,11 +171,11 @@ class SampleappLiquibaseTest {
         return -1;
     }
 
-    private Connection createConnection(String dbname) throws Exception {
+    private DataSource createDataSource(String dbname) throws Exception {
         var properties = new Properties();
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:" + dbname + ";create=true");
         var dataSource = derbyDataSourceFactory.createDataSource(properties);
-        return dataSource.getConnection();
+        return dataSource;
     }
 
 }
