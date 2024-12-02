@@ -17,11 +17,14 @@ package no.priv.bang.sampleapp.db.liquibase.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.db.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
+
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
@@ -31,11 +34,17 @@ class SampleappTestDbLiquibaseRunnerTest {
     @Test
     void testCreateAndVerifySomeDataInSomeTables() throws Exception {
         var datasource = createDataSource("sampleapp");
+        var assertjConnection = AssertDbConnectionFactory.of(datasource).create();
 
         var runner = new SampleappTestDbLiquibaseRunner();
         runner.activate();
         runner.prepare(datasource);
-        assertAccounts(datasource);
+        var accounts1 = assertjConnection.table("sampleapp_accounts").build();
+        assertThat(accounts1).exists().isEmpty();
+        var incrementSteps1 = assertjConnection.table("counter_increment_steps").build();
+        assertThat(incrementSteps1).exists().isEmpty();
+        var counters1 = assertjConnection.table("counters").build();
+        assertThat(counters1).exists().isEmpty();
     }
 
     @Test
@@ -112,20 +121,6 @@ class SampleappTestDbLiquibaseRunnerTest {
             SQLException.class,
             () -> runner.prepare(datasource));
         assertThat(e.getMessage()).startsWith("Error updating sampleapp test database schema");
-    }
-
-    private void assertAccounts(DataSource datasource) throws Exception {
-        var resultcount = 0;
-        try (var connection = datasource.getConnection()) {
-            try(var statement = connection.prepareStatement("select * from sampleapp_accounts")) {
-                try (var results = statement.executeQuery()) {
-                    while (results.next()) {
-                        ++resultcount;
-                    }
-                }
-            }
-        }
-        assertEquals(0, resultcount);
     }
 
     private DataSource createDataSource(String dbname) throws SQLException {

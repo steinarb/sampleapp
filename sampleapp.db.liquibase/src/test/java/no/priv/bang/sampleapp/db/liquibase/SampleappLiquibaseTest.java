@@ -16,7 +16,8 @@
 package no.priv.bang.sampleapp.db.liquibase;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.db.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
@@ -25,6 +26,7 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
+import org.assertj.db.type.AssertDbConnectionFactory;
 import org.junit.jupiter.api.Test;
 import org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory;
 import org.osgi.service.jdbc.DataSourceFactory;
@@ -38,18 +40,43 @@ class SampleappLiquibaseTest {
     void testCreateSchema() throws Exception {
         var sampleappLiquibase = new SampleappLiquibase();
         var datasource = createDataSource("sampleapp");
+        var assertjConnection = AssertDbConnectionFactory.of(datasource).create();
 
         sampleappLiquibase.createInitialSchema(datasource.getConnection());
 
+        var accounts1 = assertjConnection.table("sampleapp_accounts").build();
+        assertThat(accounts1).exists().isEmpty();
+
         try(var connection = datasource.getConnection()) {
             addAccounts(connection);
-            assertAccounts(connection);
+        }
+
+        var accounts2 = assertjConnection.table("sampleapp_accounts").build();
+        assertThat(accounts2).hasNumberOfRows(1);
+
+        var incrementSteps1 = assertjConnection.table("counter_increment_steps").build();
+        assertThat(incrementSteps1).exists().isEmpty();
+
+        try(var connection = datasource.getConnection()) {
             addCounterIncrementSteps(connection);
-            assertCounterIncrementSteps(connection);
+        }
+
+        var incrementSteps2 = assertjConnection.table("counter_increment_steps").build();
+        assertThat(incrementSteps2).hasNumberOfRows(1);
+
+        var counters1 = assertjConnection.table("counters").build();
+        assertThat(counters1).exists().isEmpty();
+
+        try(var connection = datasource.getConnection()) {
+            addCounters(connection);
+        }
+
+        var counters2 = assertjConnection.table("counters").build();
+        assertThat(counters2).hasNumberOfRows(1);
+
+        try(var connection = datasource.getConnection()) {
             int accountIdNotMatchingAccount = 375;
             assertThrows(SQLException.class,() -> addCounterIncrementStep(connection, accountIdNotMatchingAccount, 10));
-            addCounters(connection);
-            assertCounters(connection);
             assertThrows(SQLException.class,() -> addCounter(connection, accountIdNotMatchingAccount, 4));
         }
 
@@ -89,44 +116,12 @@ class SampleappLiquibaseTest {
         addAccount(connection, "admin");
     }
 
-    private void assertAccounts(Connection connection) throws Exception {
-        var sql = "select count(*) from sampleapp_accounts";
-        try(var statement = connection.prepareStatement(sql)) {
-            try(var results = statement.executeQuery()) {
-                if (results.next()) {
-                    var count = results.getInt(1);
-                    assertEquals(1, count);
-                }
-            }
-        }
-    }
-
     private void addCounterIncrementSteps(Connection connection) throws Exception {
         addCounterIncrementStep(connection, findAccountId(connection, "admin"), 10);
     }
 
-    private void assertCounterIncrementSteps(Connection connection) throws Exception {
-        try(var statement = connection.createStatement()) {
-            try(var results = statement.executeQuery("select * from counter_increment_steps")) {
-                assertTrue(results.next());
-                assertEquals(findAccountId(connection, "admin"), results.getInt(2));
-                assertEquals(10, results.getInt(3));
-            }
-        }
-    }
-
     private void addCounters(Connection connection) throws Exception {
         addCounter(connection, findAccountId(connection, "admin"), 3);
-    }
-
-    private void assertCounters(Connection connection) throws Exception {
-        try(var statement = connection.createStatement()) {
-            try(var results = statement.executeQuery("select * from counters")) {
-                assertTrue(results.next());
-                assertEquals(findAccountId(connection, "admin"), results.getInt(2));
-                assertEquals(3, results.getInt(3));
-            }
-        }
     }
 
     private int addAccount(Connection connection, String username) throws Exception {
