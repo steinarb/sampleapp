@@ -46,7 +46,6 @@ under the License.
     </modules>
 
     <properties>
-        <assertj-db.version>3.0.0</assertj-db.version>
         <open-iconic.version>1.1.1</open-iconic.version>
         <sonar.cpd.exclusions>
             **/SampleappServiceProvider.java,
@@ -139,11 +138,6 @@ under the License.
                 <groupId>javax.xml.bind</groupId>
                 <artifactId>jaxb-api</artifactId>
                 <version>2.3.1</version>
-            </dependency>
-            <dependency>
-                <groupId>org.assertj</groupId>
-                <artifactId>assertj-db</artifactId>
-                <version>${assertj-db.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.webjars.bower</groupId>
