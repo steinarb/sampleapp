@@ -40,7 +40,7 @@ import no.priv.bang.osgiservice.users.Role;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
 class SampleappServiceProviderTest {
-    private final static Locale NB_NO = Locale.forLanguageTag("nb-no");
+    private static final Locale NB_NO = Locale.forLanguageTag("nb-no");
 
     private static DataSource datasource;
 

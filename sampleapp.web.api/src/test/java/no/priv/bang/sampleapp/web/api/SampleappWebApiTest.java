@@ -55,8 +55,8 @@ import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 import no.priv.bang.osgiservice.users.UserManagementService;
 
 class SampleappWebApiTest extends ShiroTestBase {
-    private final static Locale NB_NO = Locale.forLanguageTag("nb-no");
-    private final static Locale EN_UK = Locale.forLanguageTag("en-uk");
+    private static final Locale NB_NO = Locale.forLanguageTag("nb-no");
+    private static final Locale EN_UK = Locale.forLanguageTag("en-uk");
 
     public static final ObjectMapper mapper = new ObjectMapper()
         .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
