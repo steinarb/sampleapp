@@ -169,8 +169,7 @@ class SampleappLiquibaseTest {
     private DataSource createDataSource(String dbname) throws Exception {
         var properties = new Properties();
         properties.setProperty(DataSourceFactory.JDBC_URL, "jdbc:derby:memory:" + dbname + ";create=true");
-        var dataSource = derbyDataSourceFactory.createDataSource(properties);
-        return dataSource;
+        return derbyDataSourceFactory.createDataSource(properties);
     }
 
 }
