@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 public class SampleappIntegrationTest extends KarafTestSupport {
 
     @Configuration
+    @Override
     public Option[] config() {
         final var sampleappFeatureRepo = maven()
             .groupId("no.priv.bang.sampleapp")
