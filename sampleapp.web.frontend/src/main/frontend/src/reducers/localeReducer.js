@@ -1,14 +1,28 @@
 import { createReducer } from '@reduxjs/toolkit';
 import Cookies from 'js-cookie';
-import {
-    SELECT_LOCALE,
-} from '../reduxactions';
+import { SELECT_LOCALE } from '../reduxactions';
+import { api } from '../api';
 
 const currentLocale = Cookies.get('locale') || '';
 
 const localeReducer = createReducer(currentLocale, builder => {
     builder
-        .addCase(SELECT_LOCALE, (state, action) => action.payload);
+        .addCase(SELECT_LOCALE, (state, action) => updateLocaleCookie(action))
+        .addMatcher(api.endpoints.getDefaultlocale.matchFulfilled, (_, action) => setLocaleCookieIfNotPresentAndPutCookieValueAsLocale(action));
 });
 
 export default localeReducer;
+
+function setLocaleCookieIfNotPresentAndPutCookieValueAsLocale(action) {
+    const currentLocale = Cookies.get('locale');
+    if (!currentLocale) {
+        Cookies.set('locale', action.payload);
+    }
+
+    return Cookies.get('locale');
+}
+
+function updateLocaleCookie(action) {
+    Cookies.set('locale', action.payload);
+    return action.payload;
+}

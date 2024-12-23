@@ -1,18 +1,28 @@
 import React from 'react';
 import { NavLink } from 'react-router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import {
+    useGetDefaultlocaleQuery,
+    useGetLoginstateQuery,
+    useGetDisplaytextsQuery,
+    useGetAccountsQuery,
+    useGetLogoutMutation,
+} from '../api';
 import Container from './bootstrap/Container';
-import { LOGOUT_REQUEST } from '../reduxactions';
 import Locale from './Locale';
 import ChevronLeft from './bootstrap/ChevronLeft';
 
 
 export default function Home() {
-    const text = useSelector(state => state.displayTexts);
-    const loginresult = useSelector(state => state.loginresult);
-    const accountCount = useSelector(state => state.accounts.length);
-    const dispatch = useDispatch();
-    const { username, firstname, lastname, email } = loginresult.user;
+    const { isSuccess: defaultLocaleIsSuccess } = useGetDefaultlocaleQuery();
+    const locale = useSelector(state => state.locale);
+    const { data: loginresult = {} } = useGetLoginstateQuery(locale, { skip: !defaultLocaleIsSuccess });
+    const { data: accounts = [] } = useGetAccountsQuery();
+    const { data: text = [] } = useGetDisplaytextsQuery(locale, { skip: !defaultLocaleIsSuccess });
+    const accountCount = accounts.length;
+    const { username, firstname, lastname, email } = loginresult.user || {};
+    const [ getLogout ] = useGetLogoutMutation();
+    const onLogoutClicked = async () => { await getLogout() }
 
     return (
         <div>
@@ -48,7 +58,7 @@ export default function Home() {
                         </tr>
                     </tbody>
                 </table>
-                <p><button className="btn btn-primary" onClick={() => dispatch(LOGOUT_REQUEST())}>{text.logout}</button></p>
+                <p><button className="btn btn-primary" onClick={onLogoutClicked}>{text.logout}</button></p>
             </Container>
         </div>
     );

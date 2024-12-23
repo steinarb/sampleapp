@@ -1,15 +1,23 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { LOGOUT_REQUEST } from '../reduxactions';
+import { useSelector } from 'react-redux';
+import {
+    useGetDefaultlocaleQuery,
+    useGetLoginstateQuery,
+    useGetDisplaytextsQuery,
+    useGetLogoutMutation,
+} from '../api';
 import Container from './bootstrap/Container';
 import ChevronLeft from './bootstrap/ChevronLeft';
 
 
 export default function Unauthorized() {
-    const loginresult = useSelector(state => state.loginresult);
-    const text = useSelector(state => state.displayTexts);
+    const { isSuccess: defaultLocaleIsSuccess } = useGetDefaultlocaleQuery();
+    const locale = useSelector(state => state.locale);
+    const { data: loginresult = { user: {} } } = useGetLoginstateQuery(locale, { skip: !defaultLocaleIsSuccess });
+    const { data: text = [] } = useGetDisplaytextsQuery(locale, { skip: !defaultLocaleIsSuccess });
     const username = loginresult.user.username;
-    const dispatch = useDispatch();
+    const [ getLogout ] = useGetLogoutMutation();
+    const onLogoutClicked = async () => { await getLogout() }
 
     return (
         <div>
@@ -27,7 +35,7 @@ export default function Unauthorized() {
                     <div className="form-group row">
                         <div className="col-5"/>
                         <div className="col-7">
-                            <button className="btn btn-primary" onClick={() => dispatch(LOGOUT_REQUEST())}>{text.logout}</button>
+                            <button className="btn btn-primary" onClick={onLogoutClicked}>{text.logout}</button>
                         </div>
                     </div>
                 </form>

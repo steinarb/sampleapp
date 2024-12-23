@@ -1,6 +1,15 @@
 import React from 'react';
 import { NavLink } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+    useGetDefaultlocaleQuery,
+    useGetLoginstateQuery,
+    useGetDisplaytextsQuery,
+    useGetCounterIncrementStepQuery,
+    useGetCounterQuery,
+    useGetDecrementCounterMutation,
+    useGetIncrementCounterMutation,
+} from '../api';
 import Container from './bootstrap/Container';
 import {
     INCREMENT_STEP_FIELD_MODIFIED,
@@ -14,10 +23,18 @@ import Plus from './bootstrap/Plus';
 
 
 export default function Counter() {
-    const text = useSelector(state => state.displayTexts);
-    const loginresult = useSelector(state => state.loginresult);
+    const { isSuccess: defaultLocaleIsSuccess } = useGetDefaultlocaleQuery();
+    const locale = useSelector(state => state.locale);
+    const { data: loginresult = { user: {} }, isSuccess: loginresultIsSuccess } = useGetLoginstateQuery(locale, { skip: !defaultLocaleIsSuccess });
+    const username = loginresult.user.username;
+    const { data: text = [] } = useGetDisplaytextsQuery(locale, { skip: !defaultLocaleIsSuccess });
+    useGetCounterIncrementStepQuery(username, { skip: !loginresultIsSuccess });
     const counterIncrementStep = useSelector(state => state.counterIncrementStep);
-    const counter = useSelector(state => state.counter);
+    const { data: counter = { counter: 0 } } = useGetCounterQuery(username, { skip: !loginresultIsSuccess });
+    const [ getDecrementCounter ] = useGetDecrementCounterMutation();
+    const [ getIncrementCounter ] = useGetIncrementCounterMutation();
+    const onDecrementClicked = async () => { await getDecrementCounter(username) }
+    const onIncrementClicked = async () => { await getIncrementCounter(username) }
     const dispatch = useDispatch();
     const firstname = loginresult.user.firstname;
 
@@ -46,9 +63,9 @@ export default function Counter() {
                     </div>
                 </form>
                 <div className="btn-group">
-                    <button className="btn btn-secondary" onClick={() => dispatch(COUNTER_DECREMENT_REQUEST())}><Minus/></button>
-                    <input readOnly className="btn btn-secondary" value={counter}/>
-                    <button className="btn btn-secondary" onClick={() => dispatch(COUNTER_INCREMENT_REQUEST())}><Plus/></button>
+                    <button className="btn btn-secondary" onClick={onDecrementClicked}><Minus/></button>
+                    <input readOnly className="btn btn-secondary" value={counter.counter}/>
+                    <button className="btn btn-secondary" onClick={onIncrementClicked}><Plus/></button>
                 </div>
             </Container>
         </div>

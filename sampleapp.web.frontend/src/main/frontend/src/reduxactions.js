@@ -1,21 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
 
-export const LOGIN_REQUEST = createAction('LOGIN_REQUEST');
-export const LOGIN_RECEIVE = createAction('LOGIN_RECEIVE');
-export const LOGIN_FAILURE = createAction('LOGIN_FAILURE');
-
-export const LOGOUT_REQUEST = createAction('LOGOUT_REQUEST');
-export const LOGOUT_RECEIVE = createAction('LOGOUT_RECEIVE');
-export const LOGOUT_FAILURE = createAction('LOGOUT_FAILURE');
-
-export const LOGINSTATE_REQUEST = createAction('LOGINSTATE_REQUEST');
-export const LOGINSTATE_RECEIVE = createAction('LOGINSTATE_RECEIVE');
-export const LOGINSTATE_FAILURE = createAction('LOGINSTATE_FAILURE');
-
-export const ACCOUNTS_REQUEST = createAction('ACCOUNTS_REQUEST');
-export const ACCOUNTS_RECEIVE = createAction('ACCOUNTS_RECEIVE');
-export const ACCOUNTS_FAILURE = createAction('ACCOUNTS_FAILURE');
-
 export const INCREMENT_STEP_FIELD_MODIFIED = createAction('INCREMENT_STEP_FIELD_MODIFIED');
 export const COUNTER_INCREMENT_STEP_REQUEST = createAction('COUNTER_INCREMENT_STEP_REQUEST');
 export const COUNTER_INCREMENT_STEP_RECEIVE = createAction('COUNTER_INCREMENT_STEP_RECEIVE');
@@ -24,28 +8,7 @@ export const UPDATE_COUNTER_INCREMENT_STEP_REQUEST = createAction('UPDATE_COUNTE
 export const UPDATE_COUNTER_INCREMENT_STEP_RECEIVE = createAction('UPDATE_COUNTER_INCREMENT_STEP_RECEIVE');
 export const UPDATE_COUNTER_INCREMENT_STEP_FAILURE = createAction('UPDATE_COUNTER_INCREMENT_STEP_FAILURE');
 
-export const COUNTER_REQUEST = createAction('COUNTER_REQUEST');
-export const COUNTER_RECEIVE = createAction('COUNTER_RECEIVE');
-export const COUNTER_FAILURE = createAction('COUNTER_FAILURE');
-
-export const COUNTER_DECREMENT_REQUEST = createAction('COUNTER_DECREMENT_REQUEST');
-export const COUNTER_DECREMENT_RECEIVE = createAction('COUNTER_DECREMENT_RECEIVE');
-export const COUNTER_DECREMENT_FAILURE = createAction('COUNTER_DECREMENT_FAILURE');
-
-export const COUNTER_INCREMENT_REQUEST = createAction('COUNTER_INCREMENT_REQUEST');
-export const COUNTER_INCREMENT_RECEIVE = createAction('COUNTER_INCREMENT_RECEIVE');
-export const COUNTER_INCREMENT_FAILURE = createAction('COUNTER_INCREMENT_FAILURE');
-
-export const DEFAULT_LOCALE_REQUEST = createAction('DEFAULT_LOCALE_REQUEST');
-export const DEFAULT_LOCALE_RECEIVE = createAction('DEFAULT_LOCALE_RECEIVE');
-export const DEFAULT_LOCALE_FAILURE = createAction('DEFAULT_LOCALE_FAILURE');
 export const SELECT_LOCALE = createAction('SELECT_LOCALE');
-export const AVAILABLE_LOCALES_REQUEST = createAction('AVAILABLE_LOCALES_REQUEST');
-export const AVAILABLE_LOCALES_RECEIVE = createAction('AVAILABLE_LOCALES_RECEIVE');
-export const AVAILABLE_LOCALES_FAILURE = createAction('AVAILABLE_LOCALES_FAILURE');
-export const DISPLAY_TEXTS_REQUEST = createAction('DISPLAY_TEXTS_REQUEST');
-export const DISPLAY_TEXTS_RECEIVE = createAction('DISPLAY_TEXTS_RECEIVE');
-export const DISPLAY_TEXTS_FAILURE = createAction('DISPLAY_TEXTS_FAILURE');
 
 export const UNAUTHORIZED_401 = createAction('UNAUTHORIZED_401');
 export const FORBIDDEN_403 = createAction('FORBIDDEN_403');
