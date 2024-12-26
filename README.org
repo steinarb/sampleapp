@@ -9,7 +9,7 @@ The application database has a table "accounts" listing the users that are allow
 Highlights of the app:
  - Uses the [[https://docs.osgi.org/specification/osgi.cmpn/7.0.0/service.http.whiteboard.html][OSGi HTTP whiteboard]] to register servlets as services and give them a web context and paths
  - [[https://www.postgresql.org][react.js]] frontend, using [[https://redux.js.org][redux]] for state management (set up using [[https://redux-toolkit.js.org][redux-toolkit]])
- - [[https://redux-saga.js.org][bootstrap v4]] styling of the frontend
+ - [[https://getbootstrap.com/docs/5.0/getting-started/introduction/][bootstrap v5]] styling of the frontend
  - [[https://en.wikipedia.org/wiki/Internationalization_and_localization][i18n/l11n]] support (using redux on the frontend and [[https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/ResourceBundle.html][Java resource bundles]] on the backend) with English and Norwegian as the languages
  - [[https://en.wikipedia.org/wiki/Jakarta_RESTful_Web_Services][JAX-RS]] REST Service support provided by [[https://eclipse-ee4j.github.io/jersey/][eclipse jersey]]
  - authentication and authorization provided by [[https://shiro.apache.org][apache shiro]] (implemented in [[https://github.com/steinarb/authservice][authservice]], but in theory anything that provides a [[https://shiro.apache.org/realm.html][shiro Realm]] as an OSGi service and provides a shiro role named sampleappuser can give access to the application)
