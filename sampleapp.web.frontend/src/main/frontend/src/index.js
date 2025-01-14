@@ -9,7 +9,6 @@ import { createReduxHistoryContext } from "redux-first-history";
 import { createBrowserHistory } from 'history';
 import createRootReducer from './reducers';
 import { api } from './api';
-import { SET_BASENAME } from './reduxactions';
 import listenerMiddleware from './listeners';
 
 const baseUrl = Array.from(document.scripts).map(s => s.src).filter(src => src.includes('assets/'))[0].replace(/\/assets\/.*/, '');
@@ -20,10 +19,9 @@ const {
   routerReducer
 } = createReduxHistoryContext({ history: createBrowserHistory(), basename });
 const store = configureStore({
-    reducer: createRootReducer(routerReducer),
+    reducer: createRootReducer(routerReducer, basename),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(routerMiddleware).concat(api.middleware).prepend(listenerMiddleware.middleware),
 });
-store.dispatch(SET_BASENAME(basename));
 const history = createReduxHistory(store);
 
 const container = document.getElementById('root');
