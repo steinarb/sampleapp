@@ -4,9 +4,9 @@ import { api } from './api';
 import { LOCATION_CHANGE } from 'redux-first-history';
 import { VIS_KVITTERING, INCREMENT_STEP_FIELD_MODIFIED } from './reduxactions';
 
-const listenerMiddleware = createListenerMiddleware();
+const listeners = createListenerMiddleware();
 
-listenerMiddleware.startListening({
+listeners.startListening({
     matcher: api.endpoints.postLogin.matchFulfilled,
     effect: (action, listenerApi) => {
         if (action.payload.success) {
@@ -35,7 +35,7 @@ const isRejectedRequest = isAnyOf(
     api.endpoints.getDecrementCounter.matchRejected,
 )
 
-listenerMiddleware.startListening({
+listeners.startListening({
     matcher: isRejectedRequest,
     effect: ({ payload }) => {
         const { originalStatus } = payload || {};
@@ -46,7 +46,7 @@ listenerMiddleware.startListening({
     }
 })
 
-listenerMiddleware.startListening({
+listeners.startListening({
     matcher: api.endpoints.getLogout.matchFulfilled,
     effect: (action, listenerApi) => {
         if (!action.payload.suksess) {
@@ -56,7 +56,7 @@ listenerMiddleware.startListening({
     }
 })
 
-listenerMiddleware.startListening({
+listeners.startListening({
     actionCreator: INCREMENT_STEP_FIELD_MODIFIED,
     effect: async (action, listenerApi) => {
         await listenerApi.delay(2000); // Wait 2sek from last change before saving modification to backend
@@ -66,4 +66,4 @@ listenerMiddleware.startListening({
     }
 })
 
-export default listenerMiddleware;
+export default listeners;
