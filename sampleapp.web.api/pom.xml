@@ -46,6 +46,12 @@ under the License.
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
+            <artifactId>sampleapp.backend</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.security</artifactId>
             <version>${project.version}</version>
             <type>xml</type>

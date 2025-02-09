@@ -33,6 +33,7 @@ import org.junit.jupiter.api.Test;
 import com.mockrunner.mock.web.MockHttpServletRequest;
 import com.mockrunner.mock.web.MockServletContext;
 
+import no.priv.bang.sampleapp.backend.SampleappServiceProvider;
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.services.beans.Credentials;
 import no.priv.bang.sampleapp.web.api.ShiroTestBase;
@@ -202,8 +203,7 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLoginWrongPassword() {
-        var sampleapp = mock(SampleappService.class);
-        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Feil passord");
+        var sampleapp = new SampleappServiceProvider();
         var logservice = new MockLogService();
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
@@ -220,8 +220,7 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLoginLockedAccount() {
-        var sampleapp = mock(SampleappService.class);
-        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Låst konto");
+        var sampleapp = new SampleappServiceProvider();
         var logservice = new MockLogService();
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
@@ -238,8 +237,7 @@ class LoginResourceTest extends ShiroTestBase {
 
     @Test
     void testLoginUnkownUsername() {
-        var sampleapp = mock(SampleappService.class);
-        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Ukjent konto");
+        var sampleapp = new SampleappServiceProvider();
         var logservice = new MockLogService();
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
@@ -266,8 +264,7 @@ class LoginResourceTest extends ShiroTestBase {
     @Test
     void testLogout() {
         var locale = "nb_NO";
-        var sampleapp = mock(SampleappService.class);
-        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Logget ut");
+        var sampleapp = new SampleappServiceProvider();
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
         var username = "jd";
@@ -287,8 +284,7 @@ class LoginResourceTest extends ShiroTestBase {
     @Test
     void testGetLoginstateWhenLoggedIn() {
         var locale = "nb_NO";
-        var sampleapp = mock(SampleappService.class);
-        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er logget inn og har tilgang");
+        var sampleapp = new SampleappServiceProvider();
         var useradmin = mock(UserManagementService.class);
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
@@ -308,8 +304,7 @@ class LoginResourceTest extends ShiroTestBase {
     @Test
     void testGetLoginstateWhenLoggedInButUserDoesntHaveRoleSampleappuser() {
         var locale = "nb_NO";
-        var sampleapp = mock(SampleappService.class);
-        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er logget inn men mangler tilgang");
+        var sampleapp = new SampleappServiceProvider();
         var useradmin = mock(UserManagementService.class);
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
@@ -329,8 +324,7 @@ class LoginResourceTest extends ShiroTestBase {
     @Test
     void testGetLoginstateWhenNotLoggedIn() {
         var locale = "nb_NO";
-        var sampleapp = mock(SampleappService.class);
-        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Bruker er ikke logget inn");
+        var sampleapp = new SampleappServiceProvider();
         var useradmin = mock(UserManagementService.class);
         var resource = new LoginResource();
         resource.sampleapp = sampleapp;
