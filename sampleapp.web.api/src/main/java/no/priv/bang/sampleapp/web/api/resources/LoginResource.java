@@ -35,6 +35,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.ExcessiveAttemptsException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -111,6 +112,9 @@ public class LoginResource {
         } catch (IncorrectCredentialsException  e) {
             logger.warn("Login error: wrong password", e);
             return Loginresult.with().success(false).errormessage(sampleapp.displayText("wrongpassword", locale)).build();
+        } catch (ExcessiveAttemptsException  e) {
+            logger.warn("Login error: max failed login limit reacted", e);
+            return Loginresult.with().success(false).errormessage(sampleapp.displayText("excessivefailedloginattempts", locale)).build();
         } catch (LockedAccountException  e) {
             logger.warn("Login error: locked account", e);
             return Loginresult.with().success(false).errormessage(sampleapp.displayText("lockedaccount", locale)).build();
