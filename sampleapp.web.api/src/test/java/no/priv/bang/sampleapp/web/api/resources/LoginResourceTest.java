@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Steinar Bang
+ * Copyright 2021-2025 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -200,7 +200,7 @@ class LoginResourceTest extends ShiroTestBase {
     }
 
     @Test
-    void testLoginFeilPassord() {
+    void testLoginWrongPassword() {
         var sampleapp = mock(SampleappService.class);
         when(sampleapp.displayText(anyString(), anyString())).thenReturn("Feil passord");
         var logservice = new MockLogService();
@@ -218,7 +218,7 @@ class LoginResourceTest extends ShiroTestBase {
     }
 
     @Test
-    void testLoginUkjentBrukernavn() {
+    void testLoginUnkownUsername() {
         var sampleapp = mock(SampleappService.class);
         when(sampleapp.displayText(anyString(), anyString())).thenReturn("Ukjent konto");
         var logservice = new MockLogService();
