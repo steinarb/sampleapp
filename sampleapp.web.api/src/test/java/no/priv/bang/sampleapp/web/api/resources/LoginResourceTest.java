@@ -22,6 +22,7 @@ import java.util.Base64;
 
 import javax.ws.rs.InternalServerErrorException;
 
+import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.web.util.WebUtils;
 
@@ -215,6 +216,24 @@ class LoginResourceTest extends ShiroTestBase {
         var result = resource.login(locale, credentials);
         assertFalse(result.success());
         assertThat(result.errormessage()).startsWith("Feil passord");
+    }
+
+    @Test
+    void testLoginLockedAccount() {
+        var sampleapp = mock(SampleappService.class);
+        when(sampleapp.displayText(anyString(), anyString())).thenReturn("Låst konto");
+        var logservice = new MockLogService();
+        var resource = new LoginResource();
+        resource.sampleapp = sampleapp;
+        resource.setLogservice(logservice);
+        var username = "jd";
+        var password = Base64.getEncoder().encodeToString("feil".getBytes());
+        createSubjectThrowingExceptionAndBindItToThread(LockedAccountException.class);
+        var credentials = Credentials.with().username(username).password(password).build();
+        var locale = "nb_NO";
+        var result = resource.login(locale, credentials);
+        assertFalse(result.success());
+        assertThat(result.errormessage()).startsWith("Låst konto");
     }
 
     @Test
