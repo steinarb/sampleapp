@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Steinar Bang
+ * Copyright 2021-2025 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,8 @@
  */
 package no.priv.bang.sampleapp.web.frontend;
 
-import static org.junit.Assert.*;
 import static org.assertj.core.api.Assertions.*;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
 
@@ -31,10 +30,12 @@ import javax.servlet.ServletConfig;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 
-public class SampleappServletTest {
+import org.junit.jupiter.api.Test;
+
+class SampleappServletTest {
 
     @Test
-    public void testGet() throws Exception {
+    void testGet() throws Exception {
         var logservice = new MockLogService();
         var servlet = new SampleappServlet();
         var servletConfig = mock(ServletConfig.class);
@@ -56,7 +57,7 @@ public class SampleappServletTest {
 
 
     @Test
-    public void testDoGetAddTrailingSlash() throws Exception {
+    void testDoGetAddTrailingSlash() throws Exception {
         var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
@@ -73,7 +74,7 @@ public class SampleappServletTest {
     }
 
     @Test
-    public void testDoGetResponseThrowsIOException() throws Exception {
+    void testDoGetResponseThrowsIOException() throws Exception {
         var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
@@ -94,7 +95,7 @@ public class SampleappServletTest {
     }
 
     @Test
-    public void testDoGetResponseStreamMethodThrowsIOException() throws Exception {
+    void testDoGetResponseStreamMethodThrowsIOException() throws Exception {
         var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
@@ -113,7 +114,7 @@ public class SampleappServletTest {
     }
 
     @Test
-    public void testDoGetResourceNotFound() throws Exception {
+    void testDoGetResourceNotFound() throws Exception {
         var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
