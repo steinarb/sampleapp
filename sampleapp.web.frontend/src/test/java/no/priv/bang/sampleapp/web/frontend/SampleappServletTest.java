@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.mockrunner.mock.web.MockHttpServletResponse;
 
 import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
+import no.priv.bang.sampleapp.services.SampleappException;
 
 import static org.mockito.Mockito.*;
 
@@ -128,6 +129,28 @@ class SampleappServletTest {
         servlet.service(request, response);
 
         assertEquals(404, response.getErrorCode());
+    }
+
+    @Test
+    void readLinesFromClasspath() {
+        var logservice = new MockLogService();
+
+        var servlet = new SampleappServlet();
+        servlet.setLogService(logservice);
+
+        var routes = servlet.readLinesFromClasspath("testroutes.txt");
+
+        assertThat(routes).isNotEmpty().hasSize(4);
+    }
+
+    @Test
+    void readLinesFromClasspathWithFileNotFound() {
+        var logservice = new MockLogService();
+
+        var servlet = new SampleappServlet();
+        servlet.setLogService(logservice);
+
+        assertThrows(SampleappException.class, () -> servlet.readLinesFromClasspath("notfound.txt"));
     }
 
 }
