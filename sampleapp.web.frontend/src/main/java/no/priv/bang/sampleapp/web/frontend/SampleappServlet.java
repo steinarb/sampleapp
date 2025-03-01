@@ -21,14 +21,11 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.*;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardContextSelect;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletName;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPattern;
 import org.osgi.service.log.LogService;
 
-import no.priv.bang.sampleapp.services.SampleappException;
 import no.priv.bang.servlet.frontend.FrontendServlet;
 
 @Component(service=Servlet.class, immediate=true)
@@ -39,23 +36,12 @@ public class SampleappServlet extends FrontendServlet {
     private static final long serialVersionUID = -3496606785818930881L;
 
     public SampleappServlet() {
-        super();
-        // The paths used by the react router
-        setRoutes(readLinesFromClasspath("assets/routes.txt"));
+        super(SampleappServlet.class);
     }
 
     @Override
     @Reference
     public void setLogService(LogService logservice) {
         super.setLogService(logservice);
-    }
-
-    String[] readLinesFromClasspath(String fileName) {
-        try (var reader = new BufferedReader(new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream(fileName)))) {
-            var lines = reader.lines().toList();
-            return lines.toArray(new String[0]);
-        } catch (Exception e) {
-            throw new SampleappException("Failed to read routes list from classpath resource", e);
-        }
     }
 }
