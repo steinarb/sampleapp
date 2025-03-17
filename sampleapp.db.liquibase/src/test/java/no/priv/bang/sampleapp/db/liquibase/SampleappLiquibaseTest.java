@@ -52,7 +52,7 @@ class SampleappLiquibaseTest {
         }
 
         var accounts2 = assertjConnection.table("sampleapp_accounts").build();
-        assertThat(accounts2).hasNumberOfRows(1);
+        assertThat(accounts2).exists().hasNumberOfRows(1).row().column("username").hasValues("admin");
 
         var incrementSteps1 = assertjConnection.table("counter_increment_steps").build();
         assertThat(incrementSteps1).exists().isEmpty();
