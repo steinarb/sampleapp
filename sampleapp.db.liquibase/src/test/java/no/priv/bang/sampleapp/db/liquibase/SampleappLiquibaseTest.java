@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Steinar Bang
+ * Copyright 2021-2025 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,9 +47,7 @@ class SampleappLiquibaseTest {
         var accounts1 = assertjConnection.table("sampleapp_accounts").build();
         assertThat(accounts1).exists().isEmpty();
 
-        try(var connection = datasource.getConnection()) {
-            addAccounts(connection);
-        }
+        addAccounts(datasource);
 
         var accounts2 = assertjConnection.table("sampleapp_accounts").build();
         assertThat(accounts2).exists().hasNumberOfRows(1).row().column("username").hasValues("admin");
@@ -57,9 +55,7 @@ class SampleappLiquibaseTest {
         var incrementSteps1 = assertjConnection.table("counter_increment_steps").build();
         assertThat(incrementSteps1).exists().isEmpty();
 
-        try(var connection = datasource.getConnection()) {
-            addCounterIncrementSteps(connection);
-        }
+        addCounterIncrementSteps(datasource);
 
         var incrementSteps2 = assertjConnection.table("counter_increment_steps").build();
         assertThat(incrementSteps2).hasNumberOfRows(1);
@@ -67,9 +63,7 @@ class SampleappLiquibaseTest {
         var counters1 = assertjConnection.table("counters").build();
         assertThat(counters1).exists().isEmpty();
 
-        try(var connection = datasource.getConnection()) {
-            addCounters(connection);
-        }
+        addCounters(datasource);
 
         var counters2 = assertjConnection.table("counters").build();
         assertThat(counters2).hasNumberOfRows(1);
@@ -112,16 +106,22 @@ class SampleappLiquibaseTest {
         assertThat(ex.getMessage()).startsWith("java.lang.Exception");
     }
 
-    private void addAccounts(Connection connection) throws Exception {
-        addAccount(connection, "admin");
+    private void addAccounts(DataSource datasource) throws Exception {
+        try(var connection = datasource.getConnection()) {
+            addAccount(connection, "admin");
+        }
     }
 
-    private void addCounterIncrementSteps(Connection connection) throws Exception {
-        addCounterIncrementStep(connection, findAccountId(connection, "admin"), 10);
+    private void addCounterIncrementSteps(DataSource datasource) throws Exception {
+        try(var connection = datasource.getConnection()) {
+            addCounterIncrementStep(connection, findAccountId(connection, "admin"), 10);
+        }
     }
 
-    private void addCounters(Connection connection) throws Exception {
-        addCounter(connection, findAccountId(connection, "admin"), 3);
+    private void addCounters(DataSource datasource) throws Exception {
+        try(var connection = datasource.getConnection()) {
+            addCounter(connection, findAccountId(connection, "admin"), 3);
+        }
     }
 
     private int addAccount(Connection connection, String username) throws Exception {
