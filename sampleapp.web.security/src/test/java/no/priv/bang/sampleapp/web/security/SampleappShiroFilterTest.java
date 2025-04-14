@@ -16,6 +16,7 @@
 package no.priv.bang.sampleapp.web.security;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.config.Ini;
@@ -28,15 +29,19 @@ import org.apache.shiro.web.env.IniWebEnvironment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import no.priv.bang.authservice.definitions.CipherKeyService;
+
 class SampleappShiroFilterTest {
 
     private static Realm realm;
     private static SessionDAO session;
+    private static CipherKeyService cipherKeyService;
 
     @BeforeAll
     static void beforeAll() {
         realm = getRealmFromIniFile();
         session = new MemorySessionDAO();
+        cipherKeyService = mock(CipherKeyService.class);
     }
 
     @Test
@@ -44,6 +49,7 @@ class SampleappShiroFilterTest {
         var filter = new SampleappShiroFilter();
         filter.setRealm(realm);
         filter.setSession(session);
+        filter.setCipherKeyService(cipherKeyService);
         filter.activate();
         var securitymanager = filter.getSecurityManager();
         var token = new UsernamePasswordToken("jad", "1ad".toCharArray());

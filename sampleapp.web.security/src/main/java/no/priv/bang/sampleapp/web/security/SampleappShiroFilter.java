@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Steinar Bang
+ * Copyright 2021-2025 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.*;
 import javax.servlet.Filter;
 
 import org.apache.shiro.config.Ini;
+import org.apache.shiro.mgt.AbstractRememberMeManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.web.env.IniWebEnvironment;
@@ -31,6 +32,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardContextSelect;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardFilterPattern;
+
+import no.priv.bang.authservice.definitions.CipherKeyService;
 
 /**
  * This is an OSGi DS component that provides a {@link Filter} service.  This filter service will
@@ -50,6 +53,7 @@ public class SampleappShiroFilter extends AbstractShiroFilter { // NOSONAR
 
     private Realm realm;
     private SessionDAO session;
+    private CipherKeyService cipherKeyService;
 
     @Reference
     public void setRealm(Realm realm) {
@@ -59,6 +63,11 @@ public class SampleappShiroFilter extends AbstractShiroFilter { // NOSONAR
     @Reference
     public void setSession(SessionDAO session) {
         this.session = session;
+    }
+
+    @Reference
+    public void setCipherKeyService(CipherKeyService cipherKeyService) {
+        this.cipherKeyService = cipherKeyService;
     }
 
     @Activate
@@ -76,6 +85,9 @@ public class SampleappShiroFilter extends AbstractShiroFilter { // NOSONAR
         var securityManager = DefaultWebSecurityManager.class.cast(environment.getWebSecurityManager());
         securityManager.setSessionManager(sessionmanager);
         securityManager.setRealm(realm);
+
+        var remembermeManager = (AbstractRememberMeManager)securityManager.getRememberMeManager();
+        remembermeManager.setCipherKey(cipherKeyService.getCipherKey());
 
         setSecurityManager(securityManager);
         setFilterChainResolver(environment.getFilterChainResolver());

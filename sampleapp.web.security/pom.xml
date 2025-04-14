@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-Copyright 2021-2024 Steinar Bang
+Copyright 2021-2025 Steinar Bang
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -49,6 +49,11 @@ under the License.
             <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
+        </dependency>
+        <dependency>
+            <artifactId>authservice.definitions</artifactId>
+            <groupId>no.priv.bang.authservice</groupId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
