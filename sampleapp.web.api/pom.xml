@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-Copyright 2021-2024 Steinar Bang
+Copyright 2021-2025 Steinar Bang
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -34,26 +34,22 @@ under the License.
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.services</artifactId>
-            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.backend</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.backend</artifactId>
-            <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.security</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>

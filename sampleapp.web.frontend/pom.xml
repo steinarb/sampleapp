@@ -34,20 +34,17 @@ under the License.
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.services</artifactId>
-            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.services</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.api</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>

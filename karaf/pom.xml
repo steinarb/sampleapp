@@ -32,63 +32,54 @@ under the License.
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.db.liquibase</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.db.liquibase.test</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.db.liquibase.production</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.services</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.backend</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.backend.testdata</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.security</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.api</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.frontend</artifactId>
-            <version>${project.version}</version>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>

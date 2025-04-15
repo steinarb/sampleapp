@@ -29,47 +29,38 @@ under the License.
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.db.liquibase</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.db.liquibase.test</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.db.liquibase.production</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.services</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.backend</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.security</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.api</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.web.frontend</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>no.priv.bang.sampleapp</groupId>
             <artifactId>sampleapp.tests</artifactId>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
