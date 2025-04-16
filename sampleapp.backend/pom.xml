@@ -54,16 +54,6 @@ under the License.
             <classifier>features</classifier>
         </dependency>
         <dependency>
-            <groupId>no.priv.bang.sampleapp</groupId>
-            <artifactId>sampleapp.db.liquibase.test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>no.priv.bang.sampleapp</groupId>
-            <artifactId>sampleapp.db.liquibase</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>no.priv.bang.karaf</groupId>
             <artifactId>karaf.liquibase.runner</artifactId>
             <scope>test</scope>
@@ -87,6 +77,16 @@ under the License.
             <groupId>org.ops4j.pax.jdbc</groupId>
             <artifactId>pax-jdbc</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.priv.bang.sampleapp</groupId>
+            <artifactId>sampleapp.db.liquibase.test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.priv.bang.sampleapp</groupId>
+            <artifactId>sampleapp.db.liquibase</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -39,6 +39,23 @@ under the License.
             <artifactId>pax-exam</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.hamcrest</artifactId>
+            <version>1.3_1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>no.priv.bang.sampleapp</groupId>
+            <artifactId>karaf</artifactId>
+            <version>${project.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+        </dependency>
+        <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
             <artifactId>pax-exam-junit4</artifactId>
             <scope>test</scope>
@@ -65,23 +82,6 @@ under the License.
                     <artifactId>org.apache.karaf.client</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.awaitility</groupId>
-            <artifactId>awaitility</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.servicemix.bundles</groupId>
-            <artifactId>org.apache.servicemix.bundles.hamcrest</artifactId>
-            <version>1.3_1</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>no.priv.bang.sampleapp</groupId>
-            <artifactId>karaf</artifactId>
-            <version>${project.version}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
         </dependency>
     </dependencies>
     <build>
