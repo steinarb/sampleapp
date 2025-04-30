@@ -146,6 +146,13 @@ under the License.
             </dependency>
             <dependency>
                 <groupId>no.priv.bang.sampleapp</groupId>
+                <artifactId>karaf</artifactId>
+                <version>${project.version}</version>
+                <classifier>features</classifier>
+                <type>xml</type>
+            </dependency>
+            <dependency>
+                <groupId>no.priv.bang.sampleapp</groupId>
                 <artifactId>sampleapp.db.liquibase</artifactId>
                 <version>${project.version}</version>
             </dependency>
