@@ -98,6 +98,18 @@ under the License.
             <artifactId>shiro-core</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>net.java.dev.msv</groupId>
+            <artifactId>msv-rngconverter</artifactId>
+            <version>2022.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.relaxng</groupId>
+            <artifactId>trang</artifactId>
+            <version>20241231</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -119,6 +131,44 @@ under the License.
                         </Include-Resource>
                     </instructions>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <classpathScope>test</classpathScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>convert-liquibase-xsd-to-rng</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>com.sun.msv.writer.relaxng.Driver</mainClass>
+                            <commandlineArgs>
+                                ${project.build.directory}/dependency/www.liquibase.org/xml/ns/dbchangelog/dbchangelog-${liquibase.xsd-version}.xsd
+                                ${project.build.directory}/dbchangelog-${liquibase.xsd-version}.rng
+                            </commandlineArgs>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>convert-liquibase-rng-to-rnc-no-version</id>
+                        <phase>test</phase> <!-- must be test scope to build workaround driver class -->
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>no.priv.bang.sampleapp.db.liquibase.TrangDriver</mainClass> <!-- workaround because trang driver calls System.exit() -->
+                            <arguments>
+                                <argument>${project.build.directory}/dbchangelog-${liquibase.xsd-version}.rng</argument>
+                                <argument>${project.build.directory}/dbchangelog.rnc</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
