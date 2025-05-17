@@ -28,6 +28,7 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardContextSelect;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardFilterPattern;
 
+import no.priv.bang.authservice.definitions.AuthserviceShiroConfigService;
 import no.priv.bang.authservice.definitions.CipherKeyService;
 import no.priv.bang.authservice.web.security.shirofilter.AuthserviceShiroFilterBase;
 
@@ -60,6 +61,11 @@ public class SampleappShiroFilter extends AuthserviceShiroFilterBase { // NOSONA
     @Reference
     public void setCipherKeyService(CipherKeyService cipherKeyService) {
         this.cipherKeyService = cipherKeyService;
+    }
+
+    @Reference
+    public void setShiroConfigService(AuthserviceShiroConfigService shiroConfigService) {
+        this.shiroConfigService = shiroConfigService;
     }
 
     @Activate

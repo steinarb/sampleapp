@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2024 Steinar Bang
+ * Copyright 2021-2025 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import org.apache.shiro.web.env.IniWebEnvironment;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import no.priv.bang.authservice.definitions.AuthserviceShiroConfigService;
 import no.priv.bang.authservice.definitions.CipherKeyService;
 
 class SampleappShiroFilterTest {
@@ -46,10 +47,12 @@ class SampleappShiroFilterTest {
 
     @Test
     void testAuthenticate() {
+        var shiroConfigService = mock(AuthserviceShiroConfigService.class);
         var filter = new SampleappShiroFilter();
         filter.setRealm(realm);
         filter.setSession(session);
         filter.setCipherKeyService(cipherKeyService);
+        filter.setShiroConfigService(shiroConfigService);
         filter.activate();
         var securitymanager = filter.getSecurityManager();
         var token = new UsernamePasswordToken("jad", "1ad".toCharArray());
