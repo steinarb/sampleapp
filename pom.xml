@@ -296,7 +296,7 @@ under the License.
             <extension>
                 <groupId>org.apache.maven.wagon</groupId>
                 <artifactId>wagon-ssh</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.3</version>
             </extension>
         </extensions>
     </build>
