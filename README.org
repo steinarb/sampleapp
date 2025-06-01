@@ -78,7 +78,7 @@ To create a new project called "mynewapp":
       cd /tmp
       git clone https://github.com/steinarb/sampleapp.git
       cd sampleapp
-      mvn archetype:create-from-project -Darchetype.filteredExtensions=java
+      mvn archetype:create-from-project -Darchetype.filteredExtensions=javaw
       cd target/generated-sources/archetype/
       mvn install
     #+end_example
@@ -88,19 +88,23 @@ To create a new project called "mynewapp":
       cd ~/git/
       mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=no.priv.bang.sampleapp -DarchetypeArtifactId=sampleapp-archetype -DgroupId=com.mycompany.mynewapp -DartifactId=mynewapp -Dversion=1.0.0-SNAPSHOT -DinteractiveMode=false
     #+end_example
- 3. Fix the groupId for a karaf feature file dependency in the integration test maven module, because this dependency isn't handled by the archetype project generator:
+ 3. Fix the groupId for a karaf feature file dependency in the integration test maven module, and the dependency management for the master karaf feature repository, because these dependencies aren't handled by the archetype project generator:
     #+begin_example
       cd ~/git/mynewapp/
-      sed -i 's/no\.priv\.bang\.sampleapp/com.mycompany.mynewapp/gI' */pom.xml
+      sed -i 's/no\.priv\.bang\.sampleapp/com.mycompany.mynewapp/gI' pom.xml */pom.xml
     #+end_example
- 4. Fix up some files that aren't handled by the archetype filtering (don't know why everything in the pom files aren't filtered)
+ 4. Fiks replace version in the dependency management section of the parent pom with ${project.version}
+    #+begin_example
+      sed -i 's/^                <version>1.0.0-SNAPSHOT/                <version>${project.version}/gI' pom.xml
+    #+end_example
+ 5. Fix up some files that aren't handled by the archetype filtering (don't know why everything in the pom files aren't filtered)
     #+begin_example
       sed -i 's/sampleapp/mynewapp/g' */src/main/resources/shiro.ini
       sed -i 's/sampleapp/mynewapp/g' */src/test/resources/test.shiro.ini
       sed -i 's/sampleapp/mynewapp/gI' */pom.xml
       find . -name \*.js | xargs sed -i 's/sampleapp/mynewapp/g'
     #+end_example
- 5. Add a .gitignore file (there is a bug in maven-resources-plugin that excludes this file from archetypes):
+ 6. Add a .gitignore file (there is a bug in maven-resources-plugin that excludes this file from archetypes):
     #+begin_example
       ,*.iml
       ,*.log
@@ -113,12 +117,12 @@ To create a new project called "mynewapp":
       node_modules/
       target/
     #+end_example
- 6. Test build the project with "mvn install" (it should build without any errors)
+ 7. Test build the project with "mvn install" (it should build without any errors)
     #+begin_example
       cd ~/git/mynewapp/
       mvn install
     #+end_example
- 7. Open the java maven modules of the mynewapp project, in a Java IDE (eclipse or IntelliJ), and use the refactoring of the IDE to rename classes with names starting with "Sampleapp" into classes starting with "Mynewapp" (this is the step that the archetype can't handle, but at least the classes are already in packages they are supposed to be in for the new application), classnames to change:
+ 8. Open the java maven modules of the mynewapp project, in a Java IDE (eclipse or IntelliJ), and use the refactoring of the IDE to rename classes with names starting with "Sampleapp" into classes starting with "Mynewapp" (this is the step that the archetype can't handle, but at least the classes are already in packages they are supposed to be in for the new application), classnames to change:
     #+begin_example
       SampleappServiceProvider
       SampleappServiceProviderTest
@@ -144,17 +148,17 @@ To create a new project called "mynewapp":
       SampleappTestdata
       SampleappTestdataTest
     #+end_example
- 8. Build mynewapp from the top with "mvn clean install" ("clean" is to get rid of .class files with the old names)
+ 9. Build mynewapp from the top with "mvn clean install" ("clean" is to get rid of .class files with the old names)
     #+begin_example
       cd ~/git/mynewapp/
       mvn clean install
     #+end_example
- 9. Fix some Java class member names that hasn't been touched by the renaming (OSGi service injection setter and constants):
-    #+begin_example
-      find . -name \*.java | xargs sed -i 's/Sampleapp/Mynewapp/g'
-      find . -name \*.java | xargs sed -i 's/SAMPLEAPP/MYNEWAPP/g'
-    #+end_example
- 10. Fix some leftover Sampleapp texts
+ 10. Fix some Java class member names that hasn't been touched by the renaming (OSGi service injection setter and constants):
+     #+begin_example
+       find . -name \*.java | xargs sed -i 's/Sampleapp/Mynewapp/g'
+       find . -name \*.java | xargs sed -i 's/SAMPLEAPP/MYNEWAPP/g'
+     #+end_example
+ 11. Fix some leftover Sampleapp texts
      #+begin_example
        find . -name pom.xml | xargs sed -i 's/Sampleapp/Mynewapp/g'
        find . -name feature.xml | xargs sed -i 's/Sampleapp/Mynewapp/g'
@@ -163,7 +167,7 @@ To create a new project called "mynewapp":
        find . -name package-lock.json | xargs sed -i 's/Sampleapp/Mynewapp/g'
        find ./mynewapp.web.frontend/src/main/frontend/src -name \*.js | xargs sed -i 's/Sampleapp/Mynewapp/g'
      #+end_example
- 11. Fix copyright dates
+ 12. Fix copyright dates
      #+begin_example
        find . -name *.xml | xargs sed -i 's/2021-2022/2025/g'
        find . -name *.java | xargs sed -i 's/2021-2022/2025/g'
@@ -176,12 +180,12 @@ To create a new project called "mynewapp":
        find . -name *.xml | xargs sed -i 's/2021/2025/g'
        find . -name *.java | xargs sed -i 's/2021/2025/g'
      #+end_example
- 12. Install mynewapp in a karaf instance
+ 13. Install mynewapp in a karaf instance
      #+begin_example
        feature:repo-add mvn:com.mycompany.mynewapp/karaf/LATEST/xml/features
        feature:install mynewapp-with-derby
      #+end_example
- 13. Verify that the application is running on http://localhost:8181/mynewapp
+ 14. Verify that the application is running on http://localhost:8181/mynewapp
 
 ** Configuring a new default locale
 
