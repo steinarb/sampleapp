@@ -101,13 +101,11 @@ under the License.
         <dependency>
             <groupId>net.java.dev.msv</groupId>
             <artifactId>msv-rngconverter</artifactId>
-            <version>2022.7</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.relaxng</groupId>
             <artifactId>trang</artifactId>
-            <version>20241231</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
