@@ -79,13 +79,6 @@ under the License.
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>org.junit</groupId>
-                <artifactId>junit-bom</artifactId>
-                <version>${junit.jupiter.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>no.priv.bang.osgiservice</groupId>
                 <artifactId>osgiservice-bom</artifactId>
                 <version>${bang-osgi-service.version}</version>
