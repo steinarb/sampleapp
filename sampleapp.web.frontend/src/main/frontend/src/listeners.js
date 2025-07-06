@@ -1,7 +1,6 @@
 import { createListenerMiddleware } from '@reduxjs/toolkit';
 import { isAnyOf } from '@reduxjs/toolkit';
 import { api } from './api';
-import { LOCATION_CHANGE } from 'redux-first-history';
 import { VIS_KVITTERING, INCREMENT_STEP_FIELD_MODIFIED } from './reduxactions';
 
 const listeners = createListenerMiddleware();

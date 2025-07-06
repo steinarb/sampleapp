@@ -5,8 +5,7 @@ import counterIncrementStep from './counterIncrementStepReducer';
 import username from './usernameReducer';
 import locale from './localeReducer';
 
-export default (routerReducer, basename) => combineReducers({
-    router: routerReducer,
+export default (basename) => combineReducers({
     [api.reducerPath]: api.reducer,
     counterIncrementStep,
     username,
