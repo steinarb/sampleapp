@@ -15,7 +15,8 @@ export default function LoginMessage() {
     }
 
     return (
-        <div className='alert alert-warning' role='alert'>
+        <div className="alert alert-warning alert-white rounded" role="alert">
+            <div className="icon"><i className="oi oi-warning"></i></div>
             {loginresult.errormessage}
         </div>
     );

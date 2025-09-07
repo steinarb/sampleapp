@@ -7,7 +7,7 @@ import {
     useGetLogoutMutation,
 } from '../api';
 import Container from './bootstrap/Container';
-import ChevronLeft from './bootstrap/ChevronLeft';
+import Locale from './Locale';
 
 
 export default function Unauthorized() {
@@ -21,25 +21,22 @@ export default function Unauthorized() {
 
     return (
         <div>
-            <nav className="navbar navbar-light bg-light">
-                <a className="btn btn-primary left-align-cell" href="../..">
-                    <ChevronLeft />&nbsp;{text.gohome}!
-                </a>
-                <h1>{text.noaccess}</h1>
-                <div className="col-sm-2"></div>
-            </nav>
-            <Container>
+            <div className="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+                <h1 className="pure-menu-heading">{text.noaccess}</h1>
+                <ul className="pure-menu-list">
+                    <li className="pure-menu-item"><a className="pure-menu-link" href="../..">{text.gohome}</a></li>
+                    <li className="pure-menu-item"><Locale /></li>
+                </ul>
+            </div>
+            <div className="content-wrapper">
                 <p>{text.hi} {username}! {text.noaccessmessage1}</p>
                 <p>{text.noaccessmessage2}</p>
-                <form onSubmit={ e => { e.preventDefault(); }}>
-                    <div className="form-group row">
-                        <div className="col-5"/>
-                        <div className="col-7">
-                            <button className="btn btn-primary" onClick={onLogoutClicked}>{text.logout}</button>
-                        </div>
+                <form className="pure-form pure-form-aligned" onSubmit={ e => { e.preventDefault(); }}>
+                    <div className="pure-control-group">
+                        <button className="pure-button pure-button-primary" onClick={onLogoutClicked}>{text.logout}</button>
                     </div>
                 </form>
-            </Container>
+            </div>
         </div>
     );
 }

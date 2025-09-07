@@ -17,7 +17,6 @@ import {
     COUNTER_INCREMENT_REQUEST,
 } from '../reduxactions';
 import Locale from './Locale';
-import ChevronLeft from './bootstrap/ChevronLeft';
 import Minus from './bootstrap/Minus';
 import Plus from './bootstrap/Plus';
 
@@ -40,34 +39,31 @@ export default function Counter() {
 
     return (
         <div>
-            <nav className="navbar navbar-light bg-light">
-                <NavLink className="btn btn-primary left-align-cell" to="/">
-                    <ChevronLeft />&nbsp;{text.gohome}!
-                </NavLink>
-                <h1>{text.counter_for} {firstname}</h1>
-                <Locale />
-            </nav>
-            <Container>
-                <form onSubmit={ e => { e.preventDefault(); }}>
-                    <div className="form-group row">
-                        <label htmlFor="amount" className="col-form-label col-5">{text.counterIncrementStep}</label>
-                        <div className="col-7">
-                            <input
-                                id="amount"
-                                className="form-control"
-                                type="number"
-                                pattern="\d+"
-                                value={counterIncrementStep}
-                                onChange={e => dispatch(INCREMENT_STEP_FIELD_MODIFIED(e.target.value))} />
-                        </div>
+            <div className="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+                <h1 className="pure-menu-heading">{text.counter_for} {firstname}</h1>
+                <ul className="pure-menu-list">
+                    <li className="pure-menu-item"><NavLink to="/">{text.gohome}</NavLink></li>
+                    <li className="pure-menu-item"><Locale /></li>
+                </ul>
+            </div>
+            <div className="content-wrapper">
+                <form className="pure-form pure-form-aligned" onSubmit={ e => { e.preventDefault(); }}>
+                    <div className="pure-control-group">
+                        <label htmlFor="amount">{text.counterIncrementStep}</label>
+                        <input
+                            id="amount"
+                            type="number"
+                            pattern="\d+"
+                            value={counterIncrementStep}
+                            onChange={e => dispatch(INCREMENT_STEP_FIELD_MODIFIED(e.target.value))} />
                     </div>
                 </form>
-                <div className="btn-group">
-                    <button className="btn btn-secondary" onClick={onDecrementClicked}><Minus/></button>
-                    <input readOnly className="btn btn-secondary" value={counter.counter}/>
-                    <button className="btn btn-secondary" onClick={onIncrementClicked}><Plus/></button>
+                <div className="pure-control-group">
+                    <button className="pure-button pure-button-primary" onClick={onDecrementClicked}><Minus/></button>
+                    <input readOnly value={counter.counter}/>
+                    <button className="pure-button pure-button-primary" onClick={onIncrementClicked}><Plus/></button>
                 </div>
-            </Container>
+            </div>
         </div>
     );
 }

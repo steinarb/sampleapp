@@ -21,41 +21,22 @@ export default function Login() {
 
     return (
         <div className="Login">
-            <header>
-                <div className="pb-2 mt-4 mb-2 border-bottom bg-light">
-                    <h1>Sampleapp login</h1>
-                    <p id="messagebanner"></p>
-                </div>
-            </header>
-            <div className="container">
+            <div className="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+                <a className="pure-menu-heading">Sampleapp login</a>
+            </div>
+            <div className="content-wrapper">
                 <LoginMessage/>
-                <form onSubmit={e => { e.preventDefault(); }}>
-                    <div className="form-group row">
-                        <label htmlFor="username" className="col-form-label col-3 mr-2">{text.username}:</label>
-                        <div className="col-8">
-                            <input
-                                id="username"
-                                className="form-control"
-                                type="text" name="username"
-                                value={username}
-                                onChange={e => setUsername(e.target.value)} />
-                        </div>
+                <form className="pure-form pure-form-aligned" onSubmit={e => { e.preventDefault(); }}>
+                    <div className="pure-control-group">
+                        <label htmlFor="username">{text.username}:</label>
+                        <input id="username" type="text" name="username" autoComplete="username" value={username} onChange={e => setUsername(e.target.value)} />
                     </div>
-                    <div className="form-group row">
-                        <label htmlFor="password" className="col-form-label col-3 mr-2">{text.password}:</label>
-                        <div className="col-8">
-                            <input
-                                id="password" className="form-control"
-                                type="password"
-                                name="password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}/>
-                        </div>
+                    <div className="pure-control-group">
+                        <label htmlFor="password">{text.password}:</label>
+                        <input id="password" type="password" name="password" autoComplete="current-password" value={password} onChange={e => setPassword(e.target.value)}/>
                     </div>
-                    <div className="form-group row">
-                        <div className="offset-xs-3 col-xs-9">
-                            <input className="btn btn-primary" type="submit" value="Login" onClick={onLoginClicked}/>
-                        </div>
+                    <div className="pure-control-group">
+                        <input className="pure-button pure-button-primary" type="submit" value="Login" onClick={onLoginClicked}/>
                     </div>
                 </form>
             </div>

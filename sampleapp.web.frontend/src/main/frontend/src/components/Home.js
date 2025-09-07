@@ -10,7 +10,6 @@ import {
 } from '../api';
 import Container from './bootstrap/Container';
 import Locale from './Locale';
-import ChevronLeft from './bootstrap/ChevronLeft';
 
 
 export default function Home() {
@@ -26,19 +25,19 @@ export default function Home() {
 
     return (
         <div>
-            <nav className="navbar navbar-light bg-light">
-                <a className="btn btn-primary left-align-cell" href="../..">
-                    <ChevronLeft />&nbsp;{text.gohome}!
-                </a>
-                <h1>Sampleapp</h1>
-                <NavLink className="btn btn-primary" to="/counter">{text.counter}</NavLink>
-                <Locale />
-            </nav>
-            <Container>
+            <div className="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+                <h1 className="pure-menu-heading">Sampleapp</h1>
+                <ul className="pure-menu-list">
+                    <li className="pure-menu-item"><NavLink to="/counter">{text.counter}</NavLink></li>
+                    <li className="pure-menu-item"><a className="pure-menu-link" href="../..">{text.gohome}</a></li>
+                    <li className="pure-menu-item"><Locale /></li>
+                </ul>
+            </div>
+            <div className="content-wrapper">
                 <p>{text.hi} {firstname}!</p>
                 <p>{text.numberofaccounts}: {accountCount}</p>
                 <p>{text.logged_in_user_info}</p>
-                <table className="table">
+                <table className="pure-table pure-table-bordered">
                     <tbody>
                         <tr>
                             <th>{text.username}</th>
@@ -58,8 +57,8 @@ export default function Home() {
                         </tr>
                     </tbody>
                 </table>
-                <p><button className="btn btn-primary" onClick={onLogoutClicked}>{text.logout}</button></p>
-            </Container>
+                <p><button className="pure-button pure-button-primary" onClick={onLogoutClicked}>{text.logout}</button></p>
+            </div>
         </div>
     );
 }
