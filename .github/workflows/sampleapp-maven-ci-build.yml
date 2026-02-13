@@ -1,8 +1,6 @@
 name: sampleapp CI build
 
 on:
-  push:
-    branches: [ master ]
   pull_request:
     branches: [ master ]
 
