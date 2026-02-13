@@ -1,0 +1,27 @@
+name: sampleapp CI build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v6.0.2
+      with:
+        persist-credentials: false
+    - name: Set up maven and Java version
+      uses: s4u/setup-maven-action@6c4e9964d4ecb8f1026310cd8618791fd51a8016
+      with:
+        java-version: 21
+        maven-version: 3.9.11
+    - name: Build with Maven
+      run: mvn -B org.jacoco:jacoco-maven-plugin:prepare-agent install coveralls:report org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --file pom.xml --define repoToken="$COVERALLS_REPO_TOKEN" -Dsonar.projectKey=steinarb_sampleapp -Dsonar.organization=steinarb -Dsonar.host.url=https://sonarcloud.io
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_SECRET }}
