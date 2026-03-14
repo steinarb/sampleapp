@@ -11,11 +11,7 @@ import {
     useGetIncrementCounterMutation,
 } from '../api';
 import Container from './bootstrap/Container';
-import {
-    INCREMENT_STEP_FIELD_MODIFIED,
-    COUNTER_DECREMENT_REQUEST,
-    COUNTER_INCREMENT_REQUEST,
-} from '../reduxactions';
+import { INCREMENT_STEP_FIELD_MODIFIED } from '../reduxactions';
 import Locale from './Locale';
 import Minus from './bootstrap/Minus';
 import Plus from './bootstrap/Plus';
