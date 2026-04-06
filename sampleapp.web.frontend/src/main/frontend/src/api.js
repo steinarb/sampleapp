@@ -21,7 +21,9 @@ export const api = createApi({
                 try {
                     const { data: loginResult } = await queryFulfilled;
                     dispatch(api.util.updateQueryData('getLoginstate', body.locale, () => loginResult));
-                } catch {}
+                } catch {
+                    // Skip and continue
+                }
             },
         }),
         getLogout: builder.mutation({ query: () => ({url: '/logout', method: 'GET' }) }),
@@ -31,7 +33,9 @@ export const api = createApi({
                 try {
                     const { data: updatedIncrementStep } = await queryFulfilled;
                     dispatch(api.util.updateQueryData('getCounterIncrementStep', body.username, () => updatedIncrementStep));
-                } catch {}
+                } catch {
+                    // Skip and continue
+                }
             },
         }),
         getIncrementCounter: builder.mutation({
@@ -40,7 +44,9 @@ export const api = createApi({
                 try {
                     const { data: incrementResult } = await queryFulfilled;
                     dispatch(api.util.updateQueryData('getCounter', username, () => incrementResult));
-                } catch {}
+                } catch {
+                    // Skip and continue
+                }
             },
         }),
         getDecrementCounter: builder.mutation({
@@ -49,7 +55,9 @@ export const api = createApi({
                 try {
                     const { data: decrementResult } = await queryFulfilled;
                     dispatch(api.util.updateQueryData('getCounter', username, () => decrementResult));
-                } catch {}
+                } catch {
+                    // Skip and continue
+                }
             },
         }),
     }),
