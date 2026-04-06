@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
     useGetDefaultlocaleQuery,
-    useGetLoginstateQuery,
     usePostLoginMutation,
     useGetDisplaytextsQuery,
 } from '../api';
@@ -11,10 +10,8 @@ import LoginMessage from './LoginMessage';
 export default function Login() {
     const [ username, setUsername ] = useState('');
     const [ password, setPassword ] = useState('');
-    const basename = useSelector(state => state.basename);
     const { isSuccess: defaultLocaleIsSuccess } = useGetDefaultlocaleQuery();
     const locale = useSelector(state => state.locale);
-    const { data: loginresult = {} } = useGetLoginstateQuery(locale, { skip: !defaultLocaleIsSuccess });
     const { data: text = [] } = useGetDisplaytextsQuery(locale, { skip: !defaultLocaleIsSuccess });
     const [ postLogin ] = usePostLoginMutation();
     const onLoginClicked = async () => { await postLogin({ username, password: btoa(password), locale }) }

@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 import {
     useGetDefaultlocaleQuery,
@@ -6,7 +5,6 @@ import {
     useGetDisplaytextsQuery,
     useGetLogoutMutation,
 } from '../api';
-import Container from './bootstrap/Container';
 import Locale from './Locale';
 
 

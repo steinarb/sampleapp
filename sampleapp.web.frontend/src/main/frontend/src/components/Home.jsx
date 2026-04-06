@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router';
 import { useSelector } from 'react-redux';
 import {
@@ -8,7 +7,6 @@ import {
     useGetAccountsQuery,
     useGetLogoutMutation,
 } from '../api';
-import Container from './bootstrap/Container';
 import Locale from './Locale';
 
 

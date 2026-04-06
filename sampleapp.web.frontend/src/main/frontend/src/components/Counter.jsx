@@ -1,4 +1,3 @@
-import React from 'react';
 import { NavLink } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -10,7 +9,6 @@ import {
     useGetDecrementCounterMutation,
     useGetIncrementCounterMutation,
 } from '../api';
-import Container from './bootstrap/Container';
 import { INCREMENT_STEP_FIELD_MODIFIED } from '../reduxactions';
 import Locale from './Locale';
 import Minus from './bootstrap/Minus';

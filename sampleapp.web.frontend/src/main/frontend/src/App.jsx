@@ -1,4 +1,3 @@
-import React, { Component } from 'react';
 import { Routes, Route, BrowserRouter as Router } from 'react-router';
 import './App.css';
 import Home from './components/Home';
@@ -7,7 +6,7 @@ import Login from './components/Login';
 import Unauthorized from './components/Unauthorized';
 
 export default function App(props) {
-    const { history, basename } = props;
+    const { basename } = props;
 
     return (
         <Router basename={basename}>
