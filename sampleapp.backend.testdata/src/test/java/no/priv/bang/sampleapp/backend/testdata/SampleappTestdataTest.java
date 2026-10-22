@@ -1,5 +1,6 @@
+package no.priv.bang.sampleapp.backend.testdata;
 /*
- * Copyright 2019-2024 Steinar Bang
+ * Copyright 2019-2026 Steinar Bang
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +14,6 @@
  * See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package no.priv.bang.sampleapp.backend.testdata;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static no.priv.bang.sampleapp.services.SampleappConstants.*;

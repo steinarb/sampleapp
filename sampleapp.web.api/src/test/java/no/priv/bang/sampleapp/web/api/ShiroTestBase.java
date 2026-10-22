@@ -1,3 +1,4 @@
+package no.priv.bang.sampleapp.web.api;
 /*
  * Copyright 2021-2026 Steinar Bang
  *
@@ -13,7 +14,6 @@
  * See the License for the specific language governing permissions and limitations
  * under the License.
  */
-package no.priv.bang.sampleapp.web.api;
 
 import static org.mockito.AdditionalAnswers.delegatesTo;
 import static org.mockito.ArgumentMatchers.any;
