@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.mockrunner.mock.web.MockHttpServletResponse;
 
-import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -35,12 +34,10 @@ class SampleappServletTest {
 
     @Test
     void testGet() throws Exception {
-        var logservice = new MockLogService();
         var servlet = new SampleappServlet();
         var servletConfig = mock(ServletConfig.class);
         when(servletConfig.getInitParameter("from")).thenReturn("to");
         servlet.init(servletConfig);
-        servlet.setLogService(logservice);
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestURI()).thenReturn("http://localhost:8181/sampleapp/useradmin/");
@@ -57,7 +54,6 @@ class SampleappServletTest {
 
     @Test
     void testDoGetAddTrailingSlash() throws Exception {
-        var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestURL()).thenReturn(new StringBuffer("http://localhost:8181/sampleapp/useradmin"));
@@ -65,7 +61,6 @@ class SampleappServletTest {
         var response = new MockHttpServletResponse();
 
         var servlet = new SampleappServlet();
-        servlet.setLogService(logservice);
 
         servlet.service(request, response);
 
@@ -74,7 +69,6 @@ class SampleappServletTest {
 
     @Test
     void testDoGetResponseThrowsIOException() throws Exception {
-        var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestURI()).thenReturn("http://localhost:8181/sampleapp/useradmin/");
@@ -86,7 +80,6 @@ class SampleappServletTest {
         when(response.getOutputStream()).thenReturn(streamThrowingIOException);
 
         var servlet = new SampleappServlet();
-        servlet.setLogService(logservice);
 
         servlet.service(request, response);
 
@@ -95,7 +88,6 @@ class SampleappServletTest {
 
     @Test
     void testDoGetResponseStreamMethodThrowsIOException() throws Exception {
-        var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestURI()).thenReturn("http://localhost:8181/sampleapp/useradmin/");
@@ -105,7 +97,6 @@ class SampleappServletTest {
         when(response.getOutputStream()).thenThrow(IOException.class);
 
         var servlet = new SampleappServlet();
-        servlet.setLogService(logservice);
 
         servlet.service(request, response);
 
@@ -114,7 +105,6 @@ class SampleappServletTest {
 
     @Test
     void testDoGetResourceNotFound() throws Exception {
-        var logservice = new MockLogService();
         var request = mock(HttpServletRequest.class);
         when(request.getMethod()).thenReturn("GET");
         when(request.getRequestURI()).thenReturn("http://localhost:8181/sampleapp/useradmin/static/nosuchname.png");
@@ -122,7 +112,6 @@ class SampleappServletTest {
         var response = new MockHttpServletResponse();
 
         var servlet = new SampleappServlet();
-        servlet.setLogService(logservice);
 
         servlet.service(request, response);
 

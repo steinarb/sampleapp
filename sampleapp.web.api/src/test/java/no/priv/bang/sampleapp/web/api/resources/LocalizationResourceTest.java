@@ -26,7 +26,6 @@ import java.util.MissingResourceException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
-import no.priv.bang.osgi.service.mocks.logservice.MockLogService;
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.services.beans.LocaleBean;
 
@@ -73,8 +72,6 @@ class LocalizationResourceTest {
         var sampleapp = mock(SampleappService.class);
         when(sampleapp.displayTexts(any())).thenThrow(MissingResourceException.class);
         var resource = new LocalizationResource();
-        var logservice = new MockLogService();
-        resource.setLogservice(logservice);
         resource.sampleapp = sampleapp;
         var response = resource.displayTexts("en_UK");
         assertThat(response).hasFieldOrPropertyWithValue("status", 500);

@@ -27,24 +27,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.osgi.service.log.LogService;
-import org.osgi.service.log.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.sampleapp.services.beans.LocaleBean;
 
 @Path("")
 public class LocalizationResource extends ResourceBase {
+    private static final Logger logger = LoggerFactory.getLogger(LocalizationResource.class);
 
     @Inject
     SampleappService sampleapp;
-
-    Logger logger;
-
-    @Inject
-    void setLogservice(LogService logservice) {
-        this.logger = logservice.getLogger(getClass());
-    }
 
     @GET
     @Path("defaultlocale")

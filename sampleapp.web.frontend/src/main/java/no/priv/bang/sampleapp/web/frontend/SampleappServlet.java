@@ -18,14 +18,11 @@ package no.priv.bang.sampleapp.web.frontend;
 import javax.servlet.Servlet;
 
 import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.Reference;
 import static org.osgi.service.http.whiteboard.HttpWhiteboardConstants.*;
 
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardContextSelect;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletName;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPattern;
-import org.osgi.service.log.LogService;
-
 import no.priv.bang.servlet.frontend.FrontendServlet;
 
 @Component(service=Servlet.class, immediate=true)
@@ -37,11 +34,5 @@ public class SampleappServlet extends FrontendServlet {
 
     public SampleappServlet() {
         super(SampleappServlet.class);
-    }
-
-    @Override
-    @Reference
-    public void setLogService(LogService logservice) {
-        super.setLogService(logservice);
     }
 }

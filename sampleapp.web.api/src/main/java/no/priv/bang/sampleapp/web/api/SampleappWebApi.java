@@ -24,8 +24,6 @@ import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardContextSelect;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletName;
 import org.osgi.service.http.whiteboard.propertytypes.HttpWhiteboardServletPattern;
-import org.osgi.service.log.LogService;
-
 import no.priv.bang.osgiservice.users.UserManagementService;
 import no.priv.bang.sampleapp.services.SampleappService;
 import no.priv.bang.servlet.jersey.JerseyServlet;
@@ -37,12 +35,6 @@ import no.priv.bang.servlet.jersey.JerseyServlet;
 @HttpWhiteboardServletPattern("/api/*")
 public class SampleappWebApi extends JerseyServlet {
     private static final long serialVersionUID = 3391345571152153990L; // NOSONAR
-
-    @Override
-    @Reference
-    public void setLogService(LogService logService) {
-        super.setLogService(logService);
-    }
 
     @Reference
     public void setSampleappService(SampleappService sampleapp) {
